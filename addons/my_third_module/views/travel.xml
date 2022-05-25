@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+  
+    <menuitem
+      id="travel_menu"
+      name="Travel"
+    />
+    <menuitem
+      id="travel_records_menu"
+      parent="travel_menu"
+      name="Travel"
+      action="action.travel"
+      sequence="5"
+    />
+  
+  </data>
+  
+
+</odoo>
