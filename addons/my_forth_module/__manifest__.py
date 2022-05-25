@@ -1,6 +1,6 @@
 {
   'name': 'Hospital Patient',
-  'version': '0.7',
+  'version': '0.8',
   'description': 'module to learn odoo',
   'summary': 'UNFINISHED',
   'author': 'NgoHuuNghia',
@@ -9,9 +9,10 @@
   'category': 'Learning odoo',
   'depends': [
     'base',
-    
+
   ],
   'data': [
+    'security/ir.model.access.csv',
     'views/menu.xml',
     'views/patient_view.xml',
   ],
