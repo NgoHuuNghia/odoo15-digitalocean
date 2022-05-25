@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
+from email.policy import default
+from xmlrpc.client import Boolean
 from odoo.models import Model
-from odoo.fields import Char, Integer, Selection
+from odoo.fields import Char, Integer, Selection, Boolean
 
 print("hello")
 
@@ -11,4 +13,5 @@ class HospitalPatient(Model):
   name = Char(string="Name")
   ref = Char(string="Reference")
   age = Integer(string="Age") 
-  gender = Selection([("males", "Male"), ("female", "Female")], string="Gender")
+  gender = Selection([("male", "Male"), ("female", "Female")], string="Gender")
+  active = Boolean(string="active", default=True)

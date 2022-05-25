@@ -9,7 +9,7 @@
     <field name="context">{}</field>
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">
-        Add your first  patient
+        Add your first patient
       </p>
     </field>
   </record>
@@ -20,5 +20,66 @@
     action="action_hospital_patient"
     parent="menu_patient_master"
     sequence="0"/>
+
+  <record id="view_hospital_patient_tree" model="ir.ui.view">
+    <field name="name">hospital.patient.tree</field>
+    <field name="model">hospital.patient</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name" string="Patient Name"/>
+        <field name="age" />
+        <field name="gender" />
+        <field name="ref" />
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_hospital_patient_form" model="ir.ui.view">
+    <field name="name">hospital.patient.form</field>
+    <field name="model">hospital.patient</field>
+    <field name="arch" type="xml">
+      <form>
+        <sheet>
+          <group>
+            <group>
+              <field name="name" />
+              <field name="age" />
+            </group>
+            <group>
+              <field name="gender" />
+              <field name="ref" />
+              <field name="active" invisible="1" />
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record id="view_hospital_patient_search" model="ir.ui.view">
+    <field name="name">hospital.patient.search</field>
+    <field name="model">hospital.patient</field>
+    <field name="arch" type="xml">
+      <search>
+        <field name="name" string="Patient Name" filter_domain="[
+            '|',
+            ('name', 'ilike', self), ('ref', 'ilike', self)
+          ]" />
+        <field name="age" />
+        <field name="gender" />
+        <field name="ref" />
+        <filter name="filter_male" string="Male" domain="[('gender', '=', 'male')]" />
+        <filter name="filter_female" string="Female" domain="[('gender', '=', 'female')]" />
+        <separator />
+        <filter name="filter_kids" string="Kids" domain="[('age', '&lt;=', 5)]" />
+        <separator />
+        <filter name="filter_archive" string="Archived" domain="[('active', '=', False)]" />
+
+        <group expand="0" string="Group By">
+          <filter string="Gender" name="group_by_gender" context="{'group_by':'gender'}"/>
+        </group>
+      </search>
+    </field>
+  </record>
 
 </odoo>
