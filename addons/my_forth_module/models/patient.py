@@ -1,18 +1,13 @@
 # -*- coding: utf-8 -*-
-from email.policy import default
-from xmlrpc.client import Boolean
 from odoo.models import Model
 from odoo.fields import Char, Integer, Selection, Boolean
-
-print("hello")
-
 class HospitalPatient(Model):
   _name = "hospital.patient"
-  _inherit = "mail.thread"
+  _inherit = ["mail.thread", "mail.activity.mixin"]
   _description = "Hospital Patient"
 
-  name = Char(string="Name")
-  ref = Char(string="Reference")
+  name = Char(string="Name", tracking=True)
+  ref = Char(string="Reference", tracking=True)
   age = Integer(string="Age") 
   gender = Selection([("male", "Male"), ("female", "Female")], string="Gender")
   active = Boolean(string="active", default=True)

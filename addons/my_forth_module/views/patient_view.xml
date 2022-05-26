@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
   <record id="action_hospital_patient" model="ir.actions.act_window">
     <field name="name">Patient</field>
     <field name="type">ir.actions.act_window</field>
@@ -52,7 +51,7 @@
             </group>
           </group>
         </sheet>
-
+        <!-- Chatter -->
         <div class="oe_chatter">
           <field name="message_follower_ids" groups="base.group_user"/>
           <field name="activity_ids"/>
@@ -67,6 +66,7 @@
     <field name="model">hospital.patient</field>
     <field name="arch" type="xml">
       <search>
+
         <field name="name" string="Patient Name" filter_domain="[
             '|',
             ('name', 'ilike', self), ('ref', 'ilike', self)
@@ -74,6 +74,7 @@
         <field name="age" />
         <field name="gender" />
         <field name="ref" />
+
         <filter name="filter_male" string="Male" domain="[('gender', '=', 'male')]" />
         <filter name="filter_female" string="Female" domain="[('gender', '=', 'female')]" />
         <separator />
@@ -84,6 +85,11 @@
         <group expand="0" string="Group By">
           <filter string="Gender" name="group_by_gender" context="{'group_by':'gender'}"/>
         </group>
+
+        <searchpanel>
+          <field name="gender" string="Gender" icon="fa-users" select="multi" enable_counters="1"/>
+        </searchpanel>
+
       </search>
     </field>
   </record>
