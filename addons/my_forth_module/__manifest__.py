@@ -9,7 +9,7 @@
   'category': 'Learning odoo',
   'depends': [
     'base',
-
+    'mail',
   ],
   'data': [
     'security/ir.model.access.csv',

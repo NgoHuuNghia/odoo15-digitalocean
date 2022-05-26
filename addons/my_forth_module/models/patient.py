@@ -8,6 +8,7 @@ print("hello")
 
 class HospitalPatient(Model):
   _name = "hospital.patient"
+  _inherit = "mail.thread"
   _description = "Hospital Patient"
 
   name = Char(string="Name")
