@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <!--? This is the action (the click specifically) let us list our module-->
   <record id="action_hospital_patient" model="ir.actions.act_window">
     <field name="name">Patient</field>
+    <!--* the type of actions find these on the debug menu -->
     <field name="type">ir.actions.act_window</field>
+    <!--* the module which we listing -->
     <field name="res_model">hospital.patient</field>
+    <!--* all the view modes we using find on debug menu -->
     <field name="view_mode">tree,form</field>
+    <!--* all our defaults filter and group by learn more in search's view -->
     <field name="context">{'search_default_filter_male':1, 'search_default_group_by_gender':1}</field>
+    <!--* just the first message before we add any data -->
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">
         Add your first patient
@@ -13,18 +19,24 @@
     </field>
   </record>
 
+  <!--? and the action attribute where we provide our actions duh!  -->
+  <!--! remember that actions need to be declear first for menu to recongize it -->
   <menuitem
     id="menu_patient"
-    name="Patient"
+    name="Patients"
     action="action_hospital_patient"
     parent="menu_patient_master"
     sequence="0"/>
 
+  <!--? this is the tree view for our patient's model what we first see when this view is triggered  -->
   <record id="view_hospital_patient_tree" model="ir.ui.view">
+    <!--* unique name for our tree view (follow this naming convention btw) -->
     <field name="name">hospital.patient.tree</field>
     <field name="model">hospital.patient</field>
+    <!--* and this where we write our tree's view (arch is mandatory) -->
     <field name="arch" type="xml">
       <tree>
+        <!--* field to show as a table on our first view -->
         <field name="name" string="Patient Name"/>
         <field name="age" />
         <field name="gender" />
@@ -33,40 +45,20 @@
     </field>
   </record>
 
-  <record id="view_hospital_patient_form" model="ir.ui.view">
-    <field name="name">hospital.patient.form</field>
-    <field name="model">hospital.patient</field>
-    <field name="arch" type="xml">
-      <form>
-        <sheet>
-          <group>
-            <group>
-              <field name="name" />
-              <field name="age" />
-            </group>
-            <group>
-              <field name="gender" />
-              <field name="ref" />
-              <field name="active" invisible="1" />
-            </group>
-          </group>
-        </sheet>
-        <!-- Chatter -->
-        <div class="oe_chatter">
-          <field name="message_follower_ids" groups="base.group_user"/>
-          <field name="activity_ids"/>
-          <field name="message_ids"/>
-        </div>
-      </form>
-    </field>
-  </record>
-
+  <!--? this is the search view for our patient's model the search parameters/filters/group by for our search  -->
   <record id="view_hospital_patient_search" model="ir.ui.view">
     <field name="name">hospital.patient.search</field>
     <field name="model">hospital.patient</field>
+    <!--* and this where we write our search (arch is mandatory) -->
     <field name="arch" type="xml">
       <search>
 
+        <!--? this block is all the availables fields to search -->
+        <!--
+          * with filter_domain attribute let us search search simultaneously grouped 
+          * (just add more [|] see it as bettween the tuples so 3 OR for 4 tuples 
+          * the tuples in of itself only have 3 values
+        -->
         <field name="name" string="Patient Name" filter_domain="[
             '|',
             ('name', 'ilike', self), ('ref', 'ilike', self)
@@ -75,22 +67,69 @@
         <field name="gender" />
         <field name="ref" />
 
+        <!--
+          ? this block is all the default filters where continous filter are bound with OR
+          ? logic and the separator element will bound each filter group by an AND logic
+          * the domain attribute is where we provide the filter logic follow the syntax
+          * as weird as it is, also remember to use special character for forward and back
+          * arrows [&lt;]
+        -->
         <filter name="filter_male" string="Male" domain="[('gender', '=', 'male')]" />
         <filter name="filter_female" string="Female" domain="[('gender', '=', 'female')]" />
         <separator />
-        <filter name="filter_kids" string="Kids" domain="[('age', '&lt;=', 5)]" />
-        <separator />
+        <!-- <filter name="filter_kids" string="Kids" domain="[('age', '&lt;=', 5)]" />
+        <separator /> -->
         <filter name="filter_archive" string="Archived" domain="[('active', '=', False)]" />
 
+        <!--? this block is all the default group by for the search -->
         <group expand="0" string="Group By">
+          <!--* context attribute is how to provide the logic for the group by -->
           <filter string="Gender" name="group_by_gender" context="{'group_by':'gender'}"/>
         </group>
 
+        <!--? this block is all the search panel on the left that you can provide -->
         <searchpanel>
           <field name="gender" string="Gender" icon="fa-users" select="multi" enable_counters="1"/>
         </searchpanel>
 
       </search>
+    </field>
+  </record>
+
+  <!--? this is the form view for our patient's model what we see when we click on a object/user to edit and create -->
+  <record id="view_hospital_patient_form" model="ir.ui.view">
+    <field name="name">hospital.patient.form</field>
+    <field name="model">hospital.patient</field>
+    <field name="arch" type="xml">
+      <form>
+        <!--* sheet element will give us the margin: auto sheet that base modules have, nice -->
+        <sheet>
+          <!--* the higher group element will let us separate the fields horizontally -->
+          <group>
+            <!--* the nested group element will let us separate the siblings fields vertically -->
+            <group>
+              <field name="name" />
+              <field name="date_of_birth" />
+              <field name="age" />
+              <!-- <field name="appointment_id" /> -->
+            </group>
+            <group>
+              <field name="gender" />
+              <field name="ref" />
+              <!--* invisible attribute will decide if this field is visible or not useful for when we use the archive action -->
+              <field name="active" invisible="1" />
+            </group>
+          </group>
+        </sheet>
+        <!--? the chatter for the form using the mail module with the thread and activity method don't forget to depends them -->
+        <div class="oe_chatter">
+          <!--* group attribute is the group of users that are allow to see and interact with this chatter -->
+          <field name="message_follower_ids" groups="base.group_user"/>
+          <!--* mail module's activity method that inherited in the model and depends -->
+          <field name="activity_ids"/>
+          <field name="message_ids"/>
+        </div>
+      </form>
     </field>
   </record>
 

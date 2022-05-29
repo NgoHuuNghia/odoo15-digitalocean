@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <!--
+    ? here where we present the menu of our module to the odoo's backend
+    * id attribute is it unquie id of the menu
+    * name attribute is the UI's name of the menu
+    * web_icon attribute we need to provide too when we provide a icon.png in static/description (just for the main menu through)
+    * sequence attribute is how pioritized it is to show on the menu (lower the better)
+    $ parent attribute is the menu's parent where it will be a submenu of
+  -->
   <menuitem
     id="menu_hospital_root"
     name="Hospital"
     web_icon="my_forth_module,static/description/icon.png"
     sequence="0"/>
-
   <menuitem
     id="menu_patient_master"
     name="Patient Details"
+    parent="menu_hospital_root"
+    sequence="0"/>
+  <menuitem
+    id="menu_appointment_master"
+    name="Appointments"
     parent="menu_hospital_root"
     sequence="0"/>
 </odoo>

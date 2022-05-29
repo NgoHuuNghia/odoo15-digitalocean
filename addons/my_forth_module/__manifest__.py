@@ -1,16 +1,18 @@
 {
   'name': 'Hospital Patient',
-  'version': '0.8',
+  'version': '0.9',
   'description': 'module to learn odoo',
   'summary': 'UNFINISHED',
   'author': 'NgoHuuNghia',
   'website': 'www.ngohuunghia.tech',
   'license': 'LGPL-3',
   'category': 'Learning odoo',
+  #? pick and choose which modules does this module itself depends on (check in addons file in source and odoo)
   'depends': [
     'base',
     'mail',
   ],
+  #? importing security rules, views and datas from top to bottom (the lowest will overwrite any collision)
   'data': [
     'security/ir.model.access.csv',
     'views/menu.xml',
@@ -21,7 +23,10 @@
   'demo': [
     
   ],
+  #? auto install duh!
   'auto_install': False,
-  'application': False,
+  #? Show as a main application on app module
+  'application': True,
+  #? If main module than make sure it true
   'installable': True,
 }
