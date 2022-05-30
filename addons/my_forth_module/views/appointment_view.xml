@@ -24,11 +24,40 @@
     <field name="name">hospital.appointment.tree</field>
     <field name="model">hospital.appointment</field>
     <field name="arch" type="xml">
-      <tree>
+      <!--? the comment bellow is how you remove the crud options from the tree view with create and delete attribute -->
+      <!-- <tree create="0" delete="0"> -->
+      <!--
+        ? You can add color indication for the font with decoration attribute depending on model value just like badge
+        ? also you can add sample data using the [sample] attribute
+        ? add the [multi_edit] attribute to give allow select multiple objects and edit a field simultaneously
+      -->
+      <tree decoration-success="state == 'done'" decoration-danger="state == 'cancel'"
+        sample="1" multi_edit="1">
         <field name="patient_id" />
-        <field name="gender" />
+        <!--
+          ? with option attribute allow us to optionally hide or show a model's field 
+          ? but still allow us to choose with a 3 dots at the right of the table 
+        -->
+        <field name="gender" optional="show"/>
+        <field name="gender" optional="hide"/>
         <field name="appointment_time" />
-        <field name="booking_date" />
+        <field name="booking_date" optional="show"/>
+        <!--? use this widget [list_activity] along with activity model from mail to add activies with icons for objects -->
+        <field name="activity_ids" widget="list_activity"/>
+        <!--
+          ? here we add a new [doctor_id] field in model file that point to the system users, 
+          ? allowing us to choose an existing user and show their avatar with the [many2one_avatar] widget
+          ? or the [many2one_avatar_user] widget to allow clicking on the avatar showing the chat from the disscuss module
+        -->
+        <field name="doctor_id" widget="many2one_avatar_user"/>
+        <!--
+          ? To add badge widget just add the widget attribute with badge value with corresponding color 
+          ? for each decoration attribute with a value condition of the model
+        -->
+        <field name="state" widget="badge" optional="show"
+          decoration-success="state == 'done'" 
+          decoration-danger="state == 'cancel'"
+          decoration-info="state in ['draft', 'in_consultation']"/>
       </tree>
     </field>
   </record>
@@ -47,26 +76,111 @@
     <field name="name">hospital.appointment.form</field>
     <field name="model">hospital.appointment</field>
     <field name="arch" type="xml">
+      <!--? the comment bellow is how you remove the crud options from the form view with create, delete, edit attribute -->
+      <!-- <form create="0" delete="0" edit="0"> -->
       <form>
+        <!-- 
+          ? this is the status widget that we can use to show and change the state of a model
+          ? first creating a state model then give create a field with a widget attribute of statusbar and a name of the model
+          ? the option attribute let us make changes on the state by clicking
+          ? the states attrubute will show us this element if the field is have the current value
+          ? using the data-hotkey attribute let us create hot key for our button and interactions
+        -->
+        <header>
+          <button name="action_done" string="Mark As Done" type="object"
+          class="oe_highlight" states="in_consultation" data-hotkey="d"/>
+          <button name="action_in_consultation" string="In Consultation" type="object" 
+          states="done,cancel,draft" data-hotkey="i"/>
+          <button name="action_cancel" string="Cancel" type="object" states="in_consultation"/>
+          <button name="action_draft" string="Rest To Draft" type="object" states="cancel"/>
+          <field name="state" widget="statusbar" nolabel="1" 
+          statusbar_visible="draft,in_consultation,done"/>
+          <!-- options="{'clickable' : '1'}" -->
+        </header>
+
         <sheet>
+          <!--
+            ? this is the 'rating' widget that we can use to either rate or prioritize our models
+            ? first creating a priority model then give create a field with a widget attribute of priority and a name of the model
+            ? everything else like div, h1 are optional
+          -->
+          <div>
+            <h1>
+              <field name="priority" widget="priority" class="mr-3"/>
+            </h1>
+          </div>
+
           <group>
             <group>
-              <field name="patient_id" />
-              <field name="ref" />
-              <field name="gender" />
+              <!--? You can add a help attribute to provide comment for ui users, work in most elements -->
+              <field name="patient_id" help="this is the patient id, can be found in breadcrumbs too" default_focus="1"/>
+              <field name="ref"/>
+              <field name="gender"/>
             </group>
             <group>
               <field name="appointment_time" />
-              <field name="booking_date" />
+              <field name="hide_sales_price" groups="base.group_no_one"/>
+              <!--? with the [default_focus] attribute we can default the focus whenever this form is reached -->
+              <field name="booking_date"/>
+              <field name="doctor_id" widget="many2one_avatar"/>
+              <!--
+                ? the button type of [object] will search for a function with the sane name as the name's attribute value
+                ? the function will be declare in the model file in python and read there
+                ? while the [action] button type will search for a window action in odoo
+              -->
+              <button name="object_test" string="Object Button" type="object" class="oe_highlight"/>
+              <button name="%(my_forth_module.action_hospital_patient)d" string="Action Button" 
+                type="action" class="oe_highlight" confirm="Are you sure to open patient action"
+                help="You will be redirected to patient record"/>
             </group>
           </group>
+
+          <!--? the notebook element allow you to create paginatable pages with buttons -->
+          <notebook>
+            <page name="prescription" string="Prescription">
+              <!--? using the new odoo15 feature we can add realtime collaborative, resize with other using the option attribute bellow -->
+              <field name="prescription" placeholder="Enter a prescription"
+              options="{'collaborative':true, 'resizable':true}"/>
+            </page>
+            <page name="pharmacy" string="Pharmacy">
+              <group>
+                <field name="appointment_time" />
+                <field name="booking_date" />
+
+                <!--
+                  ? here is where we add the one2many field to the view with a nested tree and form for it's model 
+                  ? in this case [hospital.appointment.pharmacy.lines], also add the editable attribute to the tree element
+                  ? to allow editing in the tree without entering the form view options include [top] and [bottom]
+                  ? the attrs attribute will allow us to do all kind of funtionallity with dictionary such as hide a column
+                -->
+                <field name="pharmacy_line_ids">
+                  <tree editable="bottom">
+                    <field name="product_id" />
+                    <field name="price_unit" attrs="{'column_invisible': [('parent.hide_sales_price', '=', True)]}"/>
+                    <field name="qty" />
+                    <field name="appointment_id" />
+                  </tree>
+                  <form>
+                    <group>
+                      <field name="product_id" />
+                      <field name="price_unit" />
+                      <field name="qty" />
+                      <field name="appointment_id" />
+                    </group>
+                  </form>
+                </field>
+                
+              </group>
+            </page>
+          </notebook>
         </sheet>
-        <!-- Chatter -->
+        
         <div class="oe_chatter">
           <field name="message_follower_ids" groups="base.group_user"/>
           <field name="activity_ids"/>
           <field name="message_ids"/>
         </div>
+
       </form>
     </field>
   </record>

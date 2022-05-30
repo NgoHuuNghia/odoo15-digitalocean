@@ -11,6 +11,7 @@
   'depends': [
     'base',
     'mail',
+    'product',
   ],
   #? importing security rules, views and datas from top to bottom (the lowest will overwrite any collision)
   'data': [

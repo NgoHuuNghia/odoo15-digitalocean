@@ -5,7 +5,7 @@
 #? or do the it the modern way specifically import them
 from odoo.models import Model
 from odoo.api import depends
-from odoo.fields import Char, Integer, Selection, Boolean, Date, Many2one
+from odoo.fields import Char, Integer, Selection, Boolean, Date, Image
 
 from datetime import date
 class HospitalPatient(Model):
@@ -28,6 +28,8 @@ class HospitalPatient(Model):
   #* with selection you need to prevoide the first argument as a list with tuples of the label and value of your selections
   gender = Selection([('male', 'Male'), ('female', 'Female')], string='Gender')
   active = Boolean(string='active', default=True)
+  #* with the Image method we can add images file to the view using the image widget
+  image = Image(string="Image")
   # appointment_id = Many2one(comodel_name='hospital.appointment', string="Appointments")
 
   #? this depend is a decorator to run the function bellow when a 

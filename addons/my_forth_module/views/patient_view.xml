@@ -104,6 +104,8 @@
       <form>
         <!--* sheet element will give us the margin: auto sheet that base modules have, nice -->
         <sheet>
+          <!--* add the image field here with widget attribute of [image] to show image -->
+          <field name="image" widget="image" class="oe_avatar"/>
           <!--* the higher group element will let us separate the fields horizontally -->
           <group>
             <!--* the nested group element will let us separate the siblings fields vertically -->

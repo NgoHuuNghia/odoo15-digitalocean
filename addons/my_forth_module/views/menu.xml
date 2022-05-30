@@ -13,14 +13,15 @@
     name="Hospital"
     web_icon="my_forth_module,static/description/icon.png"
     sequence="0"/>
-  <menuitem
-    id="menu_patient_master"
-    name="Patient Details"
-    parent="menu_hospital_root"
-    sequence="0"/>
+  <!--* temp making the appoint menu higher sequence for developing purposes -->
   <menuitem
     id="menu_appointment_master"
     name="Appointments"
+    parent="menu_hospital_root"
+    sequence="-10"/>
+  <menuitem
+    id="menu_patient_master"
+    name="Patient Details"
     parent="menu_hospital_root"
     sequence="0"/>
 </odoo>
