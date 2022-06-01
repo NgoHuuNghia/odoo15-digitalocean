@@ -3,9 +3,10 @@
 # from odoo import modules, api, fields
 # and use their method with a dot (modules.Model)
 #? or do the it the modern way specifically import them
+from asyncore import write
 from odoo.models import Model
-from odoo.api import depends
-from odoo.fields import Char, Integer, Selection, Boolean, Date, Image
+from odoo.api import depends, model
+from odoo.fields import Char, Integer, Selection, Boolean, Date, Image, Many2many
 
 from datetime import date
 class HospitalPatient(Model):
@@ -14,6 +15,23 @@ class HospitalPatient(Model):
   #? inherit modules's method from here as a list (remember to depend them on __manifest__.py also)
   _inherit = ['mail.thread', 'mail.activity.mixin']
   _description = 'Hospital Patient'
+
+  #$ yes all inherited odoo's base methods are placed before field declarations
+  #? here is how to inherit the odoo's method to create a new module, allowing us to manipulate the created record 
+  @model
+  def create(self, vals_list):
+    vals_list['ref'] = self.env['ir.sequence'].next_by_code('hospital.patient')
+    return super(HospitalPatient, self).create(vals_list)
+
+  #? for the write/update method a decorator is unnecessary
+  def write(self, vals):
+    if not self.ref or not vals.get('ref'):
+      vals['ref'] = self.env['ir.sequence'].next_by_code('hospital.patient')
+    return super(HospitalPatient, self).write(vals)
+
+  #? with this inherited odoo's method we can get and manipulate the rec_name
+  def name_get(self):
+    return [(record.id, "[%s] %s" % (record.ref, record.name)) for record in self]
 
   #? this block of varibles are the fields of the Module which odoo will convert for us, we just need to declare it
   #* string parameter is the UI's name of the field
@@ -31,6 +49,9 @@ class HospitalPatient(Model):
   #* with the Image method we can add images file to the view using the image widget
   image = Image(string="Image")
   # appointment_id = Many2one(comodel_name='hospital.appointment', string="Appointments")
+  #* Many2many method to create free relations between models, basically creating a intermediary table
+  #* it is recommended to provide all the arguments such as [relation] for the table name and the 2 columns label
+  tag_ids = Many2many(comodel_name='hospital.patient.tag', relation="hospital_patient_tag_ids_rel", column1="patient_id", column2="tag_id", string='Tags')
 
   #? this depend is a decorator to run the function bellow when a 
   #? field inside of it changed (remember to add @ at the start [@api.depends('')] or [@depends('')])

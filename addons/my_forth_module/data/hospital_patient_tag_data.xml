@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="patient_tag_vip" model="hospital.patient.tag">
+      <field name="name">VIP</field>
+      <field name="active" eval="False" />
+    </record>
+    <record id="patient_tag_super" model="hospital.patient.tag">
+      <field name="name">Super</field>
+    </record>
+    <record id="patient_tag_work" model="hospital.patient.tag">
+      <field name="name">Work</field>
+      <field name="active" eval="False" />
+    </record>
+    <record id="patient_tag_nuts" model="hospital.patient.tag">
+      <field name="name">Nuts</field>
+    </record>
+  </data>
+</odoo>

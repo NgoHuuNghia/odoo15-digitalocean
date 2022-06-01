@@ -118,6 +118,9 @@
             <group>
               <field name="gender" />
               <field name="ref" />
+              <!--* use [many2many_tags] widget to create the nice looking tag in the view -->
+              <!--* also with the options attribute we can provide an actual field with color provided and add it here using [color_field] -->
+              <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
               <!--* invisible attribute will decide if this field is visible or not useful for when we use the archive action -->
               <field name="active" invisible="1" />
             </group>

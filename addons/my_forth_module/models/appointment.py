@@ -9,7 +9,7 @@ class HospitalAppointment(Model):
   _inherit = ["mail.thread", "mail.activity.mixin"]
   _description = "Hospital Appointment"
   #? by default _rec-name will have field with 'name' as it value but you can change it into any field to show it on form's breadcrumbs
-  _rec_name = 'patient_id'
+  _rec_name = 'ref'
 
   patient_id = Many2one(comodel_name='hospital.patient', string="Patient")
   gender = Selection(related='patient_id.gender')
@@ -40,6 +40,7 @@ class HospitalAppointment(Model):
     ], string="Status", default="draft", tracking=True, required=True
   )
 
+  #? an onchange decorator will run the def bellow whenever this field [patient_id] is changed
   @onchange('patient_id')
   def onchange_patient_id(self):
     self.ref = self.patient_id.ref
@@ -58,10 +59,13 @@ class HospitalAppointment(Model):
       rec.state = "done" 
   def action_in_consultation(self):
     for rec in self:
-      rec.state = "in_consultation" 
+      rec.state = "in_consultation"
+  # ? if you need to get an window action and run it using a function then here the syntax
   def action_cancel(self):
+    action = self.env.ref("my_forth_module.action_cancel_appointment").read()[0]
     for rec in self:
-      rec.state = "cancel" 
+      rec.state = "cancel"
+    return action
   def action_draft(self):
     for rec in self:
       rec.state = "draft"

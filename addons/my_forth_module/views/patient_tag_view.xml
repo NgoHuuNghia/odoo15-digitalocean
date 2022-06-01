@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="action_hospital_patient_tag" model="ir.actions.act_window">
+    <field name="name">Patient Tag</field>
+    <field name="res_model">hospital.patient.tag</field>
+    <field name="view_mode">tree,form</field>
+    <field name="domain">[]</field>
+    <field name="context">{'search_default_filter_active_true':1, 'search_default_filter_active_false':1}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Add your first patient tag
+      </p>
+    </field>
+  </record>
+
+  <menuitem
+    id="menu_patient_tag"
+    name="Patient Tags"
+    action="action_hospital_patient_tag"
+    parent="menu_configuration_master"
+    sequence="10"/>
+
+  <record id="view_hospital_patient_tag_tree" model="ir.ui.view">
+    <field name="name">hospital.patient.tag.tree</field>
+    <field name="model">hospital.patient.tag</field>
+    <field name="arch" type="xml">
+      <tree string="">
+        <field name="name" />
+        <field name="active" />
+        <field name="color" widget="color_picker"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_hospital_patient_tag_search" model="ir.ui.view">
+    <field name="name">hospital.patient.tag.search</field>
+    <field name="model">hospital.patient.tag</field>
+    <field name="arch" type="xml">
+      <search>
+
+        <field name="active" />
+
+        <filter name="filter_active_true" string="Active" domain="[('active', '=', True)]" />
+        <filter name="filter_active_false" string="Inactive" domain="[('active', '=', False)]" />
+
+      </search>
+    </field>
+  </record>
+
+  <record id="view_hospital_patient_tag_form" model="ir.ui.view">
+    <field name="name">hospital.patient.tag.tree</field>
+    <field name="model">hospital.patient.tag</field>
+    <field name="arch" type="xml">
+      <form string="">
+        <sheet>
+          <group>
+            <group>
+              <field name="name" />
+            </group>
+            <group>
+              <!--
+                ? we can add a cool toggle for our boolean field with the [boolean_toggle] widget to 
+                ? update without entering edit mode
+              -->
+              <field name="active" widget="boolean_toggle"/>
+              <!-- 
+                ? next widget is the [color_picker] require an Integer field allowing us to pick a preset of colors
+                ? there also the [color] widget require a Char field allowing us to pick using a picker wheel
+              -->
+              <field name="color" widget="color_picker"/>
+              <field name="color_2" widget="color" groups="base.group_no_one"/>
+            </group>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+</odoo>

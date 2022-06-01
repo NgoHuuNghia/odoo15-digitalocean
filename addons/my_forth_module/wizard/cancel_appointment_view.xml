@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="action_cancel_appointment" model="ir.actions.act_window">
+    <field name="name">Cancel Appointment</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">hospital.cancel.appointment.wizard</field>
+    <field name="view_mode">form</field>
+    <!--? with the name [target] we don't have to open a whole new page to enter the form view -->
+    <field name="target">new</field>
+  </record>
+
+  <record id="view_cancel_appointment_form" model="ir.ui.view">
+    <field name="name">hospital.cancel.appointment.wizard.form</field>
+    <field name="model">hospital.cancel.appointment.wizard</field>
+    <field name="arch" type="xml">
+      <form string="">
+        <group>
+          <group>
+            <field name="appointment_id" />
+            <field name="reason" />
+          </group>
+          <group>
+            <field name="date_cancel" />
+          </group>
+        </group>
+
+        <!--? add our own footer to replace functionallity -->
+        <footer>
+          <button name="action_cancel" string="Cancel Appointment" type="object" class="btn-primary" data-hotkey="q"/>
+          <button special="cancel" data-hotkey="z" string="Discard"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+</odoo>

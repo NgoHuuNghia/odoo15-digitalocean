@@ -1,4 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access.hospital.patient,access_hospital_patient,my_forth_module.model_hospital_patient,base.group_user,1,1,1,1
+access.hospital.patient.tag,access_hospital_patient_tag,my_forth_module.model_hospital_patient_tag,base.group_user,1,1,1,1
 access.hospital.appointment,access_hospital_appointment,my_forth_module.model_hospital_appointment,base.group_user,1,1,1,1
 access.hospital.appointment.pharmacy.lines,access_hospital_appointment_pharmacy_lines,my_forth_module.model_hospital_appointment_pharmacy_lines,base.group_user,1,1,1,1
+access.hospital.cancel.appointment.wizard,access_hospital_cancel_appointment_wizard,my_forth_module.model_hospital_cancel_appointment_wizard,base.group_user,1,1,1,1

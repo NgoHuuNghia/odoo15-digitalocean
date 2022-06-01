@@ -1,0 +1,17 @@
+<odoo>
+  <data>
+    <record id="view_order_form_inheriet_my_forth_module_inheritence" model="ir.ui.view">
+      <field name="name">sale.order.form.my.forth.module.inheritence</field>
+      <field name="model">sale.order</field>
+      <!--? when inheriting a view simply add the field with name of inherit_id and ref of the model, remember to follow best practice -->
+      <field name="inherit_id" ref="sale.view_order_form"/>
+      <field name="priority">10</field>
+      <field name="arch" type="xml">
+        <!--? use odoo development mode to find the view field you want to insert, but if the field is too an inherited view then find them first -->
+        <xpath expr="//div[@name='commitment_date_div']" position="after">
+          <field name="confirmed_user_id" />
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
