@@ -26,6 +26,7 @@
     <field name="res_model">my.playground</field>
     <field name="view_mode">form</field>
     <field name="target">inline</field>
+    <field name="context">{'search_default_filter_male':1, 'test':1}</field>
   </record>
 
   <!-- ? rather than creating menu using the traditional way, there is this nested way which is way better -->

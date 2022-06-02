@@ -11,6 +11,7 @@ class HospitalAppointment(Model):
   #? by default _rec-name will have field with 'name' as it value but you can change it into any field to show it on form's breadcrumbs
   _rec_name = 'ref'
 
+  
   patient_id = Many2one(comodel_name='hospital.patient', string="Patient")
   gender = Selection(related='patient_id.gender')
   appointment_time = Datetime(string="Appointment Time", default=Datetime.now)

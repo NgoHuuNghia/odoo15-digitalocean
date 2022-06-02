@@ -6,22 +6,29 @@ class MyPlayground(models.Model):
   _name = 'my.playground'
   _description = 'Learning playground'
 
+  # ? remember [DEFAULT_ENV_VARIABLES] is not a field just a python varible
   DEFAULT_ENV_VARIABLES = """# available varibles
-  # also the class is declared in [source]/odoo/api.py check it for all the functions
-  # - self: Current Object/record set where the code execute happens
-  # - self.env: Odoo Enviroment on which the action is triggered
-  # - self.env.user: Return the current user (as an instance)
-  # - self.env.is_system: Return whether the current user has group "Setting", or is in superuser mode.
-  # - self.env.is_admin: Return whether the current user has a group "Access Rights", or is in superuser mode.
-  # - self.env.is_superuser: Return whether the enviromment is in superuser mode.
-  # - self.env.company: Return the current company (as an instance)
-  # - self.env.companies: Return a recordset of the enabled companies by the user
-  # - self.env.lange: Return the current language code \n\n
+  ### also the class is declared in [source]/odoo/api.py check it for all the functions
+  # - self:                                   Current Object/record/record set where the code execute happens
+  # - self.browse([id_integer]).[field_name]: Use the browse method to access a specific record with it's id, allowing us to return a field or use a function
+  # - self.env[module_name]:                  Specify the module name to access it's enviroment (use the model selection above instead)
+  # - self.env.ref([xml_id_from_metadata]):   From the enviromment we can access record/record set with it's external id (so mostly record loaded from xml or csv)
+  # - self.env:                               Current Odoo Enviroment class on which the action is triggered
+  # - self.env.user:                          Return the current user (as an instance)
+  # - self.env.is_system:                     Return whether the current user has group "Setting", or is in superuser mode.
+  # - self.env.is_admin:                      Return whether the current user has a group "Access Rights", or is in superuser mode.
+  # - self.env.is_superuser:                  Return whether the enviromment is in superuser mode.
+  # - self.env.company:                       Return the current company (as an instance)
+  # - self.env.companies:                     Return a recordset of the enabled companies by the user
+  # - self.env.lange:                         Return the current language code
+  # - self.env.cr:                            Return the sql cursor class by which let us perform queries operations in postgres
+  # - self.env.context:                       Return a dictinary of the enviromment's action context (language,timezone,model(fields,name,...),comapny,...)\n\n
   """
   model_id = fields.Many2one(comodel_name='ir.model', string='Model')
   code = fields.Text(string='Code', default=DEFAULT_ENV_VARIABLES)
   result = fields.Text(string='Result')
 
+  # ? button function to print results in the ui
   def action_execute(self):
     try:
       if self.model_id:
