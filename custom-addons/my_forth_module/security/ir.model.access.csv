@@ -4,3 +4,4 @@ access.hospital.patient.tag,access_hospital_patient_tag,my_forth_module.model_ho
 access.hospital.appointment,access_hospital_appointment,my_forth_module.model_hospital_appointment,base.group_user,1,1,1,1
 access.hospital.appointment.pharmacy.lines,access_hospital_appointment_pharmacy_lines,my_forth_module.model_hospital_appointment_pharmacy_lines,base.group_user,1,1,1,1
 access.hospital.cancel.appointment.wizard,access_hospital_cancel_appointment_wizard,my_forth_module.model_hospital_cancel_appointment_wizard,base.group_user,1,1,1,1
+access.my.playground,access_my_playground,my_forth_module.model_my_playground,base.group_user,1,1,1,1

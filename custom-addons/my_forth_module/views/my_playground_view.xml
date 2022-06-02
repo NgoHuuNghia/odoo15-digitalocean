@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="my_playground_view_form" model="ir.ui.view">
+    <field name="name">my.playground.view.form</field>
+    <field name="model">my.playground</field>
+    <field name="arch" type="xml">
+      <form string="">
+        <group>
+          <field name="model_id" />
+          <field name="code" widget="ace" options="{'mode':'python'}" />
+        </group>
+        <group>
+          <button string="Execute" name="action_execute" type="object" class="oe_highlight" data-hotkey="q"/>
+        </group>
+        <group>
+          <field name="result" readonly="1"/>
+        </group>
+      </form>
+    </field>
+  </record>
+
+  <record id="my_playground_action" model="ir.actions.act_window">
+    <field name="name">Learning Playground</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">my.playground</field>
+    <field name="view_mode">form</field>
+    <field name="target">inline</field>
+  </record>
+
+  <!-- ? rather than creating menu using the traditional way, there is this nested way which is way better -->
+  <menuitem
+    id="menu_technical"
+    name="Technical"
+    parent="menu_hospital_root"
+    sequence="110">
+    <!-- ? simply keep nesting them to go further up, 3 levels will create a main menu -->
+    <menuitem
+      id="menu_my_playground"
+      name="Learning Playground"
+      action="my_playground_action"
+      sequence="10"/>
+  </menuitem>
+
+</odoo>

@@ -52,6 +52,7 @@ class HospitalPatient(Model):
   #* Many2many method to create free relations between models, basically creating a intermediary table
   #* it is recommended to provide all the arguments such as [relation] for the table name and the 2 columns label
   tag_ids = Many2many(comodel_name='hospital.patient.tag', relation="hospital_patient_tag_ids_rel", column1="patient_id", column2="tag_id", string='Tags')
+  appointment_count = Integer(string="Appointment Count")
 
   #? this depend is a decorator to run the function bellow when a 
   #? field inside of it changed (remember to add @ at the start [@api.depends('')] or [@depends('')])

@@ -1,5 +1,4 @@
 import datetime
-from email.policy import default
 from odoo.models import TransientModel
 from odoo.api import model
 from odoo.fields import Many2one, Text, Date
