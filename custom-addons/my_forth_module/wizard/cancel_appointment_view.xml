@@ -17,7 +17,10 @@
       <form string="">
         <group>
           <group>
-            <field name="appointment_id" />
+            <!-- ? with invisible and context we can hide a field using a passed context -->
+            <!-- <field name="appointment_id" readonly="1" invisible="context.get('hide_appointment_id')"/> -->
+            <!--?90? the same domain filter can be achive in the view side as well as module side -->
+            <field name="appointment_id" domain="[('state','=','draft'),('priority','in',('0','1',False))]"/>
             <field name="reason" />
           </group>
           <group>

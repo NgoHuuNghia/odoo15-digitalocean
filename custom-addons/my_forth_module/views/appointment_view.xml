@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <record id="action_hospital_appointment" model="ir.actions.act_window">
-    <field name="name">Appointment</field>
+    <field name="name">Appointments</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">hospital.appointment</field>
     <field name="view_mode">tree,form,activity</field>
@@ -39,7 +39,6 @@
           ? but still allow us to choose with a 3 dots at the right of the table 
         -->
         <field name="gender" optional="show"/>
-        <field name="gender" optional="hide"/>
         <field name="appointment_time" />
         <field name="booking_date" optional="show"/>
         <!--? use this widget [list_activity] along with activity model from mail to add activies with icons for objects -->
@@ -57,7 +56,8 @@
         <field name="state" widget="badge" optional="show"
           decoration-success="state == 'done'" 
           decoration-danger="state == 'cancel'"
-          decoration-info="state in ['draft', 'in_consultation']"/>
+          decoration-info="state == 'draft'"
+          decoration-warning="state == 'in_consultation'"/>
       </tree>
     </field>
   </record>
@@ -115,9 +115,12 @@
           <!--
             ? using the attribute type of [action] allow us to launch the wizard using a view's action remember the weird name syntax ok?
             ? or we can use the type of [object] and define a function that return the same action, (see more in appointment.py)
+            ? to access the [active_id], more or less the _rec_name value and pass it as default use the context attribute like bellow
+            ? otherwise you can access the same [active_id] using the enviromment's context in the [default_get] function
           -->
-          <button name="%(my_forth_module.action_cancel_appointment)d" string="Cancel" type="action" states="in_consultation"/>
-          <!--$ <button name="action_cancel" string="Cancel" type="object" states="in_consultation"/> -->
+          <button name="%(my_forth_module.action_cancel_appointment)d" string="Cancel" type="action" 
+            states="in_consultation" context="{'default_appointment_id':active_id,'hide_appointment_id':1}"/>
+          <!-- <button name="action_cancel" string="Cancel" type="object" states="in_consultation"/> -->
 
           <button name="action_draft" string="Rest To Draft" type="object" states="cancel"/>
           
@@ -132,6 +135,11 @@
             ? first creating a priority model then give create a field with a widget attribute of priority and a name of the model
             ? everything else like div, h1 are optional
           -->
+          <div class="oe_title">
+            <h1>
+                <field name="name" readonly="1"/>
+            </h1>
+          </div>
           <div>
             <h1>
               <field name="priority" widget="priority" class="mr-3"/>

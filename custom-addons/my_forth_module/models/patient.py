@@ -3,9 +3,9 @@
 # from odoo import modules, api, fields
 # and use their method with a dot (modules.Model)
 #? or do the it the modern way specifically import them
-from asyncore import write
+from odoo.exceptions import ValidationError
 from odoo.models import Model
-from odoo.api import depends, model
+from odoo.api import depends, model, constrains
 from odoo.fields import Char, Integer, Selection, Boolean, Date, Image, Many2many
 
 from datetime import date
@@ -52,7 +52,14 @@ class HospitalPatient(Model):
   #* Many2many method to create free relations between models, basically creating a intermediary table
   #* it is recommended to provide all the arguments such as [relation] for the table name and the 2 columns label
   tag_ids = Many2many(comodel_name='hospital.patient.tag', relation="hospital_patient_tag_ids_rel", column1="patient_id", column2="tag_id", string='Tags')
-  appointment_count = Integer(string="Appointment Count")
+  appointment_count = Integer(string="Appointment Count", compute=("_compute_appointment_count"))
+
+  #?92? Other than using the sql constraints, we can use the odoo's constrains decorator and python to apply the same logic
+  @constrains('date_of_birth')
+  def _check_date_of_birth(self):
+    for record in self:
+      if record.date_of_birth and record.date_of_birth > Date.today():
+        raise ValidationError("Date of birth cannot be in the future")
 
   #? this depend is a decorator to run the function bellow when a 
   #? field inside of it changed (remember to add @ at the start [@api.depends('')] or [@depends('')])
@@ -71,3 +78,9 @@ class HospitalPatient(Model):
       else:
         #* if we don't have a default value there will be errors
         rec.age = 0
+
+  #?95? as we know a compute field won't be store in the database, here how we can store it
+  def _compute_appointment_count(self):
+    for record in self:
+      #? the search_count is an ORM method that allow count a given domain
+      record.appointment_count = self.env['hospital.appointment'].search_count()

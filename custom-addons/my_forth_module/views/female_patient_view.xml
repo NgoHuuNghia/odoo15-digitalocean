@@ -7,7 +7,7 @@
     <field name="res_model">hospital.patient</field>
     <field name="view_mode">tree,form</field>
     <!--? this name attribute with 'context' element where we provide the default for the model -->
-    <field name="context">{'default_gender':'female'}</field>
+    <field name="context">{'default_gender':'female', 'hide_gender':1}</field>
     <!--? this name attribute with 'domain" let us provide HARD filter a field -->
     <field name="domain">[('gender', '=', 'female')]</field>
     <field name="help" type="html">
