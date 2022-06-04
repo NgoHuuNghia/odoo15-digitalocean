@@ -3,6 +3,7 @@ from odoo.models import TransientModel
 from odoo.api import model
 from odoo.fields import Many2one, Text, Date
 from odoo.exceptions import ValidationError
+from dateutil import relativedelta
 
 # ? instead of the normal Model this is a Transient Model or i like to call it the wizard model
 # ? these model won't be added to the database, they will be use and remove after, or after a set amount of time
@@ -32,6 +33,19 @@ class HospitalCancelAppointmentWizard(TransientModel):
   #? using odoo's [ValidationError] method will let us raise a error base on some condition
   #? remember to import the underscore from odoo for translation purposes
   def action_cancel(self):
-    if self.appointment_id.booking_date == Date.today():
-      raise ValidationError(_("Cannot cancel an appointment on the same day of booking"))
-    return
+    #?114? to access the setting modules access the ['ir.config_parameter'] environment then use the [get_param(module_name.setting_field)]
+    #? same as [config_parameter] in this modules's res_config_settings.py file 
+    cancelable_days = self.env['ir.config_parameter'].get_param('my_forth_module.cancel_days')
+    #? for some reason after pass back from setting module it will return a string, so convert it back into a integer with int()
+    allowed_date = self.appointment_id.booking_date - relativedelta.relativedelta(days=int(cancelable_days))
+
+    if allowed_date < Date.today():
+      raise ValidationError(_(f"Can only cancel appointments before {cancelable_days} days of agreed booking"))
+    self.appointment_id.state = 'cancel'
+
+    #?120? returning a dictionary with [type] and [tag] like bellow to reload the page, for it won't visual change
+    #? the state without reload, because we are changing the record of another many2one's model from this wizard
+    return {
+      'type':'ir.actions.client',
+      'tag' :'reload',
+    }

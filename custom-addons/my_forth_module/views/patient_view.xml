@@ -8,6 +8,7 @@
     <!--* the module which we listing -->
     <field name="res_model">hospital.patient</field>
     <!--* all the view modes we using find on debug menu -->
+    <!--! this should be in the debug menu too right nah can be -->
     <field name="view_mode">tree,form</field>
     <!--* all our defaults filter and group by learn more in search's view -->
     <field name="context">{'search_default_filter_male':1, 'search_default_group_by_gender':1}</field>
@@ -35,11 +36,15 @@
     <field name="model">hospital.patient</field>
     <!--* and this where we write our tree's view (arch is mandatory) -->
     <field name="arch" type="xml">
-      <tree>
+      <!--?96? [export_xlsx] attribute will decide if the tree view can be export into a xlsx file -->
+      <tree export_xlsx='0'>
         <!--* field to show as a table on our first view -->
         <field name="name" string="Patient Name"/>
-        <field name="age" />
+        <!--?118? there also a [avg] to provide an average of a total sum just also add string -->
+        <field name="age" avg="Average Age"/>
         <field name="gender" />
+        <!--?118? with [sum] attribute will let us sum all the counts at the end of collum of a field just add a string -->
+        <field name="appointment_count" sum="Total Appointments"/>
         <field name="ref" />
       </tree>
     </field>
@@ -60,9 +65,9 @@
           * the tuples in of itself only have 3 values
         -->
         <field name="name" string="Patient Name" filter_domain="[
-            '|',
-            ('name', 'ilike', self), ('ref', 'ilike', self)
-          ]" />
+          '|',
+          ('name', 'ilike', self), ('ref', 'ilike', self)
+        ]" />
         <field name="age" />
         <field name="gender" />
         <field name="ref" />
@@ -84,7 +89,7 @@
         <!--? this block is all the default group by for the search -->
         <group expand="0" string="Group By">
           <!--* context attribute is how to provide the logic for the group by -->
-          <filter string="Gender" name="group_by_gender" context="{'group_by':'gender'}"/>
+          <filter string="Genders" name="group_by_genders" context="{'group_by':'gender'}"/>
         </group>
 
         <!--? this block is all the search panel on the left that you can provide -->
@@ -104,27 +109,68 @@
       <form>
         <!--* sheet element will give us the margin: auto sheet that base modules have, nice -->
         <sheet>
+          <!--?122? using the div bellow we can show an alert base on some condition and remove it with [data-dimiss] -->
+          <div class="alert alert-warning text-center o_form_header" role="alert"
+            attrs="{'invisible':[('is_birthday','=',False)]}">
+            <a class="close" data-dismiss="alert" href="#">x</a>
+            <div>
+              <strong>Today is the birthday of</strong>
+            </div>
+            <div>
+              Wish <field name="name" readonly="1"/>
+            </div>
+          </div>
           <!--* add the image field here with widget attribute of [image] to show image -->
           <field name="image" widget="image" class="oe_avatar"/>
+          <!--?100? to add a title for this form just add like a div container with class of [oe_title] and a h2 contain that field -->
+          <div class='oe_title'>
+            <h4>
+              <field name="ref" readonly='1'/>
+            </h4>
+            <h2>
+              <!--
+                ?101? to add a label to field without one (not inside group) than give it using the label element,
+                ? [class="oe_edit_only"] will only show it when in edit mode 
+              -->
+              <label for="name" string="Name" class="oe_edit_only"/>
+              <field name="name" />
+            </h2>
+          </div>
           <!--* the higher group element will let us separate the fields horizontally -->
           <group>
             <!--* the nested group element will let us separate the siblings fields vertically -->
             <group>
-              <field name="name" />
               <field name="date_of_birth" />
               <field name="age" />
+              <!--! i be honest man, no idea what context.get does -->
+              <field name="gender" invisible="context.get('hide_gender')" widget="radio"/>
               <!-- <field name="appointment_id" /> -->
             </group>
             <group>
-              <field name="gender" invisible="context.get('hide_gender')"/>
-              <field name="ref" />
               <!--* use [many2many_tags] widget to create the nice looking tag in the view -->
               <!--* also with the options attribute we can provide an actual field with color provided and add it here using [color_field] -->
               <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+              <!--*112* with the [widget="many2many_checkboxes"] we can have normal chexkboxes for many2many fields instead (not recommended for big fields) -->
+              <!-- <field name="tag_ids" widget="many2many_checkboxes" options="{'color_field': 'color'}"/> -->
               <!--* invisible attribute will decide if this field is visible or not useful for when we use the archive action -->
               <field name="active" invisible="1" />
               <field name="appointment_count" />
+              <field name="is_birthday" />
             </group>
+            <!-- <field name="appointment_id" /> -->
+          </group>
+          <!--
+            ?98?99?100? hide or read only fields base on conditions using the [attrs] attribute with the [invisible] or [readonly] dictionary with a list
+            ? of tuples of conditional domains using the PREFIX NOTATION with an OR operation provided by ['|'] in front of the list
+            ? also the [required] will also work here
+          -->
+          <group name="other_info" string="Other infomations">
+            <field name="parent" attrs="{'invisible':[('age', '>=', '18')]}"/>
+            <field name="marital_status" attrs="{'invisible':[('age', '&lt;', '18')]}"/>
+            <field name="partner_name" attrs="{
+              'readonly':[('marital_status', '!=', 'married')],
+              'required':[('marital_status', '=', 'married')],
+            }"/>
           </group>
         </sheet>
         <!--? the chatter for the form using the mail module with the thread and activity method don't forget to depends them -->

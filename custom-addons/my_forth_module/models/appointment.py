@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo.exceptions import ValidationError
 from odoo.models import Model
-from odoo.api import onchange, model
+from odoo.api import onchange, model, ondelete
 from odoo.fields import Many2one, One2many, Datetime, Date, Selection, Char, Html, Integer, Float, Boolean
 class HospitalAppointment(Model):
   #? main name for this Module (you can check them in the setting of debug options)
@@ -11,6 +11,10 @@ class HospitalAppointment(Model):
   _description = "Hospital Appointment"
   #? by default _rec-name will have field with 'name' as it value but you can change it into any field to show it on form's breadcrumbs
   _rec_name = 'name'
+  #?119 with the [_order] property we can specify the order of our fields in the tree view?
+  _order = 'id desc'
+  #? just add more separated by comma for more complacted ordering
+  # _order = 'id desc, name, age asc'
 
   @model
   def create(self, vals_list):
@@ -18,20 +22,27 @@ class HospitalAppointment(Model):
     return super(HospitalAppointment, self).create(vals_list)
 
   def write(self, vals):
-    if not self.name or self.name == False or not vals.get('name'):
+    if (not self.name or self.name == False) and not vals.get('name'):
+      print('self.name--',self.name)
+      print('self.name--',vals.get('name'))
       vals['name'] = self.env['ir.sequence'].next_by_code('hospital.appointment')
     return super(HospitalAppointment, self).write(vals)
 
-  #?95? the unlike method let us access the delete functions on the odoo's UI letting us manipulate the process
+  # the unlike method let us access the delete functions on the odoo's UI letting us manipulate the process
   #? in this case disallowing the user from delete the record while it in any but draft state
   def unlink(self):
-    print(self.state)
-    if self.state != "draft":
-      raise ValidationError("You can only delete appointments in draft state")
+    for record in self:
+      if record.state != "draft":
+        raise ValidationError("You can only delete appointments in draft state")
     return super(HospitalAppointment, self).unlink()
 
   name = Char(string="Appointment ID")
-  patient_id = Many2one(comodel_name='hospital.patient', string="Patient")
+  #?97? with the [ondelete='restrict'] parameter we can prevent the deletion of the depended many2one model's record
+  #? until all of depending model's records in the many's side is deleted first
+  #? on the other hand [ondelete='cascade'] will detect if the depended many2one model's record is deleted than it will
+  #? also delete all the model's records here that depending on it
+  # patient_id = Many2one(comodel_name='hospital.patient', string="Patient", ondelete='restrict')
+  patient_id = Many2one(comodel_name='hospital.patient', string="Patient", ondelete='cascade')
   gender = Selection(related='patient_id.gender')
   appointment_time = Datetime(string="Appointment Time", default=Datetime.now)
   booking_date = Date(string="Booking Date", default=Date.context_today)
@@ -43,6 +54,7 @@ class HospitalAppointment(Model):
   pharmacy_line_ids = One2many('hospital.appointment.pharmacy.lines', 'appointment_id', string="Pharmacy Lines")
   # ? this is just a test boolean to learn how to hide column
   hide_sales_price = Boolean(string="Hide sales Price")
+  operation_id = Many2one(comodel_name="hospital.operation",string="Operation ID")
   priority = Selection(
     [
       ('0', 'Normal'),
@@ -76,10 +88,13 @@ class HospitalAppointment(Model):
 
   def action_done(self):
     for rec in self:
-      rec.state = "done" 
+      if rec.state == 'in_consultation':
+        rec.state = "done" 
   def action_in_consultation(self):
     for rec in self:
-      rec.state = "in_consultation"
+      #?102? extra condition when we want to use this function in the tree view
+      if rec.state == 'draft':
+        rec.state = "in_consultation"
   # ? if you need to get an window action and run it using a function then here the syntax
   def action_cancel(self):
     action = self.env.ref("my_forth_module.action_cancel_appointment").read()[0]

@@ -25,7 +25,9 @@
     'views/female_patient_view.xml',
     'views/appointment_view.xml',
     'views/my_playground_view.xml',
+    'views/operation_view.xml',
     'views/menu.xml',
+    'views/res_config_settings_views.xml',
   ],
   'demo': [
     

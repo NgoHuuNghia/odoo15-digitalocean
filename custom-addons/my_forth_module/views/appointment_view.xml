@@ -33,6 +33,12 @@
       -->
       <tree decoration-success="state == 'done'" decoration-danger="state == 'cancel'"
         sample="1" multi_edit="1">
+        <!--?102? to add a button in the tree view use header, and everything is like in form view (allowing us to change records with selections) -->
+        <!--! not that [data-hotkey] and [states] does not work in tree view -->
+        <header>
+          <button name="action_done" string="Mark As Done" type="object"/>
+        </header>
+        <field name="name" />
         <field name="patient_id" />
         <!--
           ? with option attribute allow us to optionally hide or show a model's field 
@@ -58,6 +64,23 @@
           decoration-danger="state == 'cancel'"
           decoration-info="state == 'draft'"
           decoration-warning="state == 'in_consultation'"/>
+        <!-- ?103? to add buttons in the record table itself, simply put it here also all fontawesome icons are supported-->
+        <button name="action_done" type="object"  title="Action Done"
+          class="fa fa-check btn-success" attrs="{'invisible':[('state', '!=', 'in_consultation')]}"/>
+        <button name="%(my_forth_module.action_cancel_appointment)d" type="action" title="Action Cancel"
+          context="{'default_appointment_id':active_id,'hide_appointment_id':1}"
+          class="fa fa-times btn-danger" attrs="{'invisible':[('state', '=', 'cancel')]}"/>
+        <!--
+          ?105? adding a button the tree view's group by sub view
+          ? with the name attribute we can specify which group by selection will this button shown
+          ! also groupby elements can only be added by many2one fields
+          ! THIS ACTION NEED TO BE DEFINE IN IT ORIGINAL CORE MODULE
+        -->
+        <groupby name='patient_id'>
+          <button name="action_test" string="Click Me?" type="object" class="oe_highlight"/>
+          <!--? you can also specify a special [edit] value for [type] attribute to edit the core record -->
+          <button name="edit" string="Edit" type="edit"/>
+        </groupby>
       </tree>
     </field>
   </record>
@@ -87,7 +110,9 @@
     <field name="model">hospital.appointment</field>
     <field name="arch" type="xml">
       <search>
-
+        <group expand="0" string="Group By">
+          <filter string="Patients" name="group_by_patient_ids" context="{'group_by':'patient_id'}"/>
+        </group>
       </search>
     </field>
   </record>
@@ -108,7 +133,7 @@
         -->
         <header>
           <button name="action_done" string="Mark As Done" type="object"
-          class="oe_highlight" states="in_consultation" data-hotkey="d"/>
+            class="oe_highlight" states="in_consultation" data-hotkey="d"/>
           <button name="action_in_consultation" string="In Consultation" type="object" 
           states="done,cancel,draft" data-hotkey="i"/>
 
@@ -119,7 +144,7 @@
             ? otherwise you can access the same [active_id] using the enviromment's context in the [default_get] function
           -->
           <button name="%(my_forth_module.action_cancel_appointment)d" string="Cancel" type="action" 
-            states="in_consultation" context="{'default_appointment_id':active_id,'hide_appointment_id':1}"/>
+            states="in_consultation,draft" context="{'default_appointment_id':active_id,'hide_appointment_id':1}"/>
           <!-- <button name="action_cancel" string="Cancel" type="object" states="in_consultation"/> -->
 
           <button name="action_draft" string="Rest To Draft" type="object" states="cancel"/>
@@ -149,8 +174,14 @@
           <group>
             <group>
               <!--? You can add a help attribute to provide comment for ui users, work in most elements -->
+              <!--?113? with [widget="selection"] to disbaled typing and other options while selecting a many2one field in form view -->
+              <!-- <field name="patient_id" widget="selection" help="this is the patient id, can be found in breadcrumbs too" default_focus="1"/> -->
               <field name="patient_id" help="this is the patient id, can be found in breadcrumbs too" default_focus="1"/>
-              <field name="ref"/>
+              <!--
+                ?111? with [readonly] attribute will not save our record's field even when using onchange decorator
+                ? [force_save] to forcefully save a readonly field too when using [readonly]
+              use with  -->
+              <field name="ref" readonly='1' force_save="1"/>
               <field name="gender"/>
             </group>
             <group>
@@ -159,6 +190,7 @@
               <!--? with the [default_focus] attribute we can default the focus whenever this form is reached -->
               <field name="booking_date"/>
               <field name="doctor_id" widget="many2one_avatar"/>
+              <field name="operation_id" />
               <!--
                 ? the button type of [object] will search for a function with the sane name as the name's attribute value
                 ? the function will be declare in the model file in python and read there
