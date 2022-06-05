@@ -8,6 +8,8 @@ class HospitalOperation(models.Model):
   #?115? with [_log_access] property we can remove base fields like (Create, Write,...).
   #? Though only normal model can use this property not transient ones
   _log_access = False
+  #?130? for the [handle] widget to work [_order] must be set to it's field
+  _order = 'sequence'
   
   doctor_id = fields.Many2one('res.users', string="Doctor")
   operation_name = fields.Char(string='Name')
@@ -18,6 +20,7 @@ class HospitalOperation(models.Model):
     ('hospital.patient','Patient'),
     ('hospital.appointment','Appointment')
   ],string='Record')
+  sequence = fields.Integer(string='Sequence',default="10")
 
   #?116? using name_create function for niche use-case when we don't have a [name] field or [_rec_name] property
   #? applicable when creating a new record using the Many2one fields

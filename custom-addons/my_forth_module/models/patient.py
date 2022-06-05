@@ -3,6 +3,7 @@
 # from odoo import modules, api, fields
 # and use their method with a dot (modules.Model)
 #? or do the it the modern way specifically import them
+from odoo import _
 from odoo.exceptions import ValidationError
 from odoo.models import Model
 from odoo.api import depends, model, constrains, ondelete
@@ -56,7 +57,7 @@ class HospitalPatient(Model):
   #*95* since compute fields won't be store on the database, use the store parameter to make it so
   appointment_count = Integer(string="Appointment Count", compute=("_compute_appointment_count"), store=True)
   #*95* with the One2many field we can specify 
-  appointment_id = One2many(comodel_name='hospital.appointment', inverse_name='patient_id', string="Appointments")
+  appointment_ids = One2many(comodel_name='hospital.appointment', inverse_name='patient_id', string="Appointments")
   #*98* these 3 fields bellow is used for learning how to hide fields in views base on conditions
   parent = Char(string='Parent')
   marital_status = Selection(selection=[
@@ -83,7 +84,7 @@ class HospitalPatient(Model):
   @ondelete(at_uninstall=False)
   def _check_appointments(self):
     for record in self:
-      if record.appointment_id:
+      if record.appointment_ids:
         raise ValidationError("Cannot delete a patient with active appointments")
 
   #? this depend is a decorator to run the function bellow when a 
@@ -120,37 +121,57 @@ class HospitalPatient(Model):
 
   #?95? as we know a compute field won't be store in the database, here how we can store it
   #? it is also import to have the decorator depends to make sure the _compute is run everytime there a new appointment
-  @depends('appointment_id')
+  @depends('appointment_ids')
   def _compute_appointment_count(self):
-    for record in self:
-      #? the [search_count] is an ORM method that allow count a given domain using a condition
+    #? the [search_count] is an ORM method that allow count a given domain using a condition
+    # for record in self:
       # record.appointment_count = self.env['hospital.appointment'].search_count([('patient_id', '=', record.id)])
-      #? another way of getting [appointment_count] is using [read_group] method instead with 3 parameters
-      #? (domain, fields, group by) all in a list
-      appointment_group = self.env['hospital.appointment'].read_group(
-        domain=[],
-        fields=['patient_id'],
-        groupby=['patient_id']
-      )
-      for appointment in appointment_group:
-        print('appointment----', appointment.get('patient_id')[0])
-        patient_id = appointment.get('patient_id')[0]
-        patient_record = self.browse(patient_id)
-        patient_record.appointment_count = 20
-      
-      # record.appointment_count = 10
+    #? another way of getting [appointment_count] is using [read_group] method instead with 3 parameters
+    #? (domain, fields, group by) all in a list, with this method we can more fine tune that data and domain behavior we need
+    appointment_group = self.env['hospital.appointment'].read_group(
+      #? with [domain] parameter we can specify which group with which condition that will be read
+      domain=[],
+      fields=['patient_id'],
+      groupby=['patient_id']
+    )
+    
+    #? [appointment_group] will return a list of dictionary containing the counts of all the appointments that is in many2one relation with [patient_id]
+    for appointment in appointment_group:
+      #$ example of one of the dictionary from read_group
+      #$ {'patient_id_count': 4, 'patient_id': (1, <odoo.tools.func.lazy object at 0x000002904A573D80>), '__domain': [('patient_id', '=', 1)]}
+      patient_id = appointment.get('patient_id')[0]
+      patient_record = self.browse(patient_id)
+      patient_record.appointment_count = appointment['patient_id_count']
+      #? to ensure that newly created patient will have at least 0 appointment_count the record set need extract them from removing ones with values
+      self -= patient_record
+    #? give the newly created patient a value to avoid server error
+    self.appointment_count = 0
 
   #?122? here is the compute function for the is_birthday
   @depends('date_of_birth')
   def _compute_is_birthday(self):
-    print("BIRTHDAY CHAOS")
     for record in self:
-      if Date.today().day == record.date_of_birth.day and Date.today().month == record.date_of_birth.month:
-        self.is_birthday = True
-      else:
-        self.is_birthday = False
+      #? check if [date_of_birth] exist yet, important for newly created patient to avoid server error 
+      if record.date_of_birth:  
+        if Date.today().day == record.date_of_birth.day and Date.today().month == record.date_of_birth.month:
+          record.is_birthday = True
+        else: record.is_birthday = False
+      else: record.is_birthday = False
 
   #?105? the action in group by list need to be added in it's core module
   def action_test(self):
     print('BUTTON CLICKED', self)
     return
+
+  #?129? the return contain the actions properties in a dictionary
+  #? with [context] and [domain] properties determine the returned records
+  def action_view_appointments(self):
+    return {
+        'name': _('Appointments'),
+        'res_model': 'hospital.appointment',
+        'view_mode': 'list,form',
+        'context': {'default_patient_id':self.id},
+        'domain': [('patient_id','=',self.id)],
+        'target': 'current',
+        'type': 'ir.actions.act_window',
+    }

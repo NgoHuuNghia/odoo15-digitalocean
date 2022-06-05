@@ -6,6 +6,8 @@
     <field name="model">hospital.operation</field>
     <field name="arch" type="xml">
       <tree string="">
+        <!--?130? a widget to adding a drag and drop handle to a feild letting you change sequence or integer with those actions -->
+        <field name="sequence" widget="handle"/>
         <field name="doctor_id" />
         <field name="operation_name" />
         <field name="reference_record" />
@@ -24,6 +26,7 @@
               <field name="doctor_id" />
               <field name="operation_name" />
               <field name="reference_record" />
+              <field name="sequence"/>
             </group>
           </group>
         </sheet>
