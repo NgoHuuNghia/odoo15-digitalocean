@@ -40,12 +40,13 @@
       <tree export_xlsx='0'>
         <!--* field to show as a table on our first view -->
         <field name="name" string="Patient Name"/>
-        <!--?118? there also a [avg] to provide an average of a total sum just also add string -->
-        <field name="age" avg="Average Age"/>
         <field name="gender" />
         <!--?118? with [sum] attribute will let us sum all the counts at the end of collum of a field just add a string -->
         <field name="appointment_count" sum="Total Appointments"/>
+        <!--?118? there also a [avg] to provide an average of a total sum just also add string -->
+        <field name="age" avg="Average Age"/>
         <field name="ref" />
+        <field name="tag_ids"/>
       </tree>
     </field>
   </record>
@@ -109,6 +110,12 @@
       <form>
         <!--* sheet element will give us the margin: auto sheet that base modules have, nice -->
         <sheet>
+          <!--?129? adding stats button to form view, check contacts's form view for example -->
+          <div class="oe_button_box" name="button_box">
+            <button name="action_view_appointments" type="object" class="oe_stat_button" icon="fa-star">
+              <field name="appointment_count" string="Appointments" widget="statinfo"/>
+            </button>
+          </div>
           <!--?122? using the div bellow we can show an alert base on some condition and remove it with [data-dimiss] -->
           <div class="alert alert-warning text-center o_form_header" role="alert"
             attrs="{'invisible':[('is_birthday','=',False)]}">
@@ -144,7 +151,7 @@
               <field name="age" />
               <!--! i be honest man, no idea what context.get does -->
               <field name="gender" invisible="context.get('hide_gender')" widget="radio"/>
-              <!-- <field name="appointment_id" /> -->
+              <!-- <field name="appointment_ids" /> -->
             </group>
             <group>
               <!--* use [many2many_tags] widget to create the nice looking tag in the view -->
@@ -154,10 +161,9 @@
               <!-- <field name="tag_ids" widget="many2many_checkboxes" options="{'color_field': 'color'}"/> -->
               <!--* invisible attribute will decide if this field is visible or not useful for when we use the archive action -->
               <field name="active" invisible="1" />
-              <field name="appointment_count" />
               <field name="is_birthday" />
             </group>
-            <!-- <field name="appointment_id" /> -->
+            <!-- <field name="appointment_ids" /> -->
           </group>
           <!--
             ?98?99?100? hide or read only fields base on conditions using the [attrs] attribute with the [invisible] or [readonly] dictionary with a list
