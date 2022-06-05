@@ -66,6 +66,9 @@ class HospitalPatient(Model):
   partner_name = Char(string='Partner\'s Name')
   #*122* to enable the birthday alert create this Boolean field and let compute decide when today is equal to their birthday
   is_birthday = Boolean(string='Birthday?', compute="_compute_is_birthday")
+  phone = Char(string="Phone")
+  email = Char(string="Email")
+  website = Char(string="Website")
 
   #?92? Other than using the sql constraints, we can use the odoo's constrains decorator and python to apply the same logic
   @constrains('date_of_birth')
@@ -120,8 +123,22 @@ class HospitalPatient(Model):
   @depends('appointment_id')
   def _compute_appointment_count(self):
     for record in self:
-      #? the search_count is an ORM method that allow count a given domain using a condition
-      record.appointment_count = self.env['hospital.appointment'].search_count([('patient_id', '=', record.id)])
+      #? the [search_count] is an ORM method that allow count a given domain using a condition
+      # record.appointment_count = self.env['hospital.appointment'].search_count([('patient_id', '=', record.id)])
+      #? another way of getting [appointment_count] is using [read_group] method instead with 3 parameters
+      #? (domain, fields, group by) all in a list
+      appointment_group = self.env['hospital.appointment'].read_group(
+        domain=[],
+        fields=['patient_id'],
+        groupby=['patient_id']
+      )
+      for appointment in appointment_group:
+        print('appointment----', appointment.get('patient_id')[0])
+        patient_id = appointment.get('patient_id')[0]
+        patient_record = self.browse(patient_id)
+        patient_record.appointment_count = 20
+      
+      # record.appointment_count = 10
 
   #?122? here is the compute function for the is_birthday
   @depends('date_of_birth')

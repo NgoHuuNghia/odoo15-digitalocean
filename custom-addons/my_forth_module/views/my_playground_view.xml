@@ -8,6 +8,7 @@
       <form string="">
         <group>
           <field name="model_id" />
+          <!--?124? [widget="ace"] is more or less a code form with the [options] for different languages -->
           <field name="code" widget="ace" options="{'mode':'python'}" />
         </group>
         <group>

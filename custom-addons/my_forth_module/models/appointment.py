@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, CacheMiss
 from odoo.models import Model
-from odoo.api import onchange, model, ondelete
+from odoo.api import depends, onchange, model, ondelete
 from odoo.fields import Many2one, One2many, Datetime, Date, Selection, Char, Html, Integer, Float, Boolean
 class HospitalAppointment(Model):
   #? main name for this Module (you can check them in the setting of debug options)
@@ -55,6 +55,9 @@ class HospitalAppointment(Model):
   # ? this is just a test boolean to learn how to hide column
   hide_sales_price = Boolean(string="Hide sales Price")
   operation_id = Many2one(comodel_name="hospital.operation",string="Operation ID")
+  #?126? adding a progress widget in the view, we will need a computed Integer field
+  progress = Integer(string="Progress", compute="_compute_progress")
+  duration = Float(string="Duration")
   priority = Selection(
     [
       ('0', 'Normal'),
@@ -85,6 +88,22 @@ class HospitalAppointment(Model):
           'type': 'rainbow_man',
       }
     }
+  
+  #?126? here where we define the logic behind the progress compute
+  @depends('state')
+  def _compute_progress(self):
+    for record in self:
+      if record.state == 'cancel':
+        record.progress = 0
+      elif record.state == 'draft':
+        record.progress = 25
+      elif record.state == 'in_consultation':
+        record.progress = 50
+      elif record.state == 'done':
+        record.progress = 100
+      else:
+        record.progress = 0
+        raise CacheMiss("a record in hospital.appointment model has an invalid value")
 
   def action_done(self):
     for rec in self:

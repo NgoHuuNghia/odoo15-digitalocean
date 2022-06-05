@@ -4,12 +4,31 @@
     <field name="name">Appointments</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">hospital.appointment</field>
-    <field name="view_mode">tree,form,activity</field>
+    <field name="view_mode">tree,form,activity,calendar</field>
     <field name="context">{}</field>
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">
         Add your first Appointment
       </p>
+    </field>
+  </record>
+
+  <!--?125? adding a server action to the tree view to mark as done to all selected records -->
+  <record id="action_server_mark_as_done" model="ir.actions.server">
+    <field name="name">Mark As Done</field>
+    <field name="type">ir.actions.server</field>
+    <!--? [model_id] used to specify the model being interacted with syntax is [model_model_name] same as [binding_model_id] -->
+    <field name="model_id" ref="model_hospital_appointment" />
+    <field name="binding_model_id" ref="model_hospital_appointment" />
+    <!--? this is a server's model to execute code (check on server action in setting) -->
+    <field name="state">code</field>
+    <!--? use [binding_view_types] field to specify which which view to show this action -->
+    <field name="binding_view_types">list</field>
+    <!--? after declaring which state is the sever action [code] we can write code inside the [code] field, the functions is taken from the model specify above -->
+    <field name="code">
+      for record in records:
+        if record.state == 'in_consultation':
+          record.action_done()
     </field>
   </record>
 
@@ -81,7 +100,36 @@
           <!--? you can also specify a special [edit] value for [type] attribute to edit the core record -->
           <button name="edit" string="Edit" type="edit"/>
         </groupby>
+        <!--?126? here we adding the widget [widget="progressbar"], there also an option attribute which let us specify max value and editable -->
+        <field name="progress" widget="progressbar" options="{'current_value':'progress','max_value':'100','editable':True}"/>
       </tree>
+    </field>
+  </record>
+
+  <!--?127? creating a calendar view, remember to add this view in action in view_mode -->
+  <record id="view_hospital_appointment_calendar" model="ir.ui.view">
+    <field name="name">hospital.appointment.calendar</field>
+    <field name="model">hospital.appointment</field>
+    <field name="arch" type="xml">
+      <!--
+        ?127? before creating a calendar view give it a [date_start] attribute with value of field of a starting date also when creating a new record the date is pass into that field
+        ? with the date_delay we can specify a duration, just add a float field in the model and provide it in date_delay
+        ? you can also specify which [mode] the calendar view is in by default [day],[month],...
+        ? add a [color] attribute with the field you want to change colors preferbly a selection
+        ? to remove the ability to add events to calendar view, change [quick_add] to false, instead this will create a new appointment
+        ? to add filters to the calendar view just add a [filters] attribute to the field which you want to filter
+        ? to add an avatar image use [avatar_field="image_field"] attribute, since the patient_id field is a many2one field than in it core model image is available
+        ? use the [hide_time] to disable the time preview when clicking on a record
+        ? [form_view_id] attribute to specify which form view to open, incase we have multiple form view for this model
+        ? [event_open_popup="True"] to open a form view in popup mode
+        ? use [event_limit="integer"] to limit how many records is display at once, showing [integer -1] with option to show more
+      -->
+      <calendar string="Appointments" date_start="booking_date" date_delay="duration" mode="month" color="patient_id"
+        quick_add="False" hide_time="True" form_view_id="%(my_forth_module.view_hospital_appointment_form)d"
+        event_open_popup="True" event_limit="5">
+        <field name="patient_id" filters="1" avatar_field="image"/>
+        <field name="state" invisible="1" filters="1"/>
+      </calendar>
     </field>
   </record>
 
@@ -135,7 +183,7 @@
           <button name="action_done" string="Mark As Done" type="object"
             class="oe_highlight" states="in_consultation" data-hotkey="d"/>
           <button name="action_in_consultation" string="In Consultation" type="object" 
-          states="done,cancel,draft" data-hotkey="i"/>
+          states="done,draft" data-hotkey="i"/>
 
           <!--
             ? using the attribute type of [action] allow us to launch the wizard using a view's action remember the weird name syntax ok?
@@ -183,6 +231,7 @@
               use with  -->
               <field name="ref" readonly='1' force_save="1"/>
               <field name="gender"/>
+              <field name="duration" />
             </group>
             <group>
               <field name="appointment_time" />
@@ -239,6 +288,16 @@
                 </field>
                 
               </group>
+            </page>
+            <!--
+              ?126? adding a new page for the [widget="gauge"] and [widget="percentpie"] widget in form view, 
+              ? with ton of options from [options] attribute such as max_field, label or widgh and height
+              ! weird bug that all 3 progress widget is not compatible to be near eachother, the lastest will overide all
+            -->
+            <page name="progress" string="Progress">
+              <field name="progress" widget="gauge" 
+                options="{'style': 'width:100px; height: 100px;'}"/>
+              <!-- <field name="progress" widget="percentpie"/> -->
             </page>
           </notebook>
         </sheet>

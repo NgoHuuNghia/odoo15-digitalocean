@@ -165,12 +165,24 @@
             ? also the [required] will also work here
           -->
           <group name="other_info" string="Other infomations">
-            <field name="parent" attrs="{'invisible':[('age', '>=', '18')]}"/>
-            <field name="marital_status" attrs="{'invisible':[('age', '&lt;', '18')]}"/>
-            <field name="partner_name" attrs="{
-              'readonly':[('marital_status', '!=', 'married')],
-              'required':[('marital_status', '=', 'married')],
-            }"/>
+            <group name="familial_info" string="Familial Infomations">
+              <field name="parent" attrs="{'invisible':[('age', '>=', '18')]}"/>
+              <field name="marital_status" attrs="{'invisible':[('age', '&lt;', '18')]}"/>
+              <field name="partner_name" attrs="{
+                'readonly':[('marital_status', '!=', 'married')],
+                'required':[('marital_status', '=', 'married')],
+              }"/>
+            </group>
+            <group name="contanct_info" string="Contact Infomations">
+              <!--
+                ?123? with the [widget="phone"] we can use odoo's phone functionalities
+                ? such as sending messages on desktop using odoo's sms from the enterprise version
+                ? there also [widget="email"] and [widget="website"] note that only .com will be clickable
+              -->
+              <field name="phone" widget="phone"/>
+              <field name="email" widget="email"/>
+              <field name="website" widget="website"/>
+            </group>
           </group>
         </sheet>
         <!--? the chatter for the form using the mail module with the thread and activity method don't forget to depends them -->
