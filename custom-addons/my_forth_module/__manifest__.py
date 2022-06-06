@@ -1,6 +1,6 @@
 {
   'name': 'Hospital Patient',
-  'version': '0.9',
+  'version': '1.0',
   'description': 'module to learn odoo',
   'summary': 'UNFINISHED',
   'author': 'NgoHuuNghia',
@@ -20,13 +20,13 @@
     'data/hospital_patient_tag_data.xml',
     'data/hospital.patient.tag.csv',
     'wizard/cancel_appointment_view.xml',
+    'views/menu.xml',
     'views/patient_view.xml',
     'views/patient_tag_view.xml',
     'views/female_patient_view.xml',
     'views/appointment_view.xml',
     'views/my_playground_view.xml',
     'views/operation_view.xml',
-    'views/menu.xml',
     'views/res_config_settings_views.xml',
   ],
   'demo': [
