@@ -17,14 +17,15 @@ class HospitalCancelAppointmentWizard(TransientModel):
     res = super(HospitalCancelAppointmentWizard, self).default_get(fields_list)
     #? also use the datetime package that odoo requires to get current date, the odoo.fields.Date.context_today won't work here
     res['date_cancel'] = Date.today()
-    #? using the context in the [default_get] method we can get the [rec_name] more or less and manipulate it
-    if self.env.context.get("active_id"):
+    #?87? using the context in the [default_get] method we can get the [rec_name] more or less and manipulate it
+    #? either get the id using the context.get or pass it with active_id in the view
+    if not res['appointment_id'] and self.env.context.get("active_id"):
       res['appointment_id'] = self.env.context.get("active_id")
     return res
 
   #?90? the domain to hard filter can also be apply to a Many2one field search using a list with tuples containing conditions
   #$ remember that in the domain's list all conditions will have an AND condition toward eachother, if you want an 
-  #$ OR condition add ['|'] in front depend on how many tuples 2 for 3 tuples and etc...
+  #$ OR condition add ['|'] in front depend on how many tuples 2 for 3 tuples and etc... (prefix notation)
   # appointment_id = Many2one(comodel_name="hospital.appointment", string="Appointment", domain=[('state','=','draft'),('priority','in',('0','1',False))])
   appointment_id = Many2one(comodel_name="hospital.appointment", string="Appointment")
   reason = Text(string="Reason", default="None specify...")

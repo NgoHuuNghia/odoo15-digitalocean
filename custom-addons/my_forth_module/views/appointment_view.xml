@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  
+
   <record id="view_hospital_appointment_search" model="ir.ui.view">
     <field name="name">hospital.appointment.search</field>
     <field name="model">hospital.appointment</field>
@@ -37,7 +37,7 @@
             ? using the attribute type of [action] allow us to launch the wizard using a view's action remember the weird name syntax ok?
             ? or we can use the type of [object] and define a function that return the same action, (see more in appointment.py)
             ? to access the [active_id], more or less the _rec_name value and pass it as default use the context attribute like bellow
-            ? otherwise you can access the same [active_id] using the enviromment's context in the [default_get] function
+            ?87? otherwise you can access the same [active_id] using the enviromment's context in the [default_get] function
           -->
           <button name="%(my_forth_module.action_cancel_appointment)d" string="Cancel" type="action" 
             states="in_consultation,draft" context="{'default_appointment_id':active_id,'hide_appointment_id':1}"/>
@@ -88,15 +88,22 @@
               <field name="booking_date"/>
               <field name="doctor_id" widget="many2one_avatar"/>
               <field name="operation_id" />
+              <!--?131? only enable these field to view when there are multiples of them with [group] -->
+              <field name="company_id" groups="base.group_multi_company"/>
+              <field name="currency_id" groups="base.group_multi_currency"/>
               <!--
-                ? the button type of [object] will search for a function with the sane name as the name's attribute value
+                ?34?35?38? the button type of [object] will search for a function with the sane name as the name's attribute value
                 ? the function will be declare in the model file in python and read there
                 ? while the [action] button type will search for a window action in odoo
               -->
               <button name="object_test" string="Object Button" type="object" class="oe_highlight"/>
-              <button name="%(my_forth_module.action_hospital_patient)d" string="Action Button" 
+              <!-- <button name="%(my_forth_module.action_hospital_patient)d" string="Action Button" 
                 type="action" class="oe_highlight" confirm="Are you sure to open patient action"
-                help="You will be redirected to patient record"/>
+                help="You will be redirected to patient record"/> -->
+              <button
+                name="action_view_patient" type="object" string="Patient button" 
+                class="oe_highlight" confirm="Are you sure to open patient action"
+                help="You will be redirected to this patient's record"/>
             </group>
           </group>
 
@@ -111,7 +118,7 @@
               <group>
                 <field name="appointment_time" />
                 <field name="booking_date" />
-
+                <field name="total" />
                 <!--
                   ? here is where we add the one2many field to the view with a nested tree and form for it's model 
                   ? in this case [hospital.appointment.pharmacy.lines], also add the editable attribute to the tree element
@@ -121,16 +128,22 @@
                 <field name="pharmacy_line_ids">
                   <tree editable="bottom">
                     <field name="product_id" />
-                    <field name="price_unit" attrs="{'column_invisible': [('parent.hide_sales_price', '=', True)]}"/>
+                    <!--?131? you can also add the currency to any number field with widget monetary, but remember to add a [currency_id] field in the model -->
+                    <field name="price_unit" attrs="{'column_invisible': [('parent.hide_sales_price', '=', True)]}"
+                      widget="monetary" options="{'currency_field':'company_currency_id'}"/>
                     <field name="qty" />
-                    <field name="appointment_id" />
+                    <!--
+                      ?131? all the subtotal and total view for monetary
+                      ? adding the currency_id to add the actualy currency next to the subtotal with invisble to not also add a collumn
+                    -->
+                    <field name="company_currency_id" invisible="1"/>
+                    <field name="price_subtotal" />
                   </tree>
                   <form>
                     <group>
                       <field name="product_id" />
                       <field name="price_unit" />
                       <field name="qty" />
-                      <field name="appointment_id" />
                     </group>
                   </form>
                 </field>
@@ -208,7 +221,7 @@
       <!--
         ? You can add color indication for the font with decoration attribute depending on model value just like badge
         ? also you can add sample data using the [sample] attribute
-        ? add the [multi_edit] attribute to give allow select multiple objects and edit a field simultaneously
+        ?48? add the [multi_edit] attribute to give allow select multiple objects and edit a field simultaneously
       -->
       <tree decoration-success="state == 'done'" decoration-danger="state == 'cancel'"
         sample="1" multi_edit="1">
@@ -217,25 +230,25 @@
         <header>
           <button name="action_done" string="Mark As Done" type="object"/>
         </header>
-        <field name="name" />
-        <field name="patient_id" />
+        <field name="name" readonly="1"/>
+        <field name="patient_id" readonly="1"/>
         <!--
-          ? with option attribute allow us to optionally hide or show a model's field 
+          ?42? with option attribute allow us to optionally hide or show a model's field 
           ? but still allow us to choose with a 3 dots at the right of the table 
         -->
         <field name="gender" optional="show"/>
         <field name="appointment_time" />
-        <field name="booking_date" optional="show"/>
-        <!--? use this widget [list_activity] along with activity model from mail to add activies with icons for objects -->
+        <field name="booking_date" optional="hide"/>
+        <!--?41? use this widget [list_activity] along with activity model from mail to add activies with icons for objects -->
         <field name="activity_ids" widget="list_activity"/>
         <!--
-          ? here we add a new [doctor_id] field in model file that point to the system users, 
+          ?43? here we add a new [doctor_id] field in model file that point to the system users, 
           ? allowing us to choose an existing user and show their avatar with the [many2one_avatar] widget
           ? or the [many2one_avatar_user] widget to allow clicking on the avatar showing the chat from the disscuss module
         -->
         <field name="doctor_id" widget="many2one_avatar_user"/>
         <!--
-          ? To add badge widget just add the widget attribute with badge value with corresponding color 
+          ?40? To add badge widget just add the widget attribute with badge value with corresponding color 
           ? for each decoration attribute with a value condition of the model
         -->
         <field name="state" widget="badge" optional="show"
@@ -243,6 +256,8 @@
           decoration-danger="state == 'cancel'"
           decoration-info="state == 'draft'"
           decoration-warning="state == 'in_consultation'"/>
+        <field name="currency_id" invisible="1"/>
+        <field name="total"/>
         <!-- ?103? to add buttons in the record table itself, simply put it here also all fontawesome icons are supported-->
         <button name="action_done" type="object"  title="Action Done"
           class="fa fa-check btn-success" attrs="{'invisible':[('state', '!=', 'in_consultation')]}"/>

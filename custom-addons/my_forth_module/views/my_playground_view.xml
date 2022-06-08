@@ -12,7 +12,10 @@
           <field name="code" widget="ace" options="{'mode':'python'}" />
         </group>
         <group>
-          <button string="Execute" name="action_execute" type="object" class="oe_highlight" data-hotkey="q"/>
+          <groupby>
+            <button string="Execute " name="action_execute" type="object" class="fa fa-check oe_highlight" data-hotkey="q"/>
+            <button string="Clear " name="action_clear" type="object" class="fa fa-repeat" data-hotkey="c"/>
+          </groupby>
         </group>
         <group>
           <field name="result" readonly="1"/>

@@ -6,6 +6,8 @@ python odoo-bin
 python odoo-bin scaffold module_name .\[custom-addons-path]
 <!-- $ cli for creating a new database, without -d to run all available database, choose from the ui -->
 python odoo-bin -d [newDatabaseName]
+<!-- $ cli for all available commands -->
+python odoo-bin -h
 
 <!--
   ? we can kill a odoo process directly with kill command but since we are using InstallScript from Yen to install

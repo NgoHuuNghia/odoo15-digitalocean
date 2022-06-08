@@ -48,6 +48,7 @@ class HospitalPatient(Model):
   age = Integer(string='Age', compute='_compute_age', inverse='_inverse_compute_age', search='_search_age') 
   #* with selection you need to provide the first argument as a list with tuples of the label and value of your selections
   gender = Selection([('male', 'Male'), ('female', 'Female')], string='Gender')
+  #*15* creating archive field here
   active = Boolean(string='active', default=True)
   #* with the Image method we can add images file to the view using the image widget
   image = Image(string="Image")

@@ -46,7 +46,7 @@
         <!--?118? there also a [avg] to provide an average of a total sum just also add string -->
         <field name="age" avg="Average Age"/>
         <field name="ref" />
-        <field name="tag_ids"/>
+        <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
       </tree>
     </field>
   </record>
@@ -159,7 +159,7 @@
               <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
               <!--*112* with the [widget="many2many_checkboxes"] we can have normal chexkboxes for many2many fields instead (not recommended for big fields) -->
               <!-- <field name="tag_ids" widget="many2many_checkboxes" options="{'color_field': 'color'}"/> -->
-              <!--* invisible attribute will decide if this field is visible or not useful for when we use the archive action -->
+              <!--*15* invisible attribute will decide if this field is visible or not useful for when we use the archive action -->
               <field name="active" invisible="1" />
               <field name="is_birthday" />
             </group>
@@ -175,7 +175,7 @@
               <field name="parent" attrs="{'invisible':[('age', '>=', '18')]}"/>
               <field name="marital_status" attrs="{'invisible':[('age', '&lt;', '18')]}"/>
               <field name="partner_name" attrs="{
-                'readonly':[('marital_status', '!=', 'married')],
+                'invisible':[('marital_status', '!=', 'married')],
                 'required':[('marital_status', '=', 'married')],
               }"/>
             </group>
