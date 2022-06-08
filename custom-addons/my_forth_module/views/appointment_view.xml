@@ -237,8 +237,8 @@
           ? but still allow us to choose with a 3 dots at the right of the table 
         -->
         <field name="gender" optional="show"/>
-        <field name="appointment_time" />
-        <field name="booking_date" optional="hide"/>
+        <field name="appointment_time" optional="hide"/>
+        <field name="booking_date" optional="show"/>
         <!--?41? use this widget [list_activity] along with activity model from mail to add activies with icons for objects -->
         <field name="activity_ids" widget="list_activity"/>
         <!--

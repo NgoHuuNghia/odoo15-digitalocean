@@ -9,20 +9,20 @@ class MyPlayground(models.Model):
   # ? remember [DEFAULT_ENV_VARIABLES] is not a field just a python varible
   DEFAULT_ENV_VARIABLES = """# available variables
   ### also the class is declared in [source]/odoo/api.py check it for all the functions
-  # - self:                                   Current Object/record/record set where the code execute happens
-  # - self.browse([id_integer]).[field_name]: Use the ORM's browse method to access a specific record with it's id, allowing us to return a field or use a function
-  # - self.env[module_name]:                  Specify the module name to access it's environment (use the model selection above instead)
-  # - self.env.ref([xml_id_from_metadata]):   From the environment we can access record/record set with it's external id (so mostly record loaded from xml or csv)
-  # - self.env:                               Current Odoo Environment class on which the action is triggered
-  # - self.env.user:                          Return the current user (as an instance)
-  # - self.env.is_system:                     Return whether the current user has group "Setting", or is in superuser mode.
-  # - self.env.is_admin:                      Return whether the current user has a group "Access Rights", or is in superuser mode.
-  # - self.env.is_superuser:                  Return whether the environment is in superuser mode.
-  # - self.env.company:                       Return the current company (as an instance)
-  # - self.env.companies:                     Return a recordset of the enabled companies by the user
-  # - self.env.lang:                          Return the current language code
-  # - self.env.cr:                            Return the sql cursor class by which let us perform queries operations in postgres
-  # - self.env.context:                       Return a dictionary of the environment's action context (language,timezone,model(fields,name,...),company,...)
+  # - self                                   Current Object/record/record set where the code execute happens
+  # - self.browse([id_integer]).[field_name] Use the ORM's browse method to access a specific record with it's id, allowing us to return a field or use a function
+  # - self.env[module_name]                  Specify the module name to access it's environment (use the model selection above instead)
+  # - self.env.ref([xml_id_from_metadata])   From the environment we can access record/record set with it's external id (so mostly record loaded from xml or csv)
+  # - self.env                               Current Odoo Environment class on which the action is triggered
+  # - self.env.user                          Return the current user (as an instance)
+  # - self.env.is_system                     Return whether the current user has group "Setting", or is in superuser mode.
+  # - self.env.is_admin                      Return whether the current user has a group "Access Rights", or is in superuser mode.
+  # - self.env.is_superuser                  Return whether the environment is in superuser mode.
+  # - self.env.company                       Return the current company (as an instance)
+  # - self.env.companies                     Return a recordset of the enabled companies by the user
+  # - self.env.lang                          Return the current language code
+  # - self.env.cr                            Return the sql cursor class by which let us perform queries operations in postgres
+  # - self.env.context                       Return a dictionary of the environment's action context (language,timezone,model(fields,name,...),company,...)
   #
   ### these are ORM methods use for different situations, allowing us to interact with the database in code
   # - self.env['hospital.patient'].create({'name':'test patient', 'gender':'female','age':99}) - hospital.patient(24,)  # Created a new record

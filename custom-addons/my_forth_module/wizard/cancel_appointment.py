@@ -19,7 +19,7 @@ class HospitalCancelAppointmentWizard(TransientModel):
     res['date_cancel'] = Date.today()
     #?87? using the context in the [default_get] method we can get the [rec_name] more or less and manipulate it
     #? either get the id using the context.get or pass it with active_id in the view
-    if not res['appointment_id'] and self.env.context.get("active_id"):
+    if self.env.context.get("active_id"):
       res['appointment_id'] = self.env.context.get("active_id")
     return res
 
