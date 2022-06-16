@@ -145,10 +145,26 @@ class HospitalAppointment(Model):
         'res_model': 'hospital.patient',
         'view_mode': 'form',
         'res_id': self.patient_id.id,
-        # 'context': {'default_id':self.patient_id},
-        # 'domain': [('id','=',self.patient_id)],
         'target': 'current',
         'type': 'ir.actions.act_window',
+    }
+
+  #?156? display notifacation with this function, while also provide a link
+  def action_notification(self):
+    action = self.env.ref('my_forth_module.action_hospital_patient')
+    return {
+      'type':'ir.actions.client',
+      'tag':'display_notification',
+      'params': {
+        'title':'click to open patient\'s record',
+        'message':'%s',
+        # 'type':'success',
+        'links': [{
+          'label': self.patient_id.name,
+          'url': f'#action={action.id}&id={self.patient_id.id}&model=hospital.patient',
+        }],
+        'sticky':False,
+      }
     }
 
 # ? first step to create a one2many relation is to create a new model either in a new file or same up to you
@@ -159,7 +175,7 @@ class HospitalAppointmentPharmacyLines(Model):
   _description = "Appointment Pharmacy Lines"
 
   product_id = Many2one('product.product', required=True)
-  price_unit = Float(related="product_id.list_price")
+  price_unit = Float(related="product_id.list_price", digit="Product Price")
   qty = Integer(string="Quantity", default=1)
   appointment_id = Many2one('hospital.appointment', string="Appointment")
   #?131? link a related currency_id field from the parent to add type of currencies

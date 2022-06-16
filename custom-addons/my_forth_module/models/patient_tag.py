@@ -7,7 +7,7 @@ class HospitalPatientTag(Model):
   _name = "hospital.patient.tag"
   _description = "Patient Tag"
 
-  name = Char(string="Name", required=True)
+  name = Char(string="Name", required=True, trim=False)
   #?93? with the copy parameter, let us configure the when duplicate, it won't copy this field too
   active = Boolean(string="Active", default=True, copy=False)
   #* these color field will later be use with an options attribute later to add colors to tags

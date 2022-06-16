@@ -100,6 +100,7 @@
               <!-- <button name="%(my_forth_module.action_hospital_patient)d" string="Action Button" 
                 type="action" class="oe_highlight" confirm="Are you sure to open patient action"
                 help="You will be redirected to patient record"/> -->
+              <button name="action_notification" string="Notification" type="object" groups="base.group_no_one"/>
               <button
                 name="action_view_patient" type="object" string="Patient button" 
                 class="oe_highlight" confirm="Are you sure to open patient action"
@@ -109,11 +110,6 @@
 
           <!--? the notebook element allow you to create paginatable pages with buttons -->
           <notebook>
-            <page name="prescription" string="Prescription">
-              <!--? using the new odoo15 feature we can add realtime collaborative, resize with other using the option attribute bellow -->
-              <field name="prescription" placeholder="Enter a prescription"
-              options="{'collaborative':true, 'resizable':true, 'codeview':true}"/>
-            </page>
             <page name="pharmacy" string="Pharmacy">
               <group>
                 <field name="appointment_time" />
@@ -130,7 +126,7 @@
                     <field name="product_id" />
                     <!--?131? you can also add the currency to any number field with widget monetary, but remember to add a [currency_id] field in the model -->
                     <field name="price_unit" attrs="{'column_invisible': [('parent.hide_sales_price', '=', True)]}"
-                      widget="monetary" options="{'currency_field':'company_currency_id'}"/>
+                      widget="monetary" options="{'currency_field':'company_currency_id','field_digits':True}"/>
                     <field name="qty" />
                     <!--
                       ?131? all the subtotal and total view for monetary
@@ -147,8 +143,12 @@
                     </group>
                   </form>
                 </field>
-                
               </group>
+            </page>
+            <page name="prescription" string="Prescription">
+              <!--? using the new odoo15 feature we can add realtime collaborative, resize with other using the option attribute bellow -->
+              <field name="prescription" placeholder="Enter a prescription"
+                options="{'collaborative':true, 'resizable':true, 'codeview':true}"/>
             </page>
             <!--
               ?126? adding a new page for the [widget="gauge"] and [widget="percentpie"] widget in form view, 

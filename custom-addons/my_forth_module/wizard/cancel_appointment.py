@@ -47,6 +47,13 @@ class HospitalCancelAppointmentWizard(TransientModel):
     #?120? returning a dictionary with [type] and [tag] like bellow to reload the page, for it won't visual change
     #? the state without reload, because we are changing the record of another many2one's model from this wizard
     return {
-      'type':'ir.actions.client',
-      'tag' :'reload',
+      'type':'ir.actions.act_window',
+      'view_mode':'form',
+      'res_model':'hospital.cancel.appointment.wizard',
+      'target':'new',
+      'res_id':self.id,
     }
+    # return {
+    #   'type':'ir.actions.client',
+    #   'tag' :'reload',
+    # }

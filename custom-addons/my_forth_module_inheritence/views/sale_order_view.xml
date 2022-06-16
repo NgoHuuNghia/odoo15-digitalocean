@@ -8,7 +8,7 @@
       <field name="priority">10</field>
       <field name="arch" type="xml">
         <!--? use odoo development mode to find the view field you want to insert, but if the field is too an inherited view then find them first -->
-        <xpath expr="//div[@name='commitment_date_div']" position="after">
+        <xpath expr="//field[@name='payment_term_id']" position="before">
           <field name="confirmed_user_id" />
         </xpath>
       </field>

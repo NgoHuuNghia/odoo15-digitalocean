@@ -15,23 +15,23 @@
   ],
   #? importing security rules, views and datas from top to bottom (the lowest will overwrite any collision)
   'data': [
-    'security/ir.model.access.csv',
-    'data/sequence_data.xml',
+    'security/ir.model.access.csv', #$ security
+    'data/sequence_data.xml', #$ data
     'data/hospital_patient_tag_data.xml',
     'data/hospital.patient.tag.csv',
-    'wizard/cancel_appointment_view.xml',
-    'views/menu.xml',
-    'views/patient_view.xml',
+    'wizard/cancel_appointment_view.xml', #$ wizard
+    'views/menu.xml', #$ view - menu
+    'views/patient_view.xml', #$ view - views
     'views/patient_tag_view.xml',
     'views/female_patient_view.xml',
     'views/appointment_view.xml',
     'views/my_playground_view.xml',
     'views/operation_view.xml',
-    'views/res_config_settings_views.xml',
+    'views/res_config_settings_views.xml', #$ view - setting
   ],
-  'demo': [
+  # 'demo': [
     
-  ],
+  # ],
   #? auto install duh!
   'auto_install': False,
   #? Show as a main application on app module
