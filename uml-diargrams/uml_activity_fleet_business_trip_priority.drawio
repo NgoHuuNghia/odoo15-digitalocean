@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="MuZAtRpMIBstmGgHcjIb" name="Page-1">
-        <mxGraphModel dx="990" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1744" dy="534" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -88,24 +88,20 @@
                 </mxCell>
                 <mxCell id="42" value="" style="endArrow=none;html=1;" parent="1" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
-                        <mxPoint x="660" y="910" as="sourcePoint"/>
+                        <mxPoint x="660" y="870" as="sourcePoint"/>
                         <mxPoint x="660" y="80" as="targetPoint"/>
                     </mxGeometry>
-                </mxCell>
-                <mxCell id="63" style="edgeStyle=none;html=1;endArrow=none;endFill=0;" parent="1" source="50" edge="1">
-                    <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="375" y="560" as="targetPoint"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="50" value="Chỉnh sửa lại record công tác và yêu cầu duyệt lại" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
-                    <mxGeometry x="310" y="620" width="130" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="67" value="Hủy vĩnh viễn chuyến công tác" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
                     <mxGeometry x="165" y="720" width="130" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="72" value="[Duyệt lại]" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=classic;endFill=1;" parent="1" source="68" target="50" edge="1">
-                    <mxGeometry x="-0.2" y="-35" relative="1" as="geometry">
+                <mxCell id="72" value="[Yêu cầu đội xe phân việc lại]" style="edgeStyle=none;html=1;endArrow=none;endFill=0;" parent="1" source="68" target="128" edge="1">
+                    <mxGeometry x="-0.6078" relative="1" as="geometry">
                         <mxPoint as="offset"/>
+                        <mxPoint x="375" y="680" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="375" y="560"/>
+                        </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="74" value="[Hủy]" style="edgeStyle=none;html=1;endArrow=classic;endFill=1;" parent="1" source="68" target="67" edge="1">
@@ -120,7 +116,7 @@
                     <mxGeometry x="227.5" y="400" width="5" height="180" as="geometry"/>
                 </mxCell>
                 <mxCell id="96" value="&lt;span&gt;Hỗ trợ trực tiếp nhân viên &lt;br&gt;và tài xế của chuyến&lt;br&gt;&amp;nbsp;công tác ưu tiên&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-                    <mxGeometry x="165" y="860" width="150" height="50" as="geometry"/>
+                    <mxGeometry x="-80" y="815" width="150" height="50" as="geometry"/>
                 </mxCell>
                 <mxCell id="100" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="215" y="140" width="30" height="30" as="geometry"/>
@@ -170,7 +166,7 @@
                         <mxPoint x="-15" y="-9" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="132" value="[Phân việc thành công]" style="edgeStyle=none;html=1;endArrow=classic;endFill=1;" parent="1" source="133" target="137" edge="1">
+                <mxCell id="132" value="[Phân việc thành công]" style="edgeStyle=none;html=1;endArrow=classic;endFill=1;" parent="1" source="133" target="147" edge="1">
                     <mxGeometry x="-0.8125" relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="775" y="840"/>
@@ -182,17 +178,69 @@
                 <mxCell id="133" value="" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
                     <mxGeometry x="755" y="650" width="40" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="141" style="edgeStyle=none;html=1;" parent="1" source="137" target="140" edge="1">
+                <mxCell id="141" style="edgeStyle=none;html=1;startArrow=none;" parent="1" source="150" target="137" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="137" value="&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34;&quot;&gt;Tạo thành công record công tác trên database (đã duyệt)&lt;/span&gt;" style="whiteSpace=wrap;html=1;fontSize=11;fontColor=default;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="520" y="810" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="280" y="810" width="120" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="138" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;dashed=1;" parent="1" vertex="1">
-                    <mxGeometry x="225" y="825" width="30" height="30" as="geometry"/>
+                    <mxGeometry x="70" y="825" width="30" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="140" value="&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34;&quot;&gt;Gửi mail đến các nhân viên, tài xế về chuyến công tác ưu tiên&lt;/span&gt;" style="whiteSpace=wrap;html=1;fontSize=11;fontColor=default;rounded=0;" parent="1" vertex="1">
-                    <mxGeometry x="340" y="810" width="120" height="60" as="geometry"/>
+                    <mxGeometry x="135" y="810" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="144" style="edgeStyle=none;html=1;endArrow=none;endFill=0;exitX=0.733;exitY=1.044;exitDx=0;exitDy=0;exitPerimeter=0;dashed=1;" parent="1" source="143" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="420" y="750" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="143" value="Gửi mail văn phòng" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;rounded=0;dashed=1;labelBackgroundColor=none;fontSize=10;fontColor=default;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="395" y="700" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="146" style="edgeStyle=none;html=1;dashed=1;endArrow=none;endFill=0;exitX=0.728;exitY=1.022;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="145" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="630" y="560" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="145" value="Gửi mail đội xe" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;rounded=0;dashed=1;labelBackgroundColor=none;fontSize=10;fontColor=default;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="605" y="490" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="149" style="edgeStyle=none;html=1;endArrow=classic;endFill=1;" parent="1" source="137" target="140" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="147" value="&lt;span style=&quot;font-family: &amp;#34;helvetica&amp;#34;&quot;&gt;Yêu cầu văn phòng duyệt lần cuối các thông tin chuyến&lt;/span&gt;" style="whiteSpace=wrap;html=1;fontSize=11;fontColor=default;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="705" y="810" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="152" value="[Chấp thuận]" style="edgeStyle=none;html=1;endArrow=classic;endFill=1;" parent="1" source="150" target="137" edge="1">
+                    <mxGeometry x="-0.4" y="10" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="153" value="[Không chấp thuận]" style="edgeStyle=none;html=1;endArrow=none;endFill=0;" parent="1" source="150" target="68" edge="1">
+                    <mxGeometry x="-0.8974" relative="1" as="geometry">
+                        <mxPoint as="offset"/>
+                        <Array as="points">
+                            <mxPoint x="520" y="750"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="150" value="" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="820" width="40" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="151" value="" style="edgeStyle=none;html=1;endArrow=classic;endFill=1;" parent="1" source="147" target="150" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="520" y="840" as="sourcePoint"/>
+                        <mxPoint x="295" y="840" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="155" style="edgeStyle=none;html=1;endArrow=none;endFill=0;dashed=1;exitX=0.755;exitY=0.962;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="154" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="680" y="840.0000000000002" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="154" value="Gửi mail văn phòng" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;rounded=0;dashed=1;labelBackgroundColor=none;fontSize=10;fontColor=default;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="580" y="790" width="120" height="30" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

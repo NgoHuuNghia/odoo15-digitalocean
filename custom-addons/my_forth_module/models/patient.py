@@ -57,7 +57,7 @@ class HospitalPatient(Model):
   tag_ids = Many2many(comodel_name='hospital.patient.tag', relation="hospital_patient_tag_ids_rel", column1="patient_id", column2="tag_id", string='Tags')
   #*95* since compute fields won't be store on the database, use the store parameter to make it so
   appointment_count = Integer(string="Appointment Count", compute=("_compute_appointment_count"), store=True)
-  #*95* with the One2many field we can specify 
+  #*95* with the One2many field we can specify
   appointment_ids = One2many(comodel_name='hospital.appointment', inverse_name='patient_id', string="Appointments")
   #*98* these 3 fields bellow is used for learning how to hide fields in views base on conditions
   parent = Char(string='Parent')

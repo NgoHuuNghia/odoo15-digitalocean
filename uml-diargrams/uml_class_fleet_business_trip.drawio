@@ -1,0 +1,192 @@
+<mxfile host="65bd71144e">
+    <diagram id="8NVEbFYH0CTecISd1Mc0" name="Page-1">
+        <mxGraphModel dx="1283" dy="1023" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="hr_employee (nhân viên)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="400" width="370" height="184" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="3" value="+ id: integer&#10;+ name: Char()&#10;+ department_id: Many2one('hr.department')&#10;+ user_id: Many2one('res.users')&#10;+ business_trip_count: Integer()&#10;+ business_trip_ids: One2many('fleet_business_trip')&#10;+ business_rent_count: Integer()&#10;+ business_rent_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="2" vertex="1">
+                    <mxGeometry y="26" width="370" height="124" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="2" vertex="1">
+                    <mxGeometry y="150" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="2" vertex="1">
+                    <mxGeometry y="158" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="&lt;span&gt;Sơ đồ&amp;nbsp;&lt;/span&gt;class của hệ thống mượn xe đi công tác (fleet_business_trip)&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="80" y="40" width="410" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="hr_department (phòng ban)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="740" y="600" width="370" height="184" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="8" value="+ id: integer&#10;+ name: Char()&#10;+ manager_id: Many2one('hr_employee')&#10;+ vice_manager_id: Many2one('hr_employee')&#10;+ business_trip_count: Integer()&#10;+ business_trip_approved_ids: One2many('fleet_business_trip')&#10;+ business_rent_count: Integer()&#10;+ business_rent_approved_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="7" vertex="1">
+                    <mxGeometry y="26" width="370" height="124" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="7" vertex="1">
+                    <mxGeometry y="150" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="7" vertex="1">
+                    <mxGeometry y="158" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="hr_employee (quản trị viên)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="190" y="1420" width="370" height="164" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="12" value="+ id: integer&#10;+ name: Char()&#10;+ business_trip_count_approved: Integer()&#10;+ business_trip_approved_ids: One2many('fleet_business_trip')&#10;+ business_rent_count_approved: Integer()&#10;+ business_rent_approved_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="11" vertex="1">
+                    <mxGeometry y="26" width="370" height="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="11" vertex="1">
+                    <mxGeometry y="130" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="11" vertex="1">
+                    <mxGeometry y="138" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="hr_department (trưởng đội xe)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="1620" width="370" height="164" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="16" value="+ id: integer&#10;+ name: Char()&#10;+ assigned_employee: One2many('employee')&#10;+ business_trip_count_approved: Integer()&#10;+ business_trip_approved_ids: One2many('fleet_business_trip')&#10;+ business_rent_count_approved: Integer()&#10;+ business_rent_approved_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="15" vertex="1">
+                    <mxGeometry y="26" width="370" height="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="15" vertex="1">
+                    <mxGeometry y="130" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="15" vertex="1">
+                    <mxGeometry y="138" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" value="hr_employee (tài xế)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="190" y="1620" width="370" height="164" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="20" value="+ id: integer&#10;+ name: Char()&#10;+ assigned_employee: One2many('employee')&#10;+ business_trip_count_driven: Integer()&#10;+ business_trip_driven_ids: One2many('fleet_business_trip')&#10;+ business_rent_count_approved: Integer()&#10;+ business_rent_driven_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="19" vertex="1">
+                    <mxGeometry y="26" width="370" height="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="19" vertex="1">
+                    <mxGeometry y="130" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="19" vertex="1">
+                    <mxGeometry y="138" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" value="hr_department (trưởng văn phòng)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="660" y="1420" width="370" height="164" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="24" value="+ id: integer&#10;+ name: Char()&#10;+ business_trip_count_approved: Integer()&#10;+ business_trip_approved_ids: One2many('fleet_business_trip')&#10;+ business_rent_count_approved: Integer()&#10;+ business_rent_approved_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="23" vertex="1">
+                    <mxGeometry y="26" width="370" height="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="23" vertex="1">
+                    <mxGeometry y="130" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="23" vertex="1">
+                    <mxGeometry y="138" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="hr_employee (trưởng phòng)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="230" y="400" width="370" height="184" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="28" value="+ id: integer&#10;+ name: Char()&#10;+ department_id: Many2one('hr.employee')&#10;+ user_id: Many2one('res.users')&#10;+ business_trip_count: Integer()&#10;+ business_trip_ids: One2many('fleet_business_trip')&#10;+ business_rent_count: Integer()&#10;+ business_rent_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="27" vertex="1">
+                    <mxGeometry y="26" width="370" height="124" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="27" vertex="1">
+                    <mxGeometry y="150" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="27" vertex="1">
+                    <mxGeometry y="158" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" value="hr_employee (trưởng văn phòng" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="1140" y="1420" width="370" height="164" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="32" value="+ id: integer&#10;+ name: Char()&#10;+ business_trip_count_approved: Integer()&#10;+ business_trip_approved_ids: One2many('fleet_business_trip')&#10;+ business_rent_count_approved: Integer()&#10;+ business_rent_approved_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="31" vertex="1">
+                    <mxGeometry y="26" width="370" height="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="31" vertex="1">
+                    <mxGeometry y="130" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="31" vertex="1">
+                    <mxGeometry y="138" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="35" value="hr_employee (trưởng đội xe)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
+                    <mxGeometry x="1140" y="1620" width="370" height="164" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="36" value="+ id: integer&#10;+ name: Char()&#10;+ assigned_employee: One2many('employee')&#10;+ business_trip_count_driven: Integer()&#10;+ business_trip_driven_ids: One2many('fleet_business_trip')&#10;+ business_rent_count_approved: Integer()&#10;+ business_rent_driven_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="35" vertex="1">
+                    <mxGeometry y="26" width="370" height="104" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="35" vertex="1">
+                    <mxGeometry y="130" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="35" vertex="1">
+                    <mxGeometry y="138" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" value="1..1" style="endArrow=none;html=1;entryX=0;entryY=0.378;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.001;exitY=0.116;exitDx=0;exitDy=0;exitPerimeter=0;fontSize=16;" parent="1" source="8" target="3" edge="1">
+                    <mxGeometry x="-0.8421" width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="690" y="660" as="sourcePoint"/>
+                        <mxPoint x="710" y="450" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="700" y="641"/>
+                            <mxPoint x="700" y="469"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="40" value="1..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;" parent="39" vertex="1" connectable="0">
+                    <mxGeometry x="-0.4382" y="3" relative="1" as="geometry">
+                        <mxPoint x="22" y="-140" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="46" value="1..1" style="endArrow=none;html=1;fontSize=16;" parent="1" edge="1">
+                    <mxGeometry x="0.8479" width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="303" y="441" as="sourcePoint"/>
+                        <mxPoint x="740" y="668" as="targetPoint"/>
+                        <Array as="points">
+                            <mxPoint x="640" y="441"/>
+                            <mxPoint x="640" y="668"/>
+                            <mxPoint x="700" y="668"/>
+                        </Array>
+                        <mxPoint as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="56" value="&lt;span style=&quot;font-size: 16px&quot;&gt;1..1&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="46">
+                    <mxGeometry x="0.0949" y="2" relative="1" as="geometry">
+                        <mxPoint x="-22" y="-27" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="49" value="res_users (nhân viên)" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" vertex="1" parent="1">
+                    <mxGeometry x="1040" y="200" width="370" height="174" as="geometry">
+                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="50" value="+ id: integer&#10;+ name: Char()&#10;+ department_id: Many2one('hr.department')&#10;+ business_trip_count: Integer()&#10;+ business_trip_ids: One2many('fleet_business_trip')&#10;+ business_rent_count: Integer()&#10;+ business_rent_ids: One2many('fleet_business_rent')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="49">
+                    <mxGeometry y="26" width="370" height="114" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" vertex="1" parent="49">
+                    <mxGeometry y="140" width="370" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="52" value="+ method(type): type" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" vertex="1" parent="49">
+                    <mxGeometry y="148" width="370" height="26" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="Extends" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=1.001;exitY=0.074;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.001;entryY=0.074;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="27" target="2">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="590" y="410" as="sourcePoint"/>
+                        <mxPoint x="750" y="410" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
