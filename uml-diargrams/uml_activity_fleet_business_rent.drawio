@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="MuZAtRpMIBstmGgHcjIb" name="Page-1">
-        <mxGraphModel dx="990" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="678" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -108,9 +108,13 @@
                 <mxCell id="43" value="Trưởng phòng duyệt chuyến công tác" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
                     <mxGeometry x="515" y="530" width="130" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="52" value="[Chấp thuận]" style="edgeStyle=none;html=1;endArrow=classic;endFill=1;" parent="1" source="44" target="51" edge="1">
-                    <mxGeometry x="-0.4783" y="-10" relative="1" as="geometry">
+                <mxCell id="52" value="[Chấp thuận]" style="edgeStyle=none;html=1;endArrow=classic;endFill=1;" parent="1" source="44" target="131" edge="1">
+                    <mxGeometry x="-0.8286" y="10" relative="1" as="geometry">
                         <mxPoint as="offset"/>
+                        <Array as="points">
+                            <mxPoint x="670" y="650"/>
+                            <mxPoint x="670" y="410"/>
+                        </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="54" style="edgeStyle=none;html=1;endArrow=none;endFill=0;" parent="1" source="44" target="68" edge="1">
@@ -295,11 +299,11 @@
                 </mxCell>
                 <mxCell id="118" style="edgeStyle=none;html=1;dashed=1;endArrow=none;endFill=0;" parent="1" source="117" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="640" y="650" as="targetPoint"/>
+                        <mxPoint x="670" y="510" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="117" value="Gửi mail văn phòng" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;rounded=0;dashed=1;labelBackgroundColor=none;fontSize=10;fontColor=default;strokeWidth=2;" parent="1" vertex="1">
-                    <mxGeometry x="590" y="600" width="120" height="30" as="geometry"/>
+                <mxCell id="117" value="Gửi mail trưởng văn phòng" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;rounded=0;dashed=1;labelBackgroundColor=none;fontSize=10;fontColor=default;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="490" y="390" width="145" height="30" as="geometry"/>
                 </mxCell>
                 <mxCell id="120" style="edgeStyle=none;html=1;dashed=1;endArrow=none;endFill=0;" parent="1" source="119" edge="1">
                     <mxGeometry relative="1" as="geometry">
@@ -327,6 +331,12 @@
                 </mxCell>
                 <mxCell id="129" value="Gửi mail nhân viên tạo" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;rounded=0;dashed=1;labelBackgroundColor=none;fontSize=10;fontColor=default;strokeWidth=2;" parent="1" vertex="1">
                     <mxGeometry x="425" y="780" width="135" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="133" style="edgeStyle=none;html=1;" edge="1" parent="1" source="131" target="51">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="131" value="&lt;b&gt;Trưởng văn phòng &lt;/b&gt;phân công chuyên viên" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" vertex="1" parent="1">
+                    <mxGeometry x="715" y="380" width="130" height="60" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

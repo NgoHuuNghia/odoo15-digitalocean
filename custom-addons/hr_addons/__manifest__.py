@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Fleet Business",
+    'name': "HR business addons",
 
     'summary': """
-        Inherit the fleet module to create a business trip
-        managing module, support company's cars and buying tickets for travels""",
+        Inherit both the employee module to expand on it
+        better suit for my current project""",
 
     'description': """
-        Inherit the fleet module to create a business trip
-        managing module, support company's cars and buying tickets for travels
+        Inherit both the employee module to expand on it
+        better suit for my current project
     """,
 
     'author': "Ngô Hữu Nghĩa",
@@ -17,18 +17,21 @@
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'Fleet/Services/Appraisals',
+    'category': 'Human Resources',
     'version': '0.1',
     'license': 'LGPL-3',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','fleet','hr','hr_addons'],
+    'depends': ['base','hr'],
 
     # always loaded
     'data': [
         # 'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
+        'views/hr_employee_views.xml',
+        'views/hr_department_views.xml',
+        # 'views/res_user_views.xml',
     ],
     # only loaded in demonstration mode
     # 'demo': [

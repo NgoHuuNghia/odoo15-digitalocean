@@ -3,9 +3,9 @@
 # from odoo import models, fields, api
 
 
-# class fleet_business(models.Model):
-#     _name = 'fleet_business.fleet_business'
-#     _description = 'fleet_business.fleet_business'
+# class hr_addons(models.Model):
+#     _name = 'hr_addons.hr_addons'
+#     _description = 'hr_addons.hr_addons'
 
 #     name = fields.Char()
 #     value = fields.Integer()

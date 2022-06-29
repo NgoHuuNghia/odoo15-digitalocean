@@ -1,0 +1,16 @@
+<odoo>
+  <data>
+    <record id="res_users_view_form_profile_inherit_hr_addons" model="ir.ui.view">
+      <field name="name">>res.users.preferences.form.inherit.hr.addons</field>
+      <field name="model">res.users</field>
+      <field name="inherit_id" ref="hr.res_users_view_form_profile"/>
+      <field name="priority">10</field>
+      <field name="arch" type="xml">
+        <xpath expr="//field[@name='department_id']" position="after">
+          <field name="department_position" />
+          <field name="employee_id"/>
+        </xpath>
+      </field>
+    </record>
+  </data>
+</odoo>
