@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="fleet_business_trip_view_form" model="ir.ui.view">
+    <field name="name">fleet.business.trip.form</field>
+    <field name="model">fleet.business.trip</field>
+    <field name="arch" type="xml">
+      <form string="Company's Fleet Business Trips">
+        <!-- <header>
+
+        </header> -->
+        <sheet>
+          <field name="company_id" invisble='1'/>
+
+          <div class="oe_title">
+            <h1>
+                <field name="name"/>
+            </h1>
+            <label for="model_id"/>
+            <h2>
+                <field name="model_id" class="oe_inline" placeholder="e.g. PAE 326"/>
+            </h2>
+            <label for="license_plate"/>
+            <h2>
+                <field name="license_plate" class="oe_inline" placeholder="e.g. PAE 326"/>
+            </h2>
+            <label for="tag_ids"/>
+            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+        </div>
+
+          <group string='All Attending Employees'>
+            <field name="attending_employee_ids" widget="many2many_tags" options="{'color_field': 'color'}" nolabel='1'/>
+          </group>
+          <group>
+            <group string='Time'>
+              <field name='pick_time' />
+              <field name='return_time' />
+              <!--! computed
+              <field name='arrive_time' />
+              <field name='back_time' /> -->
+            </group>
+            <group string='Location'>
+              <field name='to_street' />
+              <field name='to_street2' />
+              <field name='to_zip' />
+              <field name='to_city' />
+              <field name='to_state_id'/>
+              <field name='to_country_id'/>
+            </group>
+          </group>
+
+          <notebook>
+            <page string="Intentions">
+              <group>
+                <field name="intent" />
+                <field name="note" />
+              </group>
+            </page>
+            <page string="Overseers">
+              <group string="Creator">
+                <field name="overseer_creator_id" />
+                <field name="overseer_creator_work_phone" />
+                <field name="overseer_creator_email" />
+                <field name="approval_creator" />
+              </group>
+              <group string="Manager">
+                <field name="overseer_manager_id" />
+                <field name="overseer_manager_work_phone" />
+                <field name="overseer_manager_email" />
+                <field name="approval_manager" />
+              </group>
+              <group string="Administrator">
+                <field name="overseer_admin_id" />
+                <field name="overseer_admin_work_phone" />
+                <field name="overseer_admin_email" />
+                <field name="approval_admin" />
+              </group>
+              <group string="Creator">
+                <field name="overseer_fleet_id" />
+                <field name="overseer_fleet_work_phone" />
+                <field name="overseer_fleet_email" />
+                <field name="approval_fleet" />
+              </group>
+            </page>
+          </notebook>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+</odoo>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record id="fleet_business_trip_action" model="ir.actions.act_window">
+    <field name="name">Company's Fleet</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">fleet.business.trip</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Add your first Business Trips
+      </p>
+    </field>
+  </record>
+
+  <menuitem
+    id="fleet_business_menu_root"
+    name="Business Trips"
+    parent="fleet.menu_root"
+    sequence="110">
+    
+    <menuitem
+      id="fleet_business_trip_menu"
+      name="Company's Fleet"
+      action="fleet_business_trip_action"
+      sequence="0"/>
+
+    <menuitem
+      id="fleet_business_rent_menu"
+      name="Company's Supported Business Trips"
+      sequence="10"/>
+  </menuitem>
+
+  <!-- <menuitem name="Fleet" id="menu_root" sequence="220" groups="fleet_group_user" web_icon="fleet,static/description/icon.png"/> -->
+  
+
+</odoo>

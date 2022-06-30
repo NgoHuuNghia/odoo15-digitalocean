@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    
+    <record id="job_fleet_captain" model="hr.job">
+      <field name="name">Fleet Captain</field>
+      <field name="department_id" search="[
+        ('id', '=', ref('fleet_business.dep_fleet')),
+        ('company_id', '=', obj().env.company.id)
+      ]"/>
+      <field name="description">
+        In charge of manageing company's drivers and vehicles. Also oversee any business trips and travels requested by other employees
+      </field>
+    </record>
+
+    <record id="job_fleet_driver" model="hr.job">
+      <field name="name">Driver</field>
+      <field name="department_id" search="[
+        ('id', '=', ref('fleet_business.dep_fleet')),
+        ('company_id', '=', obj().env.company.id)
+      ]"/>
+      <field name="description">
+        Main responsibity is to drive any vehicles, carrying employees on business trips and requested travels. Other responsibility is to maintain said vehicles
+      </field>
+    </record>
+
+  </data>
+</odoo>

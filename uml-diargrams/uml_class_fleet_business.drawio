@@ -1,41 +1,32 @@
 <mxfile host="65bd71144e">
     <diagram id="8NVEbFYH0CTecISd1Mc0" name="Page-1">
-        <mxGraphModel dx="765" dy="1822" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="1">
+        <mxGraphModel dx="1233" dy="1791" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="1">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="175" style="edgeStyle=none;html=1;exitX=0.095;exitY=-0.008;exitDx=0;exitDy=0;fontSize=11;fontColor=default;endArrow=open;endFill=0;entryX=-0.002;entryY=0.731;entryDx=0;entryDy=0;entryPerimeter=0;exitPerimeter=0;" parent="1" source="2" target="117" edge="1">
+                <mxCell id="175" style="edgeStyle=none;html=1;exitX=0.095;exitY=-0.008;exitDx=0;exitDy=0;fontSize=11;fontColor=default;endArrow=none;endFill=0;exitPerimeter=0;" parent="1" source="2" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="540" y="990" as="targetPoint"/>
+                        <mxPoint x="595" y="504" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="666" y="1140"/>
-                            <mxPoint x="490" y="1140"/>
-                            <mxPoint x="490" y="880"/>
-                            <mxPoint x="530" y="880"/>
-                            <mxPoint x="530" y="640"/>
+                            <mxPoint x="550" y="1140"/>
+                            <mxPoint x="550" y="504"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="176" style="edgeStyle=none;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontSize=11;fontColor=default;endArrow=open;endFill=0;entryX=1.001;entryY=0.678;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="2" target="134" edge="1">
+                <mxCell id="176" style="edgeStyle=none;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontSize=11;fontColor=default;endArrow=none;endFill=0;" parent="1" source="2" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="724.8571428571429" y="1140" as="targetPoint"/>
+                        <mxPoint x="404" y="504" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="725" y="1140"/>
-                            <mxPoint x="570" y="1140"/>
-                            <mxPoint x="570" y="880"/>
-                            <mxPoint x="530" y="880"/>
-                            <mxPoint x="530" y="587"/>
+                            <mxPoint x="550" y="1140"/>
+                            <mxPoint x="550" y="504"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="226" value="&lt;span style=&quot;font-size: 16px&quot;&gt;1..*&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="176" vertex="1" connectable="0">
                     <mxGeometry x="-0.5853" y="-1" relative="1" as="geometry">
-                        <mxPoint x="5" as="offset"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="384" value="provide" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="176" vertex="1" connectable="0">
-                    <mxGeometry x="-0.7" relative="1" as="geometry">
-                        <mxPoint as="offset"/>
+                        <mxPoint x="51" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="215" style="edgeStyle=none;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;endArrow=open;endFill=0;entryX=0;entryY=0.482;entryDx=0;entryDy=0;endSize=8;entryPerimeter=0;" parent="1" source="2" target="178" edge="1">
@@ -63,7 +54,7 @@
                         <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="3" value="+ id: integer&#10;+ name: Char()&#10;+ department_id: Many2one('hr.department')&#10;+ department_position: Char(compute='_compute_department_position',store=True) -nw-&#10;+ user_id: Many2one('res.users')&#10;+ ratings: Float(compute='_compute_rating',readonly=True) -nw-&#10;+ driver_rating_line_ids: One2many('fleet_driver_rating','driver_employee_id') -nw-&#10;+ business_trip_count: Integer(compute='_compute_business_trip_count') -nw-&#10;+ business_trip_ids: One2many('fleet_business_trip') -nw-&#10;+ business_rent_count: Integer(compute='_compute_business_rent_count') -nw-&#10;+ business_rent_ids: One2many('fleet_business_rent') -nw-" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=default;" parent="2" vertex="1">
+                <mxCell id="3" value="+ id: integer&#10;+ name: Char()&#10;+ department_id: Many2one('hr.department')&#10;+ department_position: Char(compute='_compute_department_position',store=True) -nw-&#10;+ user_id: Many2one('res.users')&#10;+ ratings: Float(compute='_compute_rating',readonly=True) -nw-&#10;+ driver_rating_line_ids: One2many('fleet_driver_rating','driver_employee_id') -nw-&#10;+ active_business_trip_ids: One2many('fleet_business_trip','attending_employee_ids') -nw-&#10;+ active_business_rent_ids: One2many('fleet_business_rent','attending_employee_ids') -nw-" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=default;" parent="2" vertex="1">
                     <mxGeometry y="26" width="380" height="164" as="geometry"/>
                 </mxCell>
                 <mxCell id="4" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="2" vertex="1">
@@ -106,34 +97,33 @@
                         <mxPoint x="600" y="1190" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="165" style="edgeStyle=none;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=1.001;entryY=0.531;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="81" target="134" edge="1">
+                <mxCell id="165" style="edgeStyle=none;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=1.001;entryY=0.756;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="81" target="134" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="530" y="760" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="725" y="880"/>
-                            <mxPoint x="530" y="880"/>
-                            <mxPoint x="530" y="590"/>
-                            <mxPoint x="530" y="563"/>
+                            <mxPoint x="500" y="880"/>
+                            <mxPoint x="500" y="600"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="168" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=0.001;entryY=0.674;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="81" target="117" edge="1">
+                <mxCell id="168" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=-0.001;entryY=0.633;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="81" target="117" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="820" y="880"/>
-                            <mxPoint x="530" y="880"/>
-                            <mxPoint x="530" y="627"/>
+                            <mxPoint x="500" y="880"/>
+                            <mxPoint x="500" y="618"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="225" value="&lt;span style=&quot;font-size: 16px&quot;&gt;1..1&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="168" vertex="1" connectable="0">
                     <mxGeometry x="-0.1099" y="-1" relative="1" as="geometry">
-                        <mxPoint x="28" as="offset"/>
+                        <mxPoint x="81" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="386" value="interact" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="168" vertex="1" connectable="0">
                     <mxGeometry x="-0.4326" y="-3" relative="1" as="geometry">
-                        <mxPoint y="3" as="offset"/>
+                        <mxPoint x="15" y="3" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="81" value="res_users (nhân viên tạo công tác [odoo])" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
@@ -160,33 +150,38 @@
                         <mxPoint x="22" as="offset"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="166" style="edgeStyle=none;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=-0.002;entryY=0.611;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="96" target="117" edge="1">
+                <mxCell id="166" style="edgeStyle=none;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=-0.001;entryY=0.554;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="96" target="117" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="530" y="760" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="358" y="880"/>
-                            <mxPoint x="530" y="880"/>
-                            <mxPoint x="530" y="613"/>
+                            <mxPoint x="500" y="880"/>
+                            <mxPoint x="500" y="600"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="170" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=0.999;entryY=0.602;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="96" target="134" edge="1">
+                <mxCell id="170" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=1.001;entryY=0.848;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="96" target="134" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="265" y="880"/>
-                            <mxPoint x="530" y="880"/>
-                            <mxPoint x="530" y="575"/>
+                            <mxPoint x="500" y="880"/>
+                            <mxPoint x="500" y="615"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="224" value="&lt;span style=&quot;font-size: 16px&quot;&gt;1..1&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="170" vertex="1" connectable="0">
                     <mxGeometry x="-0.2352" y="-1" relative="1" as="geometry">
-                        <mxPoint x="-26" as="offset"/>
+                        <mxPoint x="6" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="385" value="interact" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="170" vertex="1" connectable="0">
                     <mxGeometry x="-0.431" y="2" relative="1" as="geometry">
-                        <mxPoint x="-24" y="2" as="offset"/>
+                        <mxPoint x="14" y="2" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="397" value="&lt;span style=&quot;font-size: 16px&quot;&gt;0..*&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="170" vertex="1" connectable="0">
+                    <mxGeometry x="0.6808" y="-4" relative="1" as="geometry">
+                        <mxPoint x="-4" y="-11" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="96" value="res_users duyệt (trưởng phòng [odoo])" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
@@ -223,16 +218,16 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="116" value="fleet_business_trip (mượn xe đi công tác) -nw-" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;labelBackgroundColor=none;fontColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="590" y="450" width="420" height="370" as="geometry"/>
+                    <mxGeometry x="590" y="450" width="420" height="390" as="geometry"/>
                 </mxCell>
-                <mxCell id="117" value="+ name: Char() -ir.sequence('BTR****')-&#10;default=lambda self: self.env.company.country_id,readonly=True)[1..1]&#10;+ attending_employee_ids: One2many('hr.employee')[1..*]&#10;+ pick_address_id: Many2one('res.partner',compute='_compute_address_id')&#10;,domain=&quot;[('company_id', '=', True), ('company_id', '=', self.env.company.id)]&quot;)&#10;+ vehicle_id: Many2one('fleet_vehicle')&#10;+ model_id: Many2one(related='vehicle_id.model_id',readonly=True)&#10;+ license_plate: Char(related='vehicle_id.license_plate')&#10;+ seats: Integer(related='vehicle_id.seats')&#10;+ self_driving_employee_id: Many2one('hr_employee',domain=...)&#10;+ driver_id: Many2one('hr.employee',domain=&quot;[('department_id','=','fleet')]&quot;)&#10;+ overseer_fleet_id: Many2one('hr.employee')&#10;+ overseer_fleet_work_phone: Char(related='overseer_fleet_id.work_phone')&#10;+ overseer_fleet_work_email: Char(related='overseer_fleet_id.work_email')&#10;+ approval_fleet: Selection(['denied','deciding','approved'],default='deciding')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="116" vertex="1">
+                <mxCell id="117" value="+ name: Char() -ir.sequence('BTR****')-&#10;+ attending_employee_ids: Many2many('hr.employee')[1..*]&#10;+ pick_address_id: Many2one('res.partner',compute='_compute_address_id'&#10;,domain=&quot;[('company_id', '=', True), ('company_id', '=', self.env.company.id)]&quot;)&#10;+ vehicle_id: Many2one('fleet.vehicle')&#10;+ model_id: Many2one(related='vehicle_id.model_id',readonly=True)&#10;+ license_plate: Char(related='vehicle_id.license_plate')&#10;+ seats: Integer(related='vehicle_id.seats')&#10;+ self_driving_employee_id: Many2one('hr_employee',domain=...)&#10;+ driver_id: Many2one('hr.employee',domain=&quot;[('department_id','=','fleet')]&quot;)&#10;+ overseer_fleet_id: Many2one('hr.employee')&#10;+ overseer_fleet_work_phone: Char(related='overseer_fleet_id.work_phone')&#10;+ overseer_fleet_work_email: Char(related='overseer_fleet_id.work_email')&#10;+ approval_fleet: Selection(['denied','deciding','approved'],default='deciding')" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="116" vertex="1">
                     <mxGeometry y="26" width="420" height="224" as="geometry"/>
                 </mxCell>
                 <mxCell id="118" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;labelBackgroundColor=none;fontColor=#F0F0F0;" parent="116" vertex="1">
                     <mxGeometry y="250" width="420" height="8" as="geometry"/>
                 </mxCell>
-                <mxCell id="119" value="+ action_fleet_response(self,approval): approval_fleet()&#10;+ action_report_driver_busy(self): driver_id(null)&#10;+ action_report_vehicle_busy(self): vehicle_id(null)&#10;+ @constrains check_to_trip_address(self): void&#10;+ @constrains check_attendees_seats(self): void&#10;+ @constrains check_driver(self): void&#10;+ @onchange onchange_state_free_driver_vehicle(self): ..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="116" vertex="1">
-                    <mxGeometry y="258" width="420" height="112" as="geometry"/>
+                <mxCell id="119" value="+ action_fleet_response(self,approval): approval_fleet()&#10;+ action_report_driver_busy(self): driver_id(null)&#10;+ action_report_vehicle_busy(self): vehicle_id(null)&#10;+ @constrains check_to_trip_address(self): void&#10;+ @constrains check_attendees_seats(self): void&#10;+ @constrains check_driver(self): void&#10;+ @onchange onchange_state_free_driver_vehicle(self): ...&#10;+ @onchange onchange_log_drivers_vehicle(self): ..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="116" vertex="1">
+                    <mxGeometry y="258" width="420" height="132" as="geometry"/>
                 </mxCell>
                 <mxCell id="129" value="fleet_business_tag (thẻ công tác) -nw-" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
                     <mxGeometry x="80" y="-440" width="260" height="134" as="geometry">
@@ -264,7 +259,7 @@
                 <mxCell id="133" value="fleet_business_rent (hỗ trợ mua vé đi công tác) -nw-" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;labelBackgroundColor=none;fontColor=default;" parent="1" vertex="1">
                     <mxGeometry x="80" y="450" width="370" height="270" as="geometry"/>
                 </mxCell>
-                <mxCell id="134" value="+ name: Char() -ir.sequence('BRT****')-&#10;+ attending_employee_ids: One2many('hr.employee')[1..*]&#10;+ pick_street: Char()[1..1]&#10;+ pick_street2: Char()[0..1]&#10;+ pick_zip: Char()[1..1]&#10;+ pick_city: Char()[1..1]&#10;+ pick_state_id: Many2one('res.country.state')[0..1]&#10;+ pick_country_id: Many2one('res.country',)[1..1]&#10;+ type_of_transportation: Selection(['plane','private_jet,'ship','train''])&#10;+ to_ticket_line_ids: One2many('fleet_business_rent')[1..1]&#10;+ return_ticket_line_ids: One2many('fleet_business_rent')[1..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="133" vertex="1">
+                <mxCell id="134" value="+ name: Char() -ir.sequence('BRT****')-&#10;+ attending_employee_ids: Many2many('hr.employee')[1..*]&#10;+ pick_street: Char()[1..1]&#10;+ pick_street2: Char()[0..1]&#10;+ pick_zip: Char()[1..1]&#10;+ pick_city: Char()[1..1]&#10;+ pick_state_id: Many2one('res.country.state')[0..1]&#10;+ pick_country_id: Many2one('res.country',)[1..1]&#10;+ type_of_transportation: Selection(['plane','private_jet,'ship','train''])&#10;+ to_ticket_line_ids: One2many('fleet_business_rent')[1..1]&#10;+ return_ticket_line_ids: One2many('fleet_business_rent')[1..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="133" vertex="1">
                     <mxGeometry y="26" width="370" height="164" as="geometry"/>
                 </mxCell>
                 <mxCell id="135" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;labelBackgroundColor=none;fontColor=#F0F0F0;" parent="133" vertex="1">
@@ -276,7 +271,7 @@
                 <mxCell id="137" value="fleet_business_base (mẫu tạo công tác) -nw-" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;labelBackgroundColor=none;fontColor=default;" parent="1" vertex="1">
                     <mxGeometry x="480" y="-440" width="540" height="730" as="geometry"/>
                 </mxCell>
-                <mxCell id="138" value="+ id: integer&#10;+ pick_time: Datetime(default=Datetime.now)[1..1]&#10;+ return_time: Datetime()[1..1]&#10;+ arrive_time: Datetime(compute='_compute_arrive_time')&#10;+ back_time: Datetime(compute='_compute_back_time')&#10;+ to_street: Char()[1..1]&#10;+ to_street2: Char()[0..1]&#10;+ to_zip: Char()[1..1]&#10;+ to_city: Char()[1..1]&#10;+ to_state_id: Many2one('res.country.state')[0..1]&#10;+ to_country_id: Many2one('res.country')[1..1]&#10;+ intent: Text()[1..1]&#10;+ note: Text()[0..1]&#10;+ tag_ids: Many2many('fleet_business_tag',['priority','supported','business','vacation'])[0..*]&#10;+ overseer_manager_id: Many2one('hr.employee',compute='_compute_overseer_manager_id')&#10;+ overseer_manager_work_phone: Char(related='overseer_manager_id.work_phone')&#10;+ overseer_manager_work_email: Char(related='overseer_manager_id.work_email')&#10;+ approval_manager: Selection(['denied','deciding','approved'],default='deciding')&#10;+ overseer_admin_id: Many2one('hr.employee')&#10;+ overseer_admin_work_phone: Char(related='overseer_admin_id.work_phone')&#10;+ overseer_admin_work_email: Char(related='overseer_admin_id.work_email')&#10;+ approval_admin: Selection(['denied','deciding','approved'],default='deciding')&#10;+ overseer_creator_id: Many2one('hr.employee',default=create.uid,readonly=True)&#10;+ overseer_creator_work_phone: Char(related='overseer_creator_id.work_phone')&#10;+ overseer_creator_work_email: Char(related='overseer_creator_id.work_email')&#10;+ approval_creator: Selection(['denied','deciding','approved'],default='deciding')&#10;+ state_id: Many2one('fleet_business_state',['draft','not_approved','approved','ready','departing','returning','late','returned','car_na',&#10;'driver_na','car_driver_na','cancled','incident'],default='draft',compute='_compute_state',store=True)&#10;+ journal_line_ids: One2many('fleet_business_journal','fleet_business'_id)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="137" vertex="1">
+                <mxCell id="138" value="+ id: integer&#10;+ pick_time: Datetime(default=Datetime.now)[1..1]&#10;+ return_time: Datetime()[1..1]&#10;+ arrive_time: Datetime(compute='_compute_arrive_time')&#10;+ back_time: Datetime(compute='_compute_back_time')&#10;+ to_street: Char()[1..1]&#10;+ to_street2: Char()[0..1]&#10;+ to_zip: Char()[1..1]&#10;+ to_city: Char()[1..1]&#10;+ to_state_id: Many2one('res.country.state')[0..1]&#10;+ to_country_id: Many2one('res.country')[1..1]&#10;+ intent: Text()[1..1]&#10;+ note: Text()[0..1]&#10;+ tag_ids: Many2many('fleet_business_tag',['priority','supported','business','vacation'])[0..*]&#10;+ overseer_manager_id: Many2one('hr.employee',compute='_compute_overseer_manager_id')&#10;+ overseer_manager_work_phone: Char(related='overseer_manager_id.work_phone')&#10;+ overseer_manager_work_email: Char(related='overseer_manager_id.work_email')&#10;+ approval_manager: Selection(['denied','deciding','approved'],default='deciding')&#10;+ overseer_admin_id: Many2one('hr.employee')&#10;+ overseer_admin_work_phone: Char(related='overseer_admin_id.work_phone')&#10;+ overseer_admin_work_email: Char(related='overseer_admin_id.work_email')&#10;+ approval_admin: Selection(['denied','deciding','approved'],default='deciding')&#10;+ overseer_creator_id: Many2one('hr.employee',default=create.uid,readonly=True)&#10;+ overseer_creator_work_phone: Char(related='overseer_creator_id.work_phone')&#10;+ overseer_creator_work_email: Char(related='overseer_creator_id.work_email')&#10;+ approval_creator: Selection(['denied','deciding','approved'],default='deciding')&#10;+ state: Selection('fleet_business_state',['draft','not_approved','approved','ready','departing','returning','late','returned','car_na',&#10;'driver_na','car_driver_na','cancled','incident'],default='draft',compute='_compute_state',store=True)&#10;+ journal_line_ids: One2many('fleet_business_journal','fleet_business'_id)" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="137" vertex="1">
                     <mxGeometry y="26" width="540" height="434" as="geometry"/>
                 </mxCell>
                 <mxCell id="139" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;labelBackgroundColor=none;fontColor=#F0F0F0;" parent="137" vertex="1">
@@ -376,14 +371,14 @@
                     <mxGeometry y="26" width="420" height="84" as="geometry"/>
                 </mxCell>
                 <mxCell id="210" value="Extends" style="endArrow=block;endSize=16;endFill=0;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" parent="1" source="206" target="2" edge="1">
-                    <mxGeometry x="-1" y="130" width="160" relative="1" as="geometry">
+                    <mxGeometry x="-0.1765" width="160" relative="1" as="geometry">
                         <mxPoint x="940.0000000000001" y="1149.996" as="sourcePoint"/>
                         <mxPoint x="1070" y="1260" as="targetPoint"/>
                         <mxPoint as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="230" value="&lt;span style=&quot;font-size: 16px&quot;&gt;0..*&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="510" y="660" width="40" height="20" as="geometry"/>
+                    <mxGeometry x="530" y="520" width="40" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="238" style="edgeStyle=none;html=1;startArrow=none;startFill=0;endArrow=open;endFill=0;startSize=12;endSize=8;strokeWidth=1;entryX=0;entryY=0.388;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="178" edge="1">
                     <mxGeometry relative="1" as="geometry">
@@ -512,72 +507,38 @@
                 <mxCell id="289" value="-nw- object, model mới | -basefield- field có sẵn | @ decorator odoo của chức năng |&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;Chức năng chính" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;fillColor=default;" parent="1" vertex="1">
                     <mxGeometry x="570" y="-520" width="610" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="305" style="edgeStyle=none;html=1;exitX=-0.001;exitY=0.187;exitDx=0;exitDy=0;endArrow=none;endFill=0;endSize=12;exitPerimeter=0;" parent="1" source="293" edge="1">
+                <mxCell id="305" style="edgeStyle=none;html=1;endArrow=none;endFill=0;endSize=12;exitX=0.001;exitY=0.148;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="293" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="807" y="560" as="targetPoint"/>
+                        <mxPoint x="806" y="547" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="1120" y="490"/>
-                            <mxPoint x="1120" y="560"/>
+                            <mxPoint x="1120" y="547"/>
                         </Array>
+                        <mxPoint x="1220" y="490" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="309" value="&lt;span style=&quot;font-size: 16px&quot;&gt;1..1&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="305" vertex="1" connectable="0">
                     <mxGeometry x="-0.8444" y="4" relative="1" as="geometry">
-                        <mxPoint x="-4" y="-4" as="offset"/>
+                        <mxPoint x="7" y="-4" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="310" value="&lt;span style=&quot;font-size: 16px&quot;&gt;0..*&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="305" vertex="1" connectable="0">
                     <mxGeometry x="-0.0494" y="2" relative="1" as="geometry">
-                        <mxPoint x="-42" y="23" as="offset"/>
+                        <mxPoint x="22" y="-3" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="311" value="Has" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="305" vertex="1" connectable="0">
                     <mxGeometry x="-0.4657" y="-2" relative="1" as="geometry">
-                        <mxPoint x="-22" y="32" as="offset"/>
+                        <mxPoint x="2" y="11" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="292" value="fleet_vehicle (xe mượn công tác)" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-                    <mxGeometry x="1230" y="450" width="290" height="100" as="geometry">
+                    <mxGeometry x="1225" y="450" width="290" height="120" as="geometry">
                         <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="293" value="+ id: integer&#10;+ name: Char()&#10;+ state_id = fields.Many2one('fleet.vehicle.state')&#10;..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="292" vertex="1">
-                    <mxGeometry y="26" width="290" height="74" as="geometry"/>
-                </mxCell>
-                <mxCell id="295" value="fleet_business_state (trạng thái) -nw-" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-                    <mxGeometry x="80.54000000000002" y="-230" width="260" height="134" as="geometry">
-                        <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="296" value="+ id: integer&#10;+ name: Char()&#10;+ active: Boolean()&#10;+ color: Integer()" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="295" vertex="1">
-                    <mxGeometry y="26" width="260" height="74" as="geometry"/>
-                </mxCell>
-                <mxCell id="297" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;" parent="295" vertex="1">
-                    <mxGeometry y="100" width="260" height="8" as="geometry"/>
-                </mxCell>
-                <mxCell id="298" value="- _sql_constraints(['name_uniq'])" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="295" vertex="1">
-                    <mxGeometry y="108" width="260" height="26" as="geometry"/>
-                </mxCell>
-                <mxCell id="299" value="has" style="endArrow=open;endFill=0;endSize=12;html=1;entryX=-0.001;entryY=0.872;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="138" edge="1">
-                    <mxGeometry x="0.3676" width="160" relative="1" as="geometry">
-                        <mxPoint x="152" y="-189" as="sourcePoint"/>
-                        <mxPoint x="458.53999999999996" y="-15.439999999999827" as="targetPoint"/>
-                        <Array as="points">
-                            <mxPoint x="430" y="-189"/>
-                            <mxPoint x="430" y="-36"/>
-                        </Array>
-                        <mxPoint as="offset"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="300" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;" parent="299" vertex="1" connectable="0">
-                    <mxGeometry x="-0.7267" y="-2" relative="1" as="geometry">
-                        <mxPoint x="141" y="-1" as="offset"/>
-                    </mxGeometry>
-                </mxCell>
-                <mxCell id="301" value="0..*" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;" parent="299" vertex="1" connectable="0">
-                    <mxGeometry x="0.1089" y="-1" relative="1" as="geometry">
-                        <mxPoint x="12" y="118" as="offset"/>
-                    </mxGeometry>
+                <mxCell id="293" value="+ id: integer&#10;+ name: Char()&#10;+ state_id: Many2one('fleet.vehicle.state')&#10;+ history_count: Integer(compute=&quot;_compute_count_all&quot;)&#10;+ log_drivers: One2many('fleet.vehicle.assignation.log', 'vehicle_id')&#10;..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="292" vertex="1">
+                    <mxGeometry y="26" width="290" height="94" as="geometry"/>
                 </mxCell>
                 <mxCell id="303" style="edgeStyle=none;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=none;endFill=0;endSize=12;dashed=1;" parent="1" source="302" target="138" edge="1">
                     <mxGeometry relative="1" as="geometry">
@@ -681,17 +642,17 @@
                 </mxCell>
                 <mxCell id="346" style="edgeStyle=none;html=1;exitX=-0.004;exitY=0.265;exitDx=0;exitDy=0;endArrow=open;endFill=0;endSize=12;exitPerimeter=0;" parent="1" source="351" edge="1">
                     <mxGeometry relative="1" as="geometry">
-                        <mxPoint x="843" y="646" as="targetPoint"/>
+                        <mxPoint x="842" y="631" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="347" value="&lt;span style=&quot;font-size: 16px&quot;&gt;1..1&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="346" vertex="1" connectable="0">
                     <mxGeometry x="-0.9146" y="3" relative="1" as="geometry">
-                        <mxPoint x="-12" y="-2" as="offset"/>
+                        <mxPoint x="-7" y="-2" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="348" value="&lt;span style=&quot;font-size: 16px&quot;&gt;0..*&lt;/span&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="346" vertex="1" connectable="0">
                     <mxGeometry x="-0.3655" y="1" relative="1" as="geometry">
-                        <mxPoint x="-26" as="offset"/>
+                        <mxPoint x="-23" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="349" value="has" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="346" vertex="1" connectable="0">
@@ -700,7 +661,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="350" value="res_user (trưởng phòng đội xe [odoo])" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-                    <mxGeometry x="1229" y="606" width="290" height="80" as="geometry">
+                    <mxGeometry x="1225" y="590" width="290" height="80" as="geometry">
                         <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
@@ -758,12 +719,12 @@
                 <mxCell id="382" value="Kế hoạch muốn thêm hệ thống để tạo chuyến đi công tác chở đến điểm sân bay/bến&amp;nbsp;&amp;nbsp;" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" parent="1" vertex="1">
                     <mxGeometry x="80" y="760" width="250" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="390" style="edgeStyle=none;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="389" target="140">
+                <mxCell id="390" style="edgeStyle=none;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=none;endFill=0;dashed=1;" parent="1" source="389" target="140" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="1050" y="770" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="389" value="Các nhân viên tham dự sẽ cùng chung phòng ban hoặc có thể khác phòng?" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" vertex="1" parent="1">
+                <mxCell id="389" value="Các nhân viên tham dự sẽ cùng chung phòng ban hoặc có thể khác phòng?" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" parent="1" vertex="1">
                     <mxGeometry x="1006" y="330" width="250" height="70" as="geometry"/>
                 </mxCell>
             </root>

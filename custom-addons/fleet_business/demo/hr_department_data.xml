@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    
+    <record id="dep_fleet" model="hr.department">
+      <field name="name">Fleet</field>
+      <field name="manager_id" search="[
+        ('id', '=', ref('fleet_business.dep_fleet_captain')),
+        ('company_id', '=', obj().env.company.id)
+      ]"/>
+    </record>
+
+  </data>
+</odoo>

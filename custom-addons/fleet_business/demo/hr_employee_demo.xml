@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <!--? Still gonna need to create an actual odoo users -->
+  
+    <record id="dep_fleet_captain" model="hr.employee">
+      <field name="name">Finn Fleet</field>
+      <field name="job_id" search="[
+        ('id', '=', ref('fleet_business.job_fleet_captain')),
+        ('company_id', '=', obj().env.company.id)
+      ]"/>
+      <field name="job_title">Fleet Captain</field>
+      <field name="department_id" search="[
+        ('id', '=', ref('fleet_business.dep_fleet')),
+        ('company_id', '=', obj().env.company.id)
+      ]"/>
+      <field name="work_email">finn.fleet32@example.com</field>
+    </record>
+
+    <record id="dep_fleet_driver" model="hr.employee">
+      <field name="name">David Driver</field>
+      <field name="job_id" search="[
+        ('id', '=', ref('fleet_business.job_fleet_driver')),
+        ('company_id', '=', obj().env.company.id)
+      ]"/>
+      <field name="job_title">Driver</field>
+      <field name="department_id" search="[
+        ('id', '=', ref('fleet_business.dep_fleet')),
+        ('company_id', '=', obj().env.company.id)
+      ]"/>
+      <field name="work_email">david.driver32@example.com</field>
+    </record>
+  
+  </data>
+</odoo>
