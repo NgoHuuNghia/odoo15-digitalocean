@@ -27,14 +27,17 @@
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/hr_business_menu_views.xml',
-        'views/hr_business_trip_views.xml',
+        'views/fleet_business_menu_views.xml',
+        'views/fleet_business_trip_views.xml',
+        'views/fleet_business_tag_views.xml',
+        'data/ir_sequence_data.xml',
         'data/hr_department_data.xml',
         'data/hr_job_data.xml',
+        'data/fleet_business_tag_data.xml',
         'demo/hr_employee_demo.xml',
         'demo/hr_department_data.xml',
     ],
-    # only loaded in demonstration mode
+    #! only loaded in demonstration mode
     # 'demo': [
     #     'demo/demo.xml',
     # ],

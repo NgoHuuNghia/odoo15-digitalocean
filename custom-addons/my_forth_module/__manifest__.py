@@ -16,8 +16,8 @@
   #? importing security rules, views and datas from top to bottom (the lowest will overwrite any collision)
   'data': [
     'security/ir.model.access.csv', #$ security
-    'data/sequence_data.xml', #$ data
-    'data/hospital_patient_tag_data.xml',
+    'data/sequence_data.xml', #$ sequence
+    'data/hospital_patient_tag_data.xml', #$ data
     'data/hospital.patient.tag.csv',
     'wizard/cancel_appointment_view.xml', #$ wizard
     'views/menu.xml', #$ view - menu

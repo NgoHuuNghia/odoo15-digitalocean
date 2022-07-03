@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="8NVEbFYH0CTecISd1Mc0" name="Page-1">
-        <mxGraphModel dx="1233" dy="1791" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="1">
+        <mxGraphModel dx="1657" dy="1977" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="1">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -302,7 +302,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="152" value="fleet_business_journal (nhật ký) -nw-" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;" parent="1" vertex="1">
-                    <mxGeometry x="80" y="-80" width="260" height="120" as="geometry">
+                    <mxGeometry x="40" y="-50" width="260" height="120" as="geometry">
                         <mxRectangle x="160" y="110" width="100" height="26" as="alternateBounds"/>
                     </mxGeometry>
                 </mxCell>
@@ -310,13 +310,10 @@
                     <mxGeometry y="26" width="260" height="94" as="geometry"/>
                 </mxCell>
                 <mxCell id="156" value="part of" style="endArrow=diamondThin;endFill=0;endSize=12;html=1;entryX=0;entryY=0.934;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="138" edge="1">
-                    <mxGeometry x="0.4095" y="-1" width="160" relative="1" as="geometry">
-                        <mxPoint x="152" y="-40" as="sourcePoint"/>
+                    <mxGeometry x="0.455" width="160" relative="1" as="geometry">
+                        <mxPoint x="113" y="-10" as="sourcePoint"/>
                         <mxPoint x="480" y="-10" as="targetPoint"/>
-                        <Array as="points">
-                            <mxPoint x="390" y="-40"/>
-                            <mxPoint x="390" y="-9"/>
-                        </Array>
+                        <Array as="points"/>
                         <mxPoint as="offset"/>
                     </mxGeometry>
                 </mxCell>
@@ -327,7 +324,7 @@
                 </mxCell>
                 <mxCell id="158" value="1..1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=16;" parent="156" vertex="1" connectable="0">
                     <mxGeometry x="0.1089" y="-1" relative="1" as="geometry">
-                        <mxPoint x="88" y="29" as="offset"/>
+                        <mxPoint x="124" y="-2" as="offset"/>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="177" value="fleet_driver_rating [transModel] (đánh giá tài xế) -nw-" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;labelBackgroundColor=none;fontColor=default;" parent="1" vertex="1">

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequences for fleet.business.trip -->
+        <record id="seq_fleet_business_trip" model="ir.sequence">
+            <field name="name">Company Fleet Business Trip</field>
+            <field name="code">fleet.business.trip</field>
+            <field name="prefix">BTR</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Sequences for fleet.business.rent -->
+        <record id="seq_fleet_business_trip" model="ir.sequence">
+            <field name="name">Company Supported Business Trip</field>
+            <field name="code">fleet.business.rent</field>
+            <field name="prefix">BRT</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>
