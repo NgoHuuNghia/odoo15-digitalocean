@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import json
 from odoo import models, fields, api
 
 APPROVAL_SELECTIONS = [('deciding','Deciding'),('denied','Denied'),('approved','Approved')]
@@ -13,7 +12,6 @@ class FleetBusinessTrip(models.Model):
   name = fields.Char('Sequence Name',readonly=True)
   attending_employee_ids = fields.Many2many(comodel_name='hr.employee', relation='business_trip_employees_rel', 
     column1='business_trip_id', column2='employee_id', string='Attending Employees')
-  #! attending_employee_ids = fields.One2many('hr.employee','business_trip_ids','Attending Employees')
   attending_employee_count = fields.Integer(string="Attendees Count", compute="_compute_attending_employee_count", store=True)
   pick_address_id = fields.Many2one('res.partner','Pick Up Company',compute='_compute_address_id', store=True, readonly=False,
     #! domain="['&',('is_company', '=', True),('company_id', '!=', None)]"
@@ -33,19 +31,12 @@ class FleetBusinessTrip(models.Model):
   overseer_fleet_email = fields.Char(related='overseer_fleet_id.work_email',string='Fleet\'s Work Email')
   approval_fleet = fields.Selection(APPROVAL_SELECTIONS, string='Fleet\'s Decision', default='deciding')
   tag_ids = fields.Many2many(comodel_name='fleet.business.tag', relation="fleet_business_trip_tag_rel", column1="fleet_business_trip_id", column2="tag_id", string='Tags')
+  journal_line_ids = fields.One2many('fleet.business.trip.journal.line','fleet_business_trip_id',string='Journal Line')
 
   @api.model
   def create(self, vals_list):
     vals_list['name'] = self.env['ir.sequence'].next_by_code('fleet.business.trip')
     return super(FleetBusinessTrip, self).create(vals_list)
-
-  def write(self, vals):
-    for record in self:
-      if (not record.name or record.name == False) and not vals.get('name'):
-        print('self.name--',self.name)
-        print('self.name--',vals.get('name'))
-        record.name = self.env['ir.sequence'].next_by_code('fleet.business.trip')
-    return super(FleetBusinessTrip, self).write(vals)
 
   @api.depends('attending_employee_ids')
   def _compute_attending_employee_count(self):
@@ -57,3 +48,9 @@ class FleetBusinessTrip(models.Model):
     for trip in self:
       address = trip.company_id.partner_id.address_get(['default'])
       trip.pick_address_id = address['default'] if address else False
+
+class FleetBusinessTripJournalLine(models.Model):
+  _inherit = 'fleet.business.journal.line'
+  _name = 'fleet.business.trip.journal.line'
+
+  fleet_business_trip_id = fields.Many2one('fleet.business.trip',readonly=True)
