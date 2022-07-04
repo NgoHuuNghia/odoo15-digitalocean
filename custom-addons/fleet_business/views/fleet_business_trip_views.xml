@@ -39,8 +39,11 @@
         <sheet>
           <div class="oe_button_box" name="button_box">
             <!--! <button name="action_view_appointments" type="object" class="oe_stat_button" icon="fa-star"> -->
-            <button class="oe_stat_button" icon="fa-user">
+            <button name="action_view_attendees" type="object" class="oe_stat_button" icon="fa-history">
               <field name="attending_employee_count" string="Attendees" widget="statinfo"/>
+            </button>
+            <button class="oe_stat_button" icon="fa-list">
+              <field name="journal_line_count" string="Journals" widget="statinfo"/>
             </button>
           </div>
           <div class="oe_title">
@@ -57,7 +60,7 @@
             </group>
             <group>
               <field name="driver_id" />
-              <field name="self_driving_employee_id" />
+              <field name="self_driving_employee_id" attrs="{'readonly':[('attending_employee_count', '=', 0)]}"/>
             </group>
           </group>
           <group string='All Attending Employees'>
@@ -115,7 +118,7 @@
                   <field name="overseer_admin_email" />
                   <field name="approval_admin" />
                 </group>
-                <group string="Creator">
+                <group string="Fleet Captain">
                   <field name="overseer_fleet_id" />
                   <field name="overseer_fleet_work_phone" />
                   <field name="overseer_fleet_email" />

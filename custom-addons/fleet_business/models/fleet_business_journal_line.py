@@ -2,7 +2,7 @@ from odoo import models,fields,api
 
 TYPE_SELECTION = [('state','State'),('update','Update'),('approval','Approval'),('special','Special')]
 
-class FleetBusinessJournalLine(models.Model):
+class FleetBusinessJournalLine(models.AbstractModel):
   _name = 'fleet.business.journal.line'
   _description = 'Journal records for a business trip'
 

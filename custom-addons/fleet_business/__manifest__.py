@@ -26,18 +26,18 @@
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv',
-        'views/fleet_business_menu_views.xml',
-        'views/fleet_business_trip_views.xml',
-        'views/fleet_business_tag_views.xml',
-        'views/fleet_vehicle_views.xml',
-        'views/hr_employee_views.xml',
-        'data/ir_sequence_data.xml',
-        'data/hr_department_data.xml',
+        'security/ir.model.access.csv', #$ Security
+        'data/ir_sequence_data.xml', #$ Sequence
+        'data/hr_department_data.xml', #$ Data
         'data/hr_job_data.xml',
         'data/fleet_business_tag_data.xml',
-        'demo/hr_employee_demo.xml',
+        'demo/hr_employee_demo.xml', #$ Demo
         'demo/hr_department_data.xml',
+        'views/fleet_business_menu_views.xml', #$ Menu
+        'views/fleet_business_tag_views.xml', #$ Views
+        'views/fleet_vehicle_views.xml',
+        'views/hr_employee_views.xml',
+        'views/fleet_business_trip_views.xml',
     ],
     #! only loaded in demonstration mode
     # 'demo': [

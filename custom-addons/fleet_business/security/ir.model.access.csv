@@ -1,5 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-fleet_business.access_fleet_business_base,access_fleet_business_base,fleet_business.model_fleet_business_base,base.group_user,1,1,1,1
 fleet_business.access_fleet_business_tag,access_fleet_business_tag,fleet_business.model_fleet_business_tag,base.group_user,1,1,1,1
 fleet_business.access_fleet_business_trip_journal_line,access_fleet_business_trip_journal_line,fleet_business.model_fleet_business_trip_journal_line,base.group_user,1,1,1,1
 fleet_business.access_fleet_business_trip,access_fleet_business_trip,fleet_business.model_fleet_business_trip,base.group_user,1,1,1,1

@@ -12,7 +12,7 @@
         </record>
 
         <!-- Sequences for fleet.business.rent -->
-        <record id="seq_fleet_business_trip" model="ir.sequence">
+        <record id="seq_fleet_business_rent" model="ir.sequence">
             <field name="name">Company Supported Business Trip</field>
             <field name="code">fleet.business.rent</field>
             <field name="prefix">BRT</field>
