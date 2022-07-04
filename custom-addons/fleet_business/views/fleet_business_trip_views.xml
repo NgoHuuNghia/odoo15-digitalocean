@@ -69,8 +69,6 @@
               <field name='return_time' />
             </group>
             <group string='Estamated Time'>
-              <field name='pick_time' readonly='1'/>
-              <field name='return_time' readonly='1'/>
               <!--! computed
               <field name='arrive_time' />
               <field name='back_time' /> -->
@@ -98,29 +96,31 @@
             </page>
 
             <page string="Overseers">
-              <group string="Creator">
-                <field name="overseer_creator_id" />
-                <field name="overseer_creator_work_phone" />
-                <field name="overseer_creator_email" />
-                <field name="approval_creator" />
-              </group>
-              <group string="Manager">
-                <field name="overseer_manager_id" />
-                <field name="overseer_manager_work_phone" />
-                <field name="overseer_manager_email" />
-                <field name="approval_manager" />
-              </group>
-              <group string="Administrator">
-                <field name="overseer_admin_id" />
-                <field name="overseer_admin_work_phone" />
-                <field name="overseer_admin_email" />
-                <field name="approval_admin" />
-              </group>
-              <group string="Creator">
-                <field name="overseer_fleet_id" />
-                <field name="overseer_fleet_work_phone" />
-                <field name="overseer_fleet_email" />
-                <field name="approval_fleet" />
+              <group>
+                <group string="Creator">
+                  <field name="overseer_creator_id" />
+                  <field name="overseer_creator_work_phone" />
+                  <field name="overseer_creator_email" />
+                  <field name="approval_creator" />
+                </group>
+                <group string="Manager">
+                  <field name="overseer_manager_id" />
+                  <field name="overseer_manager_work_phone" />
+                  <field name="overseer_manager_email" />
+                  <field name="approval_manager" />
+                </group>
+                <group string="Administrator">
+                  <field name="overseer_admin_id" />
+                  <field name="overseer_admin_work_phone" />
+                  <field name="overseer_admin_email" />
+                  <field name="approval_admin" />
+                </group>
+                <group string="Creator">
+                  <field name="overseer_fleet_id" />
+                  <field name="overseer_fleet_work_phone" />
+                  <field name="overseer_fleet_email" />
+                  <field name="approval_fleet" />
+                </group>
               </group>
             </page>
 

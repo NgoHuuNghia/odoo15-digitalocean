@@ -12,7 +12,8 @@ class FleetBusinessTrip(models.Model):
 
   name = fields.Char('Sequence Name',readonly=True)
   attending_employee_ids = fields.Many2many(comodel_name='hr.employee', relation='business_trip_employees_rel', 
-    column1='business_trip_id', column2='employee_id', string='All Attending Employees')
+    column1='business_trip_id', column2='employee_id', string='Attending Employees')
+  #! attending_employee_ids = fields.One2many('hr.employee','business_trip_ids','Attending Employees')
   attending_employee_count = fields.Integer(string="Attendees Count", compute="_compute_attending_employee_count", store=True)
   pick_address_id = fields.Many2one('res.partner','Pick Up Company',compute='_compute_address_id', store=True, readonly=False,
     #! domain="['&',('is_company', '=', True),('company_id', '!=', None)]"
