@@ -22,7 +22,7 @@
     'license': 'LGPL-3',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','hr'],
+    'depends': ['hr'],
 
     # always loaded
     'data': [
@@ -37,6 +37,7 @@
     # 'demo': [
     #     'demo/demo.xml',
     # ],
+    'auto_install': True,
     'installable': True,
-    'application': True,
+    # 'application': True,
 }

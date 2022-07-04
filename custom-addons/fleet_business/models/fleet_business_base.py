@@ -48,5 +48,5 @@ class FleetBusinessBase(models.Model):
   #$ other fields
   intent = fields.Text('Intention', required=True, help='The intention of this business trip')
   note = fields.Text('Note/Comment', help='Any note, reminder or comments special to this business trip')
-  state = fields.Selection(STATE_SELECTIONS,string='Business State',default='draft',compute='_compute_state',store=True)
+  state = fields.Selection(STATE_SELECTIONS,string='State',default='draft',compute='_compute_state',store=True)
   journal_line_ids = fields.One2many('fleet.business.journal.line','fleet_business_base_id',string='Journal Line')

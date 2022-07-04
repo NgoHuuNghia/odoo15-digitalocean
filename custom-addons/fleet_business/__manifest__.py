@@ -30,6 +30,7 @@
         'views/fleet_business_menu_views.xml',
         'views/fleet_business_trip_views.xml',
         'views/fleet_business_tag_views.xml',
+        'views/fleet_vehicle_views.xml',
         'data/ir_sequence_data.xml',
         'data/hr_department_data.xml',
         'data/hr_job_data.xml',

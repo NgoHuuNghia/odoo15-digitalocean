@@ -10,11 +10,6 @@ class Employee(models.Model):
   ratings = fields.Float('Employee\'s Ratings')
   parent_id = fields.Many2one('hr.employee',
     domain="['&','|',('company_id', '=', False),('company_id', '=', company_id),('id', '!=', id)]")
-  #! driver_rating_line_ids
-  #! business_trip_count
-  #! business_trip_ids
-  #! business_rent_count
-  #! business_rent_ids
 
   @api.depends('department_id')
   def _compute_department_position(self):

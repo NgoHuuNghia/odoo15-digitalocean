@@ -1,22 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+  <record id="fleet_business_trip_view_tree" model="ir.ui.view">
+    <field name="name">fleet.business.trip.tree</field>
+    <field name="model">fleet.business.trip</field>
+    <field name="arch" type="xml">
+      <tree>
+        <field name="name" string='Sequence ID'/>
+        <field name="overseer_creator_id" />
+        <field name="attending_employee_count"/>
+        <field name="vehicle_id"/>
+        <field name="driver_id"/>
+        <field name="pick_time"/>
+        <field name="pick_address_id"/>
+        <field name="to_street"/>
+        <field name="state" widget="badge"
+          decoration-success="state == ['approved','returned']" 
+          decoration-danger="state == ['not_approved','canceled','car_na','driver_na','car_driver_na']"
+          decoration-info="state == ['ready','departing','returning']"
+          decoration-warning="state == ['late','incident']"/>
+      </tree>
+    </field>
+  </record>
+
   <record id="fleet_business_trip_view_form" model="ir.ui.view">
     <field name="name">fleet.business.trip.form</field>
     <field name="model">fleet.business.trip</field>
     <field name="arch" type="xml">
-      <form string="Company's Fleet Business Trips">
-        <!-- <header>
+      <form>
+        <field name="company_id" invisible='1'/>
 
-        </header> -->
+        <header>
+          <field name="state" widget="statusbar" nolabel="1"
+            statusbar_visible="draft,not_approved,approved,ready,
+            departing,returning,late,returned,cancled,incident"/>
+        </header>
+        
         <sheet>
-          <field name="company_id" invisible='1'/>
-          <field name="overseer_fleet_id_domain" invisible='1'/>
-          <attribute name="domain">[('job_id', 'in', _computed_filtered_ids)]</attribute>
-          <!--? <xpath expr="" position="attributes">
-            <attribute name="" separator="" add="" remove="" value=""></attribute>
-          </xpath> -->
-
+          <div class="oe_button_box" name="button_box">
+            <!--! <button name="action_view_appointments" type="object" class="oe_stat_button" icon="fa-star"> -->
+            <button class="oe_stat_button" icon="fa-user">
+              <field name="attending_employee_count" string="Attendees" widget="statinfo"/>
+            </button>
+          </div>
           <div class="oe_title">
             <h1>
                 <field name="name"/>
@@ -41,17 +67,25 @@
             <group string='Time'>
               <field name='pick_time' />
               <field name='return_time' />
+            </group>
+            <group string='Estamated Time'>
+              <field name='pick_time' readonly='1'/>
+              <field name='return_time' readonly='1'/>
               <!--! computed
               <field name='arrive_time' />
               <field name='back_time' /> -->
             </group>
-            <group string='Location'>
+            <group string='Go To Location'>
               <field name='to_street' />
               <field name='to_street2' />
               <field name='to_zip' />
               <field name='to_city' />
               <field name='to_state_id'/>
               <field name='to_country_id'/>
+            </group>
+            <group string='Pick up Location'>
+              <field name="pick_address_id" context="{'show_address': 1}"
+                options='{"always_reload": True, "highlight_first_line": True}'/>
             </group>
           </group>
 
@@ -90,10 +124,12 @@
               </group>
             </page>
 
-            <page string="Vehicle">
-              <field name="model_id" class="oe_inline" placeholder="e.g. PAE 326"/>
-              <field name="license_plate" class="oe_inline" placeholder="e.g. PAE 326"/>
-            </page>
+            <!-- <page string="Vehicle">
+              <group>
+                <field name="model_id" class="oe_inline" placeholder="e.g. PAE 326"/>
+                <field name="license_plate" class="oe_inline" placeholder="e.g. PAE 326"/>
+              </group>
+            </page> -->
 
             <!--! set groups admin only -->
             <page string="Journal">
