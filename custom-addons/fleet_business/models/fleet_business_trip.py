@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api, _
+from odoo import models, fields, api, exceptions, _
 
 APPROVAL_SELECTIONS = [('deciding','Deciding'),('denied','Denied'),('approved','Approved')]
 
 class FleetBusinessTrip(models.Model):
   _name = 'fleet.business.trip'
-  _description = "Model for creating and supervising a business trip with a company's car"
+  _description = "Business Trip"
   _inherit = ['fleet.business.base']
 
   name = fields.Char('Sequence Name',readonly=True)
@@ -22,7 +22,7 @@ class FleetBusinessTrip(models.Model):
   model_id = fields.Many2one(related='vehicle_id.model_id',string='Model')
   license_plate = fields.Char(related='vehicle_id.license_plate',string='License Plate')
   seats = fields.Integer(related='vehicle_id.seats',string='Seats')
-  self_driving_employee_id = fields.Many2one('hr.employee',string='Self Driver',domain="[('id', 'in', attending_employee_ids)]")
+  self_driving_employee_id = fields.Many2one('hr.employee',string='Attendee Driver',domain="[('id', 'in', attending_employee_ids)]")
   driver_id = fields.Many2one('hr.employee',string="Company's Driver",domain="['&','&','&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Fleet'),('department_position', '=', 'Member'),('job_title', '=', 'Driver')]")
   overseer_fleet_id = fields.Many2one('hr.employee',string='Fleet Captain',
     default=lambda self: self.env['hr.employee'].search([('department_id.name','=','Fleet'),('department_position','=','Manager')],limit=1),
@@ -42,7 +42,10 @@ class FleetBusinessTrip(models.Model):
   @api.depends('attending_employee_ids')
   def _compute_attending_employee_count(self):
     for trip in self:
-      trip.attending_employee_count = len(trip.attending_employee_ids)
+      if trip.driver_id:
+        trip.attending_employee_count = len(trip.attending_employee_ids) + 1
+      else:
+        trip.attending_employee_count = len(trip.attending_employee_ids)
 
   @api.depends('journal_line_ids')
   def _compute_journal_line_count(self):
@@ -55,32 +58,44 @@ class FleetBusinessTrip(models.Model):
       address = trip.company_id.partner_id.address_get(['default'])
       trip.pick_address_id = address['default'] if address else False
 
-  def action_view_attendees(self):
-    return {
-        'name': _('Employees'),
-        'res_model': 'hr.employee',
-        'view_mode': 'kanban,tree,activity,form',
-        #? 'context': {'default_id':self.id},
-        'domain': [('id','in',self.attending_employee_ids.ids)],
-        'target': 'current',
-        'type': 'ir.actions.act_window',
-    }
-
   @api.onchange('attending_employee_ids')
   def onchange_product_list(self):
     return {'domain': {'self_driving_employee_id': [
       ('id', 'in', self.attending_employee_ids.ids)
     ]}}
 
-  #$ a method to run a function on view load, just not getting it to work yet
-  # @api.model
-  # def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
-  #   res = super(FleetBusinessTrip, self).fields_view_get(view_id=view_id, view_type=view_type, 
-  #     toolbar=toolbar, submenu=submenu)
-  #   # Write your code here which should be executed on view load
-  #   res['fields']['self_driving_employee_id']['domain'] = [('id', 'in', self.attending_employee_ids.ids)]
-  #   print('--------res=',res['fields'])
-  #   return res
+  @api.constrains('self_driving_employee_id','driver_id')
+  def _check_driver(self):
+    for trip in self:
+      if not trip.self_driving_employee_id and not trip.driver_id: 
+        raise exceptions.UserError("Must choose either a Company's Driver Or Attendee Driver")
+      elif trip.self_driving_employee_id and trip.driver_id: 
+        raise exceptions.ValidationError("Please either choose a Company's Driver Or Attendee Driver")
+
+  @api.constrains('attending_employee_count','seats')
+  def _check_seats(self):
+    for trip in self:
+      if trip.attending_employee_count > trip.seats: 
+        raise exceptions.UserError("Number of employees can't be more than the seats (driver included)")
+
+  def action_view_attendees(self):
+    attending_employee_ids_list = self.attending_employee_ids.ids
+    if self.driver_id:
+      attending_employee_ids_list.append(self.driver_id.id)
+
+    return {
+        'name': _('Employees'),
+        'res_model': 'hr.employee',
+        'view_mode': 'kanban,tree,activity,form',
+        #? 'context': {'default_id':self.id},
+        'domain': [('id','in',attending_employee_ids_list)],
+        # 'domain': (
+        #   [('id','in',attending_employee_ids_list.append(self.driver_id.id))] if self.driver_id else 
+        #   [('id','in',attending_employee_ids_list)]
+        # ),
+        'target': 'current',
+        'type': 'ir.actions.act_window',
+    }
 
 class FleetBusinessTripJournalLine(models.Model):
   _inherit = 'fleet.business.journal.line'

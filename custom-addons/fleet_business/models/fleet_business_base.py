@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from email.policy import default
-from odoo import models, fields, api
+from odoo import models, fields, api, exceptions
+from dateutil import relativedelta
 
 APPROVAL_SELECTIONS = [('deciding','Deciding'),('denied','Denied'),('approved','Approved')]
 STATE_SELECTIONS = [
@@ -10,17 +11,20 @@ STATE_SELECTIONS = [
   ('car_na','Car N/a'),('driver_na','Driver N/a'),('car_driver_na','Car & Driver N/a'),
   ('canceled','Canceled'),('incident','Incident')
 ]
+#! Add the setting properly to setting module
+SETTING_TIME_CONSTRAINS = 4
 
 class FleetBusinessBase(models.AbstractModel):
   _name = 'fleet.business.base'
   _description = 'Base model for other business model'
+  _inherit = 'mail.thread'
 
   name = fields.Char()
   pick_time = fields.Datetime('Pick Up Time', default=fields.Datetime.now(),required=True)
   return_time = fields.Datetime('Return By Time', required=True)
   #$ these 2 Datetime fields is still experimental
-  #! arrive_time = fields.Datetime('Estimated Arrive Time', readonly=True, compute='_compute_arrive_time')
-  #! back_time = fields.Datetime('Estimated Back Time', readonly=True, compute='_compute_back_time')
+  arrive_time = fields.Datetime('Estimated Arrive Time', readonly=True)
+  back_time = fields.Datetime('Estimated Back Time', readonly=True)
   #$ location 
   company_id = fields.Many2one('res.company', string='Company', index=True, default=lambda self: self.env.company, readonly=True)
   to_street = fields.Char('To Street 1')
@@ -48,3 +52,14 @@ class FleetBusinessBase(models.AbstractModel):
   intent = fields.Text('Intention', required=True, help='The intention of this business trip')
   note = fields.Text('Note/Comment', help='Any note, reminder or comments special to this business trip')
   state = fields.Selection(STATE_SELECTIONS,string='State',default='draft',compute='_compute_state',store=True)
+
+  #? Temp using this exeptions way to throw error, want to use the notification and highlight way instead
+  @api.constrains('pick_time','return_time')
+  def _check_time(self):
+    for trip in self:
+      if not trip.return_time: 
+        raise exceptions.UserError("Return By Time can't be empty")
+      elif trip.return_time < trip.pick_time:
+        raise exceptions.ValidationError("Return By Time can't be before Pick Up Time")
+      elif trip.return_time > trip.pick_time + relativedelta.relativedelta(months=SETTING_TIME_CONSTRAINS):
+        raise exceptions.ValidationError(f"Return By Time can't {SETTING_TIME_CONSTRAINS} months in the future")

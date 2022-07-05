@@ -167,6 +167,14 @@ class HospitalAppointment(Model):
       }
     }
 
+  #$$ a method to run a function on view load, just not getting it to work yet
+  # @api.model
+  # def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+  #   res = super(FleetBusinessTrip, self).fields_view_get(view_id=view_id, view_type=view_type, 
+  #     toolbar=toolbar, submenu=submenu)
+  #   # Write your code here which should be executed on view load
+  #   return res
+
 # ? first step to create a one2many relation is to create a new model either in a new file or same up to you
 # ? then create a field to link betweeen them with a [many2one] method see -> appointment_id
 # ? also here we are depending the [product] model from the [product] module for testing purposes, remember to depend them on manifest.py

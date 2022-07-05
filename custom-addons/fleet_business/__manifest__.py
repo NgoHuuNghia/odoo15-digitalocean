@@ -22,7 +22,7 @@
     'license': 'LGPL-3',
 
     # any module necessary for this one to work correctly
-    'depends': ['fleet','hr','hr_addons'],
+    'depends': ['fleet','mail','hr','hr_addons'],
 
     # always loaded
     'data': [

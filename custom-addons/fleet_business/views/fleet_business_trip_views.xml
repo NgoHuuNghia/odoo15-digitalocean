@@ -55,12 +55,12 @@
 
           <group>
             <group>
-              <field name="vehicle_id" />
+              <field name="vehicle_id"/>
               <field name="seats" />
             </group>
             <group>
-              <field name="driver_id" />
-              <field name="self_driving_employee_id" attrs="{'readonly':[('attending_employee_count', '=', 0)]}"/>
+              <field name="driver_id" attrs="{'invisible':[('self_driving_employee_id', '!=', False)]}"/>
+              <field name="self_driving_employee_id" attrs="{'invisible':[('driver_id', '!=', False)]}"/>
             </group>
           </group>
           <group string='All Attending Employees'>
@@ -72,9 +72,8 @@
               <field name='return_time' />
             </group>
             <group string='Estamated Time'>
-              <!--! computed
               <field name='arrive_time' />
-              <field name='back_time' /> -->
+              <field name='back_time' />
             </group>
             <group string='Go To Location'>
               <field name='to_street' />
@@ -153,6 +152,11 @@
             </page>
           </notebook>
         </sheet>
+
+        <div class="oe_chatter">
+          <field name="message_follower_ids" groups="base.group_user"/>
+          <field name="message_ids"/>
+        </div>
       </form>
     </field>
   </record>
