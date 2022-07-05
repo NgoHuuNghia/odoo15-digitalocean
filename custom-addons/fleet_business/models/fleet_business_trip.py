@@ -18,7 +18,8 @@ class FleetBusinessTrip(models.Model):
     #! working on domain that filter only system's company (res.company)
     domain="[('is_company', '=', True)]"
   )
-  vehicle_id = fields.Many2one('fleet.vehicle','Vehicle Used')
+  to_country_id = fields.Many2one(related='pick_address_id.country_id', string='To Country')
+  vehicle_id = fields.Many2one('fleet.vehicle','Vehicle Used',required=True)
   model_id = fields.Many2one(related='vehicle_id.model_id',string='Model')
   license_plate = fields.Char(related='vehicle_id.license_plate',string='License Plate')
   seats = fields.Integer(related='vehicle_id.seats',string='Seats')
@@ -36,6 +37,16 @@ class FleetBusinessTrip(models.Model):
 
   @api.model
   def create(self, vals_list):
+    # prev_id = self.env['fleet.business.trip'].search([('id', '!=', False)], limit=1, order="id desc").id
+    # curr_id = prev_id + 1
+    # first_journal_val_list = {
+    #   'fleet_business_trip_id': curr_id,
+    #   'type': 'update',
+    #   'note': f'{self.env.user.employee_id.name} have successfully created this trip, now awaiting approval.'
+    # }
+    # self.env['fleet.business.trip.journal.line'].create(first_journal_val_list)
+    # print('-----first_journal_val_list----',first_journal_val_list)
+
     vals_list['name'] = self.env['ir.sequence'].next_by_code('fleet.business.trip')
     return super(FleetBusinessTrip, self).create(vals_list)
 
@@ -64,6 +75,17 @@ class FleetBusinessTrip(models.Model):
       ('id', 'in', self.attending_employee_ids.ids)
     ]}}
 
+  #? automated code, still figuring it out
+  def action_create_first_journal(self):
+    curr_id = self.env['fleet.business.trip'].search([('id', '!=', False)], limit=1, order="id desc").id
+
+    first_journal_val_list = {
+      'fleet_business_trip_id': curr_id,
+      'type': 'update',
+      'note': f'{self.env.user.employee_id.name} have successfully created this trip, now awaiting approval.'
+    }
+    self.env['fleet.business.trip.journal.line'].create(first_journal_val_list)
+
   @api.constrains('self_driving_employee_id','driver_id')
   def _check_driver(self):
     for trip in self:
@@ -89,10 +111,6 @@ class FleetBusinessTrip(models.Model):
         'view_mode': 'kanban,tree,activity,form',
         #? 'context': {'default_id':self.id},
         'domain': [('id','in',attending_employee_ids_list)],
-        # 'domain': (
-        #   [('id','in',attending_employee_ids_list.append(self.driver_id.id))] if self.driver_id else 
-        #   [('id','in',attending_employee_ids_list)]
-        # ),
         'target': 'current',
         'type': 'ir.actions.act_window',
     }

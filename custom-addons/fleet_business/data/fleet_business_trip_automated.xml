@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+  
+    <record id="create_first_journal" model="base.automation">
+      <field name="name">Base Automation: Create first journal</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="state">code</field>
+      <field name="code">model.action_create_first_journal()</field>
+      <field name="trigger">on_create</field>
+      <field name="active" eval="True"/>
+      <field name="filter_domain">[('id','!=',False)]</field>
+    </record>
+
+  </data>
+</odoo>

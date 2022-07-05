@@ -32,7 +32,6 @@ class FleetBusinessBase(models.AbstractModel):
   to_zip = fields.Char('To Country\'s Zip Code',change_default=True)
   to_city = fields.Char('To City')
   to_state_id = fields.Many2one("res.country.state", string='To State/Province', domain="[('country_id', '=?', to_country_id)]")
-  to_country_id = fields.Many2one('res.country', string='To Country')
   #$ all employees that need to approve this business trip
   overseer_manager_id = fields.Many2one('hr.employee',string='Creator\'s Manager', default=lambda self: self.env.user.employee_id.parent_id)
   overseer_manager_work_phone = fields.Char(related='overseer_manager_id.work_phone',string='Manager\'s Work Phone')

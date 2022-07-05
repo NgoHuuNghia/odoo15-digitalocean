@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_hr_addons_hr_addons,hr_addons.hr_addons,model_hr_addons_hr_addons,base.group_user,1,1,1,1
+hr_addons.access_hr_department,hr_addons_access_hr_department,hr_addons.model_hr_department,base.group_user,1,1,1,1
+hr_addons.access_hr_employee,hr_addons_access_hr_employee,hr_addons.model_hr_employee,base.group_user,1,1,1,1

@@ -22,7 +22,7 @@
     'license': 'LGPL-3',
 
     # any module necessary for this one to work correctly
-    'depends': ['fleet','mail','hr','hr_addons'],
+    'depends': ['base_automation','fleet','mail','hr','hr_addons'],
 
     # always loaded
     'data': [
@@ -33,6 +33,7 @@
         'data/fleet_business_tag_data.xml',
         'demo/hr_employee_demo.xml', #$ Demo
         'demo/hr_department_data.xml',
+        'data/fleet_business_trip_automated.xml',#$ Automation
         'views/fleet_business_menu_views.xml', #$ Menu
         'views/fleet_business_tag_views.xml', #$ Views
         'views/fleet_vehicle_views.xml',
