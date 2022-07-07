@@ -17,7 +17,7 @@
     # Categories can be used to filter modules in modules listing
     # Check https://github.com/odoo/odoo/blob/15.0/odoo/addons/base/data/ir_module_category_data.xml
     # for the full list
-    'category': 'Fleet/Services/Appraisals',
+    'category': 'Human Resources/Services',
     'version': '0.1',
     'license': 'LGPL-3',
 
@@ -26,13 +26,15 @@
 
     # always loaded
     'data': [
-        'security/ir.model.access.csv', #$ Security
+        'security/fleet_business_security.xml', #$ Security
+        'security/ir.model.access.csv',
         'data/ir_sequence_data.xml', #$ Sequence
         'data/hr_department_data.xml', #$ Data
         'data/hr_job_data.xml',
         'data/fleet_business_tag_data.xml',
         'demo/hr_employee_demo.xml', #$ Demo
-        'demo/hr_department_data.xml',
+        'demo/hr_department_demo.xml',
+        'demo/fleet_vehicle_demo.xml',
         'data/fleet_business_trip_automated.xml',#$ Automation
         'views/fleet_business_menu_views.xml', #$ Menu
         'views/fleet_business_tag_views.xml', #$ Views

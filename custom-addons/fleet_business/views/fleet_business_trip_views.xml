@@ -54,11 +54,11 @@
           </div>
 
           <group>
-            <group>
+            <group string="Vehicle">
               <field name="vehicle_id"/>
               <field name="seats" />
             </group>
-            <group>
+            <group string="Driver">
               <field name="driver_id" attrs="{'invisible':[('self_driving_employee_id', '!=', False)]}"/>
               <field name="self_driving_employee_id" attrs="{'invisible':[('driver_id', '!=', False)]}"/>
             </group>

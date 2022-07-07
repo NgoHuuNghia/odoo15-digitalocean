@@ -9,26 +9,33 @@
     <field name="context">{}</field>
     <field name="help" type="html">
       <p class="o_view_nocontent_smiling_face">
-        Add your first Business Trips
+        Create a business trip and wait for approval
       </p>
     </field>
+  </record>
+
+  <record model='ir.ui.menu' id='fleet.menu_root'>
+    <field name="groups_id" eval="[(4,ref('base.group_user'))]"/>
   </record>
 
   <menuitem
     id="fleet_business_menu_root"
     name="Business Trips"
+    groups="base.group_user,fleet.fleet_group_user"
     parent="fleet.menu_root"
     sequence="90">
     
     <menuitem
       id="fleet_business_trip_menu"
       name="Company's Fleet"
+      groups="base.group_user,fleet.fleet_group_user"
       action="fleet_business_trip_action"
       sequence="0"/>
 
     <menuitem
       id="fleet_business_rent_menu"
       name="Company's Supported Business Trips"
+      groups="base.group_user,fleet.fleet_group_user"
       sequence="10"/>
   </menuitem>
 
