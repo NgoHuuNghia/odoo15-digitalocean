@@ -27,6 +27,6 @@
       <field name="department_id" ref="dep_fleet"/>
       <field name="work_email">denny.driver32@example.com</field>
     </record>
-  
+
   </data>
 </odoo>

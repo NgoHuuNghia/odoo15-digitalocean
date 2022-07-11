@@ -29,8 +29,30 @@
     <field name="arch" type="xml">
       <form>
         <field name="company_id" invisible='1'/>
+        <field name="curr_logged_overseer" invisible='1'/>
 
         <header>
+          <!--? approval buttons -->
+          <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
+            attrs="{'invisible':['|',('approval_manager', '!=', 'deciding'),('curr_logged_overseer', '!=', 'manager')]}"/>
+          <button name="action_approval_manager_denied" string="Manager Deny" type="object" 
+            attrs="{'invisible':['|',('approval_manager', '!=', 'deciding'),('curr_logged_overseer', '!=', 'manager')]}"/>
+
+          <button name="action_approval_admin_approved" string="Admin Approve" type="object" class="oe_highlight"
+            attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('curr_logged_overseer', '!=', 'admin')]}"/>
+          <button name="action_approval_admin_denied" string="Admin Deny" type="object" 
+            attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('curr_logged_overseer', '!=', 'admin')]}"/>
+
+          <button name="action_approval_creator_approved" string="Creator Approve" type="object" class="oe_highlight"
+            attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('curr_logged_overseer', '!=', 'creator')]}"/>
+          <button name="action_approval_creator_denied" string="Creator Deny" type="object" 
+            attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('curr_logged_overseer', '!=', 'creator')]}"/>
+
+          <button name="action_approval_fleet_approved" string="Fleet Approve" type="object" class="oe_highlight"
+            attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('curr_logged_overseer', '!=', 'fleet')]}"/>
+          <button name="action_approval_fleet_denied" string="Fleet Deny" type="object" 
+            attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('curr_logged_overseer', '!=', 'fleet')]}"/>
+
           <field name="state" widget="statusbar" nolabel="1"
             statusbar_visible="draft,not_approved,approved,ready,
             departing,returning,late,returned,cancled,incident"/>
@@ -38,7 +60,45 @@
         
         <sheet>
           <div class="oe_button_box" name="button_box">
-            <!--! <button name="action_view_appointments" type="object" class="oe_stat_button" icon="fa-star"> -->
+            <!--? overseers -->
+            <!--! add buttons to choose missing overseers -->
+            <button name="action_view_manager" type="object" class="oe_stat_button" icon="fa-id-card-o">
+              <div class="o_field_widget o_stat_info">
+                  <span class="o_stat_value">
+                    <field name="overseer_manager_id" readonly="1" attrs="{'invisible': [('overseer_manager_id', '=', False)]}"/>
+                    <strong attrs="{'invisible': [('overseer_manager_id', '!=', False)]}">Missing Manager</strong>
+                  </span>
+                  <span class="o_stat_text">Manager</span>
+              </div>
+            </button>
+            <button name="action_view_admin" type="object" class="oe_stat_button" icon="fa-id-card-o">
+              <div class="o_field_widget o_stat_info">
+                  <span class="o_stat_value">
+                    <field name="overseer_admin_id" readonly="1" attrs="{'invisible': [('overseer_admin_id', '=', False)]}"/>
+                    <strong attrs="{'invisible': [('overseer_admin_id', '!=', False)]}">Missing Admin</strong>
+                  </span>
+                  <span class="o_stat_text">Administator</span>
+              </div>
+            </button>
+            <button name="action_view_creator" type="object" class="oe_stat_button" icon="fa-id-card-o" attrs="{'invisible': [('overseer_creator_id', '=', False)]}">
+              <div class="o_field_widget o_stat_info">
+                  <span class="o_stat_value">
+                    <field name="overseer_creator_id" readonly="1" attrs="{'invisible': [('overseer_creator_id', '=', False)]}"/>
+                    <strong attrs="{'invisible': [('overseer_creator_id', '!=', False)]}">Missing Creator</strong>
+                  </span>
+                  <span class="o_stat_text">Trip Requester</span>
+              </div>
+            </button>
+            <button name="action_view_fleet" type="object" class="oe_stat_button" icon="fa-id-card-o" attrs="{'invisible': [('overseer_fleet_id', '=', False)]}">
+              <div class="o_field_widget o_stat_info">
+                  <span class="o_stat_value">
+                    <field name="overseer_fleet_id" readonly="1" attrs="{'invisible': [('overseer_fleet_id', '=', False)]}"/>
+                    <strong attrs="{'invisible': [('overseer_fleet_id', '!=', False)]}">Missing fleet</strong>
+                  </span>
+                  <span class="o_stat_text">Fleet Captain</span>
+              </div>
+            </button>
+            
             <button name="action_view_attendees" type="object" class="oe_stat_button" icon="fa-history">
               <field name="attending_employee_count" string="Attendees" widget="statinfo"/>
             </button>
@@ -46,6 +106,84 @@
               <field name="journal_line_count" string="Journals" widget="statinfo"/>
             </button>
           </div>
+
+          <!--? approval alerts -->
+          <div class="alert alert-warning text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_manager', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'manager'),]}">
+            <div>
+              <strong>You, the manager Need to decide the approval of this business trip</strong>
+            </div>
+          </div>
+          <div class="alert alert-success text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_manager', '!=', 'approved'), ('curr_logged_overseer', '!=', 'manager'),]}">
+            <div>
+              <strong>You, the manager have approve of this business trip</strong>
+            </div>
+          </div>
+          <div class="alert alert-danger text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_manager', '!=', 'denied'), ('curr_logged_overseer', '!=', 'manager'),]}">
+            <div>
+              <strong>You, the manager have deny this business trip</strong>
+            </div>
+          </div>
+
+          <div class="alert alert-warning text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_admin', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'admin'),]}">
+            <div>
+              <strong>You, the Admin Need to decide the approval of this business trip</strong>
+            </div>
+          </div>
+          <div class="alert alert-success text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_admin', '!=', 'approved'), ('curr_logged_overseer', '!=', 'admin'),]}">
+            <div>
+              <strong>You, the Admin have approve of this business trip</strong>
+            </div>
+          </div>
+          <div class="alert alert-danger text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_admin', '!=', 'denied'), ('curr_logged_overseer', '!=', 'admin'),]}">
+            <div>
+              <strong>You, the Admin have deny this business trip</strong>
+            </div>
+          </div>
+
+          <div class="alert alert-warning text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_creator', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'creator'),]}">
+            <div>
+              <strong>You, the Creator Need to decide the approval of this business trip</strong>
+            </div>
+          </div>
+          <div class="alert alert-success text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_creator', '!=', 'approved'), ('curr_logged_overseer', '!=', 'creator'),]}">
+            <div>
+              <strong>You, the Creator have approve of this business trip</strong>
+            </div>
+          </div>
+          <div class="alert alert-danger text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_creator', '!=', 'denied'), ('curr_logged_overseer', '!=', 'creator'),]}">
+            <div>
+              <strong>You, the Creator have deny this business trip</strong>
+            </div>
+          </div>
+
+          <div class="alert alert-warning text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_fleet', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'fleet'),]}">
+            <div>
+              <strong>You, the Fleet Need to decide the approval of this business trip</strong>
+            </div>
+          </div>
+          <div class="alert alert-success text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_fleet', '!=', 'approved'), ('curr_logged_overseer', '!=', 'fleet'),]}">
+            <div>
+              <strong>You, the Fleet have approve of this business trip</strong>
+            </div>
+          </div>
+          <div class="alert alert-danger text-center o_form_header" role="alert"
+            attrs="{'invisible':['|', ('approval_fleet', '!=', 'denied'), ('curr_logged_overseer', '!=', 'fleet'),]}">
+            <div>
+              <strong>You, the Fleet have deny this business trip</strong>
+            </div>
+          </div>
+
           <div class="oe_title">
             <h1>
                 <field name="name"/>
@@ -100,7 +238,7 @@
             <page string="Overseers">
               <group>
                 <group string="Creator">
-                  <field name="overseer_creator_id" />
+                  <field name="overseer_creator_id"/>
                   <field name="overseer_creator_work_phone" />
                   <field name="overseer_creator_email" />
                   <field name="approval_creator" />
@@ -154,7 +292,7 @@
         </sheet>
 
         <div class="oe_chatter">
-          <field name="message_follower_ids" groups="base.group_user"/>
+          <field name="message_follower_ids" groups="fleet.fleet_group_user"/>
           <field name="message_ids"/>
         </div>
       </form>

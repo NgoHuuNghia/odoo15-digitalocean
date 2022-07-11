@@ -12,6 +12,7 @@ class FleetBusinessTrip(models.Model):
   @api.model
   def create(self, vals_list):
     vals_list['name'] = self.env['ir.sequence'].next_by_code('fleet.business.trip')
+    vals_list['approval_manager'] = 'deciding'
     return super(FleetBusinessTrip, self).create(vals_list)
 
   name = fields.Char('Sequence Name',readonly=True)
@@ -34,10 +35,24 @@ class FleetBusinessTrip(models.Model):
     domain="['&','&','&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Fleet'),('department_position', 'in', ['Manager','Vice Manager']),('job_title', '=', 'Fleet Captain')]")
   overseer_fleet_work_phone = fields.Char(related='overseer_fleet_id.work_phone',string='Fleet\'s Work Phone')
   overseer_fleet_email = fields.Char(related='overseer_fleet_id.work_email',string='Fleet\'s Work Email')
-  approval_fleet = fields.Selection(APPROVAL_SELECTIONS, string='Fleet\'s Decision', default='deciding', readonly=True)
+  approval_fleet = fields.Selection(APPROVAL_SELECTIONS, string='Fleet\'s Decision', default=None)
   tag_ids = fields.Many2many(comodel_name='fleet.business.tag', relation="fleet_business_trip_tag_rel", column1="fleet_business_trip_id", column2="tag_id", string='Tags')
   journal_line_ids = fields.One2many('fleet.business.trip.journal.line','fleet_business_trip_id',string='Journal Line')
   journal_line_count = fields.Integer('Journal Count', compute='_compute_journal_line_count')
+
+  @api.depends()
+  def _compute_curr_logged_overseer(self):
+    for trip in self:
+      if self.env.user == trip.overseer_manager_id.user_id:
+        trip.curr_logged_overseer = "manager"
+      elif self.env.user == trip.overseer_admin_id.user_id:
+        trip.curr_logged_overseer = "admin"
+      elif self.env.user == trip.overseer_creator_id.user_id:
+        trip.curr_logged_overseer = "creator"
+      elif self.env.user == trip.overseer_fleet_id.user_id:
+        trip.curr_logged_overseer = "fleet"
+      else:
+        trip.curr_logged_overseer = None
 
   @api.depends('attending_employee_ids','driver_id')
   def _compute_attending_employee_count(self):
@@ -83,6 +98,23 @@ class FleetBusinessTrip(models.Model):
       ],
     }}
 
+  def action_approval_fleet_approved(self):
+    for rec in self:
+      rec.approval_fleet = "approved"
+  def action_approval_fleet_denied(self):
+    for rec in self:
+      rec.approval_fleet = "denied"
+
+  def action_view_fleet(self):
+    return {
+      'name': _('Fleet'),
+      'res_model': 'hr.employee',
+      'view_mode': 'form',
+      'res_id': self.overseer_fleet_id.id,
+      'target': 'current',
+      'type': 'ir.actions.act_window',
+    }
+
   def action_view_attendees(self):
     attending_employee_ids_list = self.attending_employee_ids.ids
     if self.driver_id:
@@ -123,6 +155,11 @@ class FleetBusinessTrip(models.Model):
       if trip.attending_employee_count > trip.seats: 
         raise exceptions.UserError("Number of employees can't be more than the seats (driver included)")
 
+  # @api.constrains('overseer_fleet_id')
+  # def _check_time(self):
+  #   for trip in self:
+  #     if not trip.overseer_fleet_id: 
+  #       raise exceptions.ValidationError("Overseeing Fleet Captain can't be empty")
 class FleetBusinessTripJournalLine(models.Model):
   _inherit = 'fleet.business.journal.line'
   _name = 'fleet.business.trip.journal.line'

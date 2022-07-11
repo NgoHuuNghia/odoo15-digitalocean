@@ -9,8 +9,26 @@
       <field name="code">model.action_create_first_journal()</field>
       <field name="trigger">on_create</field>
       <field name="active" eval="True"/>
-      <field name="filter_domain">[('id','!=',False)]</field>
     </record>
+
+    <!-- <record id="show_notification_on_approval" model="base.automation">
+      <field name="name">Base Automation: Show notification on approval</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="state">code</field>
+      <field name="code">model.action_update_and_simple_notification()</field>
+      <field name="trigger">on_write</field>
+      <field name="active" eval="True"/>
+      <field name="filter_domain">['|','|',
+        ('approval_manager','!=','deciding'),
+        ('approval_admin','!=','deciding'),
+        ('approval_creator','!=','deciding'),
+      ]</field>
+      <field name="trigger_field_ids" eval="[(6,0,[
+        ref('fleet_business.field_fleet_business_trip__approval_manager'),
+        ref('fleet_business.field_fleet_business_trip__approval_admin'),
+        ref('fleet_business.field_fleet_business_trip__approval_creator'),
+      ])]"/>
+    </record> -->
 
   </data>
 </odoo>

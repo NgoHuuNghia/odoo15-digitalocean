@@ -7,7 +7,7 @@ from odoo import fields
 class TestFleetBusinessTrip(TransactionCase):
 
     def test_user_create_business_trip(self):
-        user = new_test_user(self.env, "test base user", groups="base.group_user")
+        user = new_test_user(self.env, "test base user", groups="fleet.fleet_group_user")
         new_trip = self.env["fleet.business.trip"].with_user(user).create({
             'tag_ids': [
                 self.env.ref('fleet_business.fleet_business_tag_priority').id,

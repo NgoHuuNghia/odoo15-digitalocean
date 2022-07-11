@@ -3,46 +3,42 @@
 
   <data>
   
-    <record id="fleet_business_trip_visibility_employee" model="ir.rule">
-      <field name="name">Employees can only see his/her attend trips or created</field>
-      <field name="model_id" ref="model_fleet_business_trip"/>
-      <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-      <field name="perm_read" eval="True"/>
-      <field name="perm_write" eval="False"/>
-      <field name="perm_create" eval="True"/>
-      <field name="perm_unlink" eval="False"/>
-      <field name="domain_force">['|',
-        ('overseer_creator_id','=',user.employee_id.id),
-        ('attending_employee_ids','in',[user.employee_id.id]),
-      ]</field>
-    </record>
-
-    <record id="fleet_business_trip_visibility_employee_manager" model="ir.rule">
-      <field name="name">Department Managers can only see his/her currently overseeing trips</field>
-      <field name="model_id" ref="model_fleet_business_trip"/>
-      <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-      <field name="perm_read" eval="True"/>
-      <field name="perm_write" eval="False"/>
-      <field name="perm_create" eval="True"/>
-      <field name="perm_unlink" eval="False"/>
-      <!-- <field name="domain_force">[('attending_employee_ids','in',user.employee_id.id)]</field> -->
-      <field name="domain_force">['|','|',
-        ('overseer_creator_id','=',user.employee_id.id),
-        ('attending_employee_ids','in',[user.employee_id.id]),
-        ('overseer_manager_id','=',user.employee_id.id),
-      ]</field>
-    </record>
-
-    <record id="fleet_business_trip_visibility_user" model="ir.rule">
-      <field name="name">Users can see all created business trips</field>
+    <record id="fleet_business_trip_rule_user" model="ir.rule">
+      <field name="name">Users can see any trips that is related to them in any way</field>
       <field name="model_id" ref="model_fleet_business_trip"/>
       <field name="groups" eval="[(4, ref('fleet.fleet_group_user'))]"/>
       <field name="perm_read" eval="True"/>
       <field name="perm_write" eval="False"/>
       <field name="perm_create" eval="True"/>
       <field name="perm_unlink" eval="False"/>
+      <field name="domain_force">['|','|','|','|','|',
+        ('attending_employee_ids','in',[user.employee_id.id]),
+        ('overseer_creator_id','=',user.employee_id.id),
+        ('overseer_manager_id','=',user.employee_id.id),
+        ('overseer_admin_id','=',user.employee_id.id),
+        ('overseer_fleet_id','=',user.employee_id.id),
+        ('driver_id','=',user.employee_id.id),
+      ]</field>
     </record>
-  
+
+    <function name="write" model="ir.model.data">
+      <function name="search" model="ir.model.data">
+          <value eval="[('module', '=', 'fleet'), ('name', '=', 'fleet_rule_vehicle_visibility_user')]"/>
+      </function>
+      <value eval="{'noupdate': False}" />
+    </function>
+
+    <record id="fleet_rule_vehicle_visibility_user" model="ir.rule">
+      <field name="name">User can only see his/her vehicle</field>
+      <field name="model_id" ref="fleet.model_fleet_vehicle"/>
+      <field name="groups" eval="[(4, ref('fleet.fleet_group_user'))]"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="False"/>
+      <field name="perm_unlink" eval="False"/>
+      <field name="domain_force"> </field>
+    </record>
+
   </data>
   
 </odoo>
