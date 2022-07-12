@@ -32,6 +32,8 @@
         <field name="curr_logged_overseer" invisible='1'/>
 
         <header>
+          <button name="action_send_approval_email" string="Send Email" type="object"/>
+
           <!--? approval buttons -->
           <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
             attrs="{'invisible':['|',('approval_manager', '!=', 'deciding'),('curr_logged_overseer', '!=', 'manager')]}"/>

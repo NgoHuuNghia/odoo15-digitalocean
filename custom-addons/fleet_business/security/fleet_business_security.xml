@@ -21,6 +21,17 @@
       ]</field>
     </record>
 
+    <record id="fleet_business_trip_rule_manager" model="ir.rule">
+      <field name="name">Managers can see all trips</field>
+      <field name="model_id" ref="model_fleet_business_trip"/>
+      <field name="groups" eval="[(4, ref('fleet.fleet_group_manager'))]"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!--? start of editing existing fleet's record rules -->
     <function name="write" model="ir.model.data">
       <function name="search" model="ir.model.data">
           <value eval="[('module', '=', 'fleet'), ('name', '=', 'fleet_rule_vehicle_visibility_user')]"/>
@@ -28,16 +39,24 @@
       <value eval="{'noupdate': False}" />
     </function>
 
-    <record id="fleet_rule_vehicle_visibility_user" model="ir.rule">
+    <record id="fleet.fleet_rule_vehicle_visibility_user" model="ir.rule">
       <field name="name">User can only see his/her vehicle</field>
       <field name="model_id" ref="fleet.model_fleet_vehicle"/>
       <field name="groups" eval="[(4, ref('fleet.fleet_group_user'))]"/>
       <field name="perm_read" eval="True"/>
-      <field name="perm_write" eval="True"/>
+      <field name="perm_write" eval="False"/>
       <field name="perm_create" eval="False"/>
       <field name="perm_unlink" eval="False"/>
-      <field name="domain_force"> </field>
+      <field name="domain_force"></field>
     </record>
+
+    <function name="write" model="ir.model.data"> 
+      <function name="search" model="ir.model.data"> 
+          <value eval="[('module', '=', 'fleet'), ('name','=','fleet_rule_vehicle_visibility_user')] "/> 
+      </function> 
+      <value eval =" {'noupdate': True} "/> 
+    </function>
+    <!--? end of editing existing fleet's record rules -->
 
   </data>
   

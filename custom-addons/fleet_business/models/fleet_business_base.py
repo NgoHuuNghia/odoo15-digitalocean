@@ -12,24 +12,25 @@ STATE_SELECTIONS = [
   ('canceled','Canceled'),('incident','Incident')
 ]
 #! Add the setting properly to setting module
-SETTING_TIME_CONSTRAINS = 4
-
+DUE_TIME_SETTING = 7 #days
+SETTING_TIME_CONSTRAINS = 4 #months
 class FleetBusinessBase(models.AbstractModel):
   _name = 'fleet.business.base'
   _description = 'Base model for other business model'
   _inherit = 'mail.thread'
 
-  # @api.model
-  # def default_get(self, fields_list):
-  #   res = super(FleetBusinessBase, self).default_get(fields_list)
-  #   print('---res---',res)
-  #   if not res['overseer_manager_id']:
-  #     res['overseer_manager_id'] = self.env['hr.employee'].search([('department_id.name','=','Management'),('department_position','=','Manager')],limit=1).id
-  #   return res
+  @api.model
+  def default_get(self, fields_list):
+    res = super(FleetBusinessBase, self).default_get(fields_list)
+    if not res['overseer_manager_id']:
+      optional_manager = self.env['hr.employee'].search([('department_id.name','=','Management'),('department_position','=','Manager')],limit=1).ensure_one()
+      res['overseer_manager_id'] = optional_manager.id
+    return res
 
   name = fields.Char()
   pick_time = fields.Datetime('Pick Up Time', default=fields.Datetime.now(),required=True)
   return_time = fields.Datetime('Return By Time', required=True)
+  due_for_approval_time = fields.Datetime('Due For Approval By', compute="_compute_due_for_approval_time", store=True)
   #$ these 2 Datetime fields is still experimental
   arrive_time = fields.Datetime('Estimated Arrive Time', readonly=True)
   back_time = fields.Datetime('Estimated Back Time', readonly=True)
@@ -75,6 +76,11 @@ class FleetBusinessBase(models.AbstractModel):
       else:
         trip.curr_logged_overseer = None
 
+  @api.depends('pick_time')
+  def _compute_due_for_approval_time(self):
+    for trip in self:
+      trip.due_for_approval_time = trip.pick_time - relativedelta.relativedelta(days=DUE_TIME_SETTING)
+
   def action_approval_manager_approved(self):
     self.approval_manager = "approved"
   def action_approval_manager_denied(self):
@@ -117,6 +123,13 @@ class FleetBusinessBase(models.AbstractModel):
       'target': 'current',
       'type': 'ir.actions.act_window',
     }
+
+  def action_send_approval_email(self):
+    self.ensure_one()
+    approval_email_template_id = self.env.ref('fleet_business.email_template_fleet_business_approval').id
+    approval_email_template = self.env['mail.template'].browse(approval_email_template_id)
+    print('---approval_email_template---',approval_email_template.read())
+    approval_email_template.send_mail(self.id, force_send=True)
 
   #? Temp using this exeptions way to throw error, want to use the notification and highlight way instead
   @api.constrains('pick_time','return_time')

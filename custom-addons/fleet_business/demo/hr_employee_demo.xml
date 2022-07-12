@@ -28,5 +28,29 @@
       <field name="work_email">denny.driver32@example.com</field>
     </record>
 
+    <record id="dep_sales_member_fleet_business" model="hr.employee">
+      <field name="name">Sophia Sales Member</field>
+      <field name="job_id" ref="hr.job_marketing"/>
+      <field name="job_title">Sales</field>
+      <field name="department_id" ref="hr.dep_sales"/>
+      <field name="work_email">sophia.sales99@example.com</field>
+    </record>
+
+    <record id="dep_sales_manager_fleet_business" model="hr.employee">
+      <field name="name">Sadie Sales Manager</field>
+      <field name="job_id" ref="hr.job_marketing"/>
+      <field name="job_title">Sales Manager</field>
+      <field name="department_id" ref="hr.dep_sales"/>
+      <field name="work_email">sadie.sales66@example.com</field>
+    </record>
+
+    <record id="dep_management_member_fleet_business" model="hr.employee">
+      <field name="name">Micheal Management</field>
+      <field name="job_id" ref="hr.job_developer"/>
+      <field name="job_title">Administrator</field>
+      <field name="department_id" ref="hr.dep_administration"/>
+      <field name="work_email">micheal.management82@example.com</field>
+    </record>
+
   </data>
 </odoo>

@@ -31,7 +31,7 @@ class FleetBusinessTrip(models.Model):
   self_driving_employee_id = fields.Many2one('hr.employee',string='Attendee Driver',domain="[('id', 'in', attending_employee_ids)]")
   driver_id = fields.Many2one('hr.employee',string="Company's Driver")
   overseer_fleet_id = fields.Many2one('hr.employee',string='Fleet Captain',
-    default=lambda self: self.env['hr.employee'].search([('department_id.name','=','Fleet'),('department_position','=','Manager')],limit=1),
+    default=lambda self: self.env['hr.employee'].search([('department_id.name','=','Fleet'),('department_position','=','Manager')],limit=1,order='id').ensure_one(),
     domain="['&','&','&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Fleet'),('department_position', 'in', ['Manager','Vice Manager']),('job_title', '=', 'Fleet Captain')]")
   overseer_fleet_work_phone = fields.Char(related='overseer_fleet_id.work_phone',string='Fleet\'s Work Phone')
   overseer_fleet_email = fields.Char(related='overseer_fleet_id.work_email',string='Fleet\'s Work Email')
@@ -132,7 +132,7 @@ class FleetBusinessTrip(models.Model):
   #? automated code, still figuring it out
   def action_create_first_journal(self):
     print('hello')
-    curr_id = self.env['fleet.business.trip'].search([('id', '!=', False)], limit=1, order="id desc").id
+    curr_id = self.env['fleet.business.trip'].search([('id', '!=', False)], limit=1, order="id desc").ensure_one().id
 
     first_journal_val_list = {
       'fleet_business_trip_id': curr_id,
