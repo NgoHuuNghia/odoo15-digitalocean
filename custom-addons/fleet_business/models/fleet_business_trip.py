@@ -98,6 +98,10 @@ class FleetBusinessTrip(models.Model):
       ],
     }}
 
+  #! def action_hyperlink_test(self):
+  #   print('---self._name---',self._name)
+  #   print('---web_base_url---',self.record_url)
+
   def action_approval_fleet_approved(self):
     for rec in self:
       rec.approval_fleet = "approved"
@@ -131,7 +135,6 @@ class FleetBusinessTrip(models.Model):
 
   #? automated code, still figuring it out
   def action_create_first_journal(self):
-    print('hello')
     curr_id = self.env['fleet.business.trip'].search([('id', '!=', False)], limit=1, order="id desc").ensure_one().id
 
     first_journal_val_list = {

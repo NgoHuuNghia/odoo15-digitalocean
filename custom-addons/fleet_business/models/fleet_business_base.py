@@ -22,7 +22,7 @@ class FleetBusinessBase(models.AbstractModel):
   @api.model
   def default_get(self, fields_list):
     res = super(FleetBusinessBase, self).default_get(fields_list)
-    if not res['overseer_manager_id']:
+    if not res.get('overseer_manager_id'):
       optional_manager = self.env['hr.employee'].search([('department_id.name','=','Management'),('department_position','=','Manager')],limit=1).ensure_one()
       res['overseer_manager_id'] = optional_manager.id
     return res
@@ -63,6 +63,7 @@ class FleetBusinessBase(models.AbstractModel):
   intent = fields.Text('Intention', required=True, help='The intention of this business trip')
   note = fields.Text('Note/Comment', help='Any note, reminder or comments special to this business trip')
   state = fields.Selection(STATE_SELECTIONS,string='State',default='draft',compute='_compute_state',store=True)
+  record_url = fields.Text("Record's url",compute="_compute_record_url")
 
   @api.depends()
   def _compute_curr_logged_overseer(self):
@@ -75,6 +76,13 @@ class FleetBusinessBase(models.AbstractModel):
         trip.curr_logged_overseer = "creator"
       else:
         trip.curr_logged_overseer = None
+
+  @api.depends()
+  def _compute_record_url(self):
+    web_base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+    for rec in self:
+      curr_model_name = rec._name
+      rec.record_url = """{}/web#id={}&model={}&view_type=form""".format(web_base_url,self.id,curr_model_name)
 
   @api.depends('pick_time')
   def _compute_due_for_approval_time(self):
@@ -128,8 +136,9 @@ class FleetBusinessBase(models.AbstractModel):
     self.ensure_one()
     approval_email_template_id = self.env.ref('fleet_business.email_template_fleet_business_approval').id
     approval_email_template = self.env['mail.template'].browse(approval_email_template_id)
-    print('---approval_email_template---',approval_email_template.read())
     approval_email_template.send_mail(self.id, force_send=True)
+
+  
 
   #? Temp using this exeptions way to throw error, want to use the notification and highlight way instead
   @api.constrains('pick_time','return_time')

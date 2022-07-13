@@ -7,7 +7,8 @@
       <field name="name">Request Approval: Send by email</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="email_from">{{ (object.overseer_creator_id.user_id.email_formatted or user.email_formatted) }}</field>
-      <field name="email_to">{{ object.overseer_manager_id.work_email }}</field>
+      <!-- <field name="email_to">{{ object.overseer_manager_id.work_email }}</field> -->
+      <field name="partner_to">{{ object.overseer_manager_id.user_id.partner_id.id }}</field>
       <field name="subject">{{ object.company_id.name }} Request Approval (Ref {{ object.name or 'n/a' }})</field>
       <field name="body_html" type="html">
         <div style="margin: 0px; padding: 0px;">
@@ -47,9 +48,10 @@
             </t>
             <br /><br />
             This trip will have a total of <strong t-out="object.attending_employee_count or 'n/a'">Number of attendees</strong> attendees (driver included)
-            starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>
-            <br />
-            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. For more infomation and to make your decision please enter the link bellow.
+            starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>, 
+            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. For more infomation and to make your decision please enter the link bellow:
+            <br /><br />
+            <strong t-out="object.record_url or 'n/a'">Recordurl</strong>
             <t t-if="object.overseer_creator_id.user_id.signature">
                 <br />
                 <t t-out="object.overseer_creator_id.user_id.signature or ''">--<br/>Bom Basitic</t>
