@@ -1,304 +1,328 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+  <data>
 
-  <record id="fleet_business_trip_view_tree" model="ir.ui.view">
-    <field name="name">fleet.business.trip.tree</field>
-    <field name="model">fleet.business.trip</field>
-    <field name="arch" type="xml">
-      <tree>
-        <field name="name" string='Sequence ID'/>
-        <field name="overseer_creator_id" />
-        <field name="attending_employee_count"/>
-        <field name="vehicle_id"/>
-        <field name="driver_id"/>
-        <field name="pick_time"/>
-        <field name="pick_address_id"/>
-        <field name="to_street"/>
-        <field name="state" widget="badge"
-          decoration-success="state == ['approved','returned']" 
-          decoration-danger="state == ['not_approved','canceled','car_na','driver_na','car_driver_na']"
-          decoration-info="state == ['ready','departing','returning']"
-          decoration-warning="state == ['late','incident']"/>
-      </tree>
-    </field>
-  </record>
+    <record id="fleet_business_trip_view_tree" model="ir.ui.view">
+      <field name="name">fleet.business.trip.tree</field>
+      <field name="model">fleet.business.trip</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" string='Sequence ID'/>
+          <field name="overseer_creator_id" />
+          <field name="attending_employee_count"/>
+          <field name="vehicle_id"/>
+          <field name="driver_id"/>
+          <field name="pick_time"/>
+          <field name="pick_address_id"/>
+          <field name="to_street"/>
+          <field name="state" widget="badge"
+            decoration-success="state == ['approved','returned']" 
+            decoration-danger="state == ['not_approved','canceled','car_na','driver_na','car_driver_na']"
+            decoration-info="state == ['ready','departing','returning']"
+            decoration-warning="state == ['late','incident']"/>
+        </tree>
+      </field>
+    </record>
 
-  <record id="fleet_business_trip_view_form" model="ir.ui.view">
-    <field name="name">fleet.business.trip.form</field>
-    <field name="model">fleet.business.trip</field>
-    <field name="arch" type="xml">
-      <form>
-        <field name="company_id" invisible='1'/>
-        <field name="curr_logged_overseer" invisible='1'/>
-
-        <header>
-          <button name="action_send_approval_email" string="Send Email" type="object"/>
-
-          <!--? approval buttons -->
-          <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
-            attrs="{'invisible':['|',('approval_manager', '!=', 'deciding'),('curr_logged_overseer', '!=', 'manager')]}"/>
-          <button name="action_approval_manager_denied" string="Manager Deny" type="object" 
-            attrs="{'invisible':['|',('approval_manager', '!=', 'deciding'),('curr_logged_overseer', '!=', 'manager')]}"/>
-
-          <button name="action_approval_admin_approved" string="Admin Approve" type="object" class="oe_highlight"
-            attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('curr_logged_overseer', '!=', 'admin')]}"/>
-          <button name="action_approval_admin_denied" string="Admin Deny" type="object" 
-            attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('curr_logged_overseer', '!=', 'admin')]}"/>
-
-          <button name="action_approval_creator_approved" string="Creator Approve" type="object" class="oe_highlight"
-            attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('curr_logged_overseer', '!=', 'creator')]}"/>
-          <button name="action_approval_creator_denied" string="Creator Deny" type="object" 
-            attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('curr_logged_overseer', '!=', 'creator')]}"/>
-
-          <button name="action_approval_fleet_approved" string="Fleet Approve" type="object" class="oe_highlight"
-            attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('curr_logged_overseer', '!=', 'fleet')]}"/>
-          <button name="action_approval_fleet_denied" string="Fleet Deny" type="object" 
-            attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('curr_logged_overseer', '!=', 'fleet')]}"/>
-
-          <field name="state" widget="statusbar" nolabel="1"
-            statusbar_visible="draft,not_approved,approved,ready,
-            departing,returning,late,returned,cancled,incident"/>
-        </header>
-        
-        <sheet>
-          <div class="oe_button_box" name="button_box">
-            <!--? overseers -->
-            <!--! add buttons to choose missing overseers -->
-            <button name="action_view_manager" type="object" class="oe_stat_button" icon="fa-id-card-o">
-              <div class="o_field_widget o_stat_info">
-                  <span class="o_stat_value">
-                    <field name="overseer_manager_id" readonly="1" attrs="{'invisible': [('overseer_manager_id', '=', False)]}"/>
-                    <strong attrs="{'invisible': [('overseer_manager_id', '!=', False)]}">Missing Manager</strong>
-                  </span>
-                  <span class="o_stat_text">Manager</span>
-              </div>
-            </button>
-            <button name="action_view_admin" type="object" class="oe_stat_button" icon="fa-id-card-o">
-              <div class="o_field_widget o_stat_info">
-                  <span class="o_stat_value">
-                    <field name="overseer_admin_id" readonly="1" attrs="{'invisible': [('overseer_admin_id', '=', False)]}"/>
-                    <strong attrs="{'invisible': [('overseer_admin_id', '!=', False)]}">Missing Admin</strong>
-                  </span>
-                  <span class="o_stat_text">Administator</span>
-              </div>
-            </button>
-            <button name="action_view_creator" type="object" class="oe_stat_button" icon="fa-id-card-o" attrs="{'invisible': [('overseer_creator_id', '=', False)]}">
-              <div class="o_field_widget o_stat_info">
-                  <span class="o_stat_value">
-                    <field name="overseer_creator_id" readonly="1" attrs="{'invisible': [('overseer_creator_id', '=', False)]}"/>
-                    <strong attrs="{'invisible': [('overseer_creator_id', '!=', False)]}">Missing Creator</strong>
-                  </span>
-                  <span class="o_stat_text">Trip Requester</span>
-              </div>
-            </button>
-            <button name="action_view_fleet" type="object" class="oe_stat_button" icon="fa-id-card-o" attrs="{'invisible': [('overseer_fleet_id', '=', False)]}">
-              <div class="o_field_widget o_stat_info">
-                  <span class="o_stat_value">
-                    <field name="overseer_fleet_id" readonly="1" attrs="{'invisible': [('overseer_fleet_id', '=', False)]}"/>
-                    <strong attrs="{'invisible': [('overseer_fleet_id', '!=', False)]}">Missing fleet</strong>
-                  </span>
-                  <span class="o_stat_text">Fleet Captain</span>
-              </div>
-            </button>
+    <record id="fleet_business_trip_view_form" model="ir.ui.view">
+      <field name="name">fleet.business.trip.form</field>
+      <field name="model">fleet.business.trip</field>
+      <field name="arch" type="xml">
+        <form duplicate="0" archive="0">
+          <header>
+            <field name="company_id" invisible='1'/>
+            <field name="curr_logged_overseer" invisible='1'/>
+            <field name="active" invisible="1" />
+            <!--? custom conditional css -->
+            <field name="edit_hide_css_user"/>
             
-            <button name="action_view_attendees" type="object" class="oe_stat_button" icon="fa-history">
-              <field name="attending_employee_count" string="Attendees" widget="statinfo"/>
+            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" string="Archive This Trip">
+                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
             </button>
-            <button class="oe_stat_button" icon="fa-list">
-              <field name="journal_line_count" string="Journals" widget="statinfo"/>
-            </button>
-          </div>
+            <button name="action_send_approval_email" string="Send Test Email" type="object" class="oe_highlight"/>
 
-          <!--? approval alerts -->
-          <div class="alert alert-warning text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_manager', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'manager'),]}">
-            <div>
-              <strong>You, the manager Need to decide the approval of this business trip</strong>
-            </div>
-          </div>
-          <div class="alert alert-success text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_manager', '!=', 'approved'), ('curr_logged_overseer', '!=', 'manager'),]}">
-            <div>
-              <strong>You, the manager have approve of this business trip</strong>
-            </div>
-          </div>
-          <div class="alert alert-danger text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_manager', '!=', 'denied'), ('curr_logged_overseer', '!=', 'manager'),]}">
-            <div>
-              <strong>You, the manager have deny this business trip</strong>
-            </div>
-          </div>
+            <!--? approval buttons -->
+            <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
+              attrs="{'invisible':['|',('approval_manager', '!=', 'deciding'),('curr_logged_overseer', '!=', 'manager')]}"/>
+            <button name="action_approval_manager_denied" string="Manager Deny" type="object" 
+              attrs="{'invisible':['|',('approval_manager', '!=', 'deciding'),('curr_logged_overseer', '!=', 'manager')]}"/>
 
-          <div class="alert alert-warning text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_admin', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'admin'),]}">
-            <div>
-              <strong>You, the Admin Need to decide the approval of this business trip</strong>
-            </div>
-          </div>
-          <div class="alert alert-success text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_admin', '!=', 'approved'), ('curr_logged_overseer', '!=', 'admin'),]}">
-            <div>
-              <strong>You, the Admin have approve of this business trip</strong>
-            </div>
-          </div>
-          <div class="alert alert-danger text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_admin', '!=', 'denied'), ('curr_logged_overseer', '!=', 'admin'),]}">
-            <div>
-              <strong>You, the Admin have deny this business trip</strong>
-            </div>
-          </div>
+            <button name="action_approval_admin_approved" string="Admin Approve" type="object" class="oe_highlight"
+              attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('curr_logged_overseer', '!=', 'admin')]}"/>
+            <button name="action_approval_admin_denied" string="Admin Deny" type="object" 
+              attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('curr_logged_overseer', '!=', 'admin')]}"/>
 
-          <div class="alert alert-warning text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_creator', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'creator'),]}">
-            <div>
-              <strong>You, the Creator Need to decide the approval of this business trip</strong>
-            </div>
-          </div>
-          <div class="alert alert-success text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_creator', '!=', 'approved'), ('curr_logged_overseer', '!=', 'creator'),]}">
-            <div>
-              <strong>You, the Creator have approve of this business trip</strong>
-            </div>
-          </div>
-          <div class="alert alert-danger text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_creator', '!=', 'denied'), ('curr_logged_overseer', '!=', 'creator'),]}">
-            <div>
-              <strong>You, the Creator have deny this business trip</strong>
-            </div>
-          </div>
+            <button name="action_approval_creator_approved" string="Creator Approve" type="object" class="oe_highlight"
+              attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('curr_logged_overseer', '!=', 'creator')]}"/>
+            <button name="action_approval_creator_denied" string="Creator Deny" type="object" 
+              attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('curr_logged_overseer', '!=', 'creator')]}"/>
 
-          <div class="alert alert-warning text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_fleet', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'fleet'),]}">
-            <div>
-              <strong>You, the Fleet Need to decide the approval of this business trip</strong>
-            </div>
-          </div>
-          <div class="alert alert-success text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_fleet', '!=', 'approved'), ('curr_logged_overseer', '!=', 'fleet'),]}">
-            <div>
-              <strong>You, the Fleet have approve of this business trip</strong>
-            </div>
-          </div>
-          <div class="alert alert-danger text-center o_form_header" role="alert"
-            attrs="{'invisible':['|', ('approval_fleet', '!=', 'denied'), ('curr_logged_overseer', '!=', 'fleet'),]}">
-            <div>
-              <strong>You, the Fleet have deny this business trip</strong>
-            </div>
-          </div>
+            <button name="action_approval_fleet_approved" string="Fleet Approve" type="object" class="oe_highlight"
+              attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('curr_logged_overseer', '!=', 'fleet')]}"/>
+            <button name="action_approval_fleet_denied" string="Fleet Deny" type="object" 
+              attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('curr_logged_overseer', '!=', 'fleet')]}"/>
 
-          <div class="oe_title">
-            <h1>
-                <field name="name"/>
-            </h1>
-            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags"/>
-          </div>
+            <field name="state" widget="statusbar" nolabel="1"
+              statusbar_visible="draft,not_approved,approved,ready,
+              departing,returning,late,returned,cancled,incident"/>
+          </header>
+          
+          <sheet>
+            <div class="oe_button_box" name="button_box">
+              <!--? overseers -->
+              <!--! add buttons to choose missing overseers -->
+              <button name="action_view_overseer" context="{'view_overseer': 'manager','view_overseer_id': overseer_manager_id}"  type="object" class="oe_stat_button" icon="fa-id-card-o">
+                <div class="o_field_widget o_stat_info">
+                    <span class="o_stat_value">
+                      <field name="overseer_manager_id" readonly="1" attrs="{'invisible': [('overseer_manager_id', '=', False)]}"/>
+                      <strong attrs="{'invisible': [('overseer_manager_id', '!=', False)]}">Missing Manager</strong>
+                    </span>
+                    <span class="o_stat_text">Manager</span>
+                </div>
+              </button>
+              <button name="action_view_overseer" context="{'view_overseer': 'admin','view_overseer_id': overseer_admin_id}" type="object" class="oe_stat_button" icon="fa-id-card-o">
+                <div class="o_field_widget o_stat_info">
+                    <span class="o_stat_value">
+                      <field name="overseer_admin_id" readonly="1" attrs="{'invisible': [('overseer_admin_id', '=', False)]}"/>
+                      <strong attrs="{'invisible': [('overseer_admin_id', '!=', False)]}">Missing Admin</strong>
+                    </span>
+                    <span class="o_stat_text">Administator</span>
+                </div>
+              </button>
+              <button name="action_view_overseer" context="{'view_overseer': 'creator','view_overseer_id': overseer_creator_id}" type="object" class="oe_stat_button" icon="fa-id-card-o" attrs="{'invisible': [('overseer_creator_id', '=', False)]}">
+                <div class="o_field_widget o_stat_info">
+                    <span class="o_stat_value">
+                      <field name="overseer_creator_id" readonly="1" attrs="{'invisible': [('overseer_creator_id', '=', False)]}"/>
+                      <strong attrs="{'invisible': [('overseer_creator_id', '!=', False)]}">Missing Creator</strong>
+                    </span>
+                    <span class="o_stat_text">Trip Requester</span>
+                </div>
+              </button>
+              <button name="action_view_overseer" context="{'view_overseer': 'fleet','view_overseer_id': overseer_fleet_id}" type="object" class="oe_stat_button" icon="fa-id-card-o" attrs="{'invisible': [('overseer_fleet_id', '=', False)]}">
+                <div class="o_field_widget o_stat_info">
+                    <span class="o_stat_value">
+                      <field name="overseer_fleet_id" readonly="1" attrs="{'invisible': [('overseer_fleet_id', '=', False)]}"/>
+                      <strong attrs="{'invisible': [('overseer_fleet_id', '!=', False)]}">Missing fleet</strong>
+                    </span>
+                    <span class="o_stat_text">Fleet Captain</span>
+                </div>
+              </button>
+              
+              <button name="action_view_attendees" type="object" class="oe_stat_button" icon="fa-history">
+                <field name="attending_employee_count" string="Attendees" widget="statinfo"/>
+              </button>
+              <button class="oe_stat_button" icon="fa-list">
+                <field name="journal_line_count" string="Journals" widget="statinfo"/>
+              </button>
+            </div>
 
-          <group>
-            <group string="Vehicle">
-              <field name="vehicle_id"/>
-              <field name="seats" />
-            </group>
-            <group string="Driver">
-              <field name="driver_id" attrs="{'invisible':[('self_driving_employee_id', '!=', False)]}"/>
-              <field name="self_driving_employee_id" attrs="{'invisible':[('driver_id', '!=', False)]}"/>
-            </group>
-          </group>
-          <group string='All Attending Employees'>
-            <field name="attending_employee_ids" widget="many2many_tags" options="{'no_create_edit': True}" nolabel='1'/>
-          </group>
-          <group>
-            <group string='Time'>
-              <field name='pick_time' />
-              <field name='return_time' />
-            </group>
-            <group string='Estamated Time'>
-              <field name='arrive_time' />
-              <field name='back_time' />
-            </group>
-            <group string='Go To Location'>
-              <field name='to_street' />
-              <field name='to_street2' />
-              <field name='to_zip' />
-              <field name='to_city' />
-              <field name='to_state_id'/>
-              <field name='to_country_id'/>
-            </group>
-            <group string='Pick up Location'>
-              <field name="pick_address_id" context="{'show_address': 1}"
-                options='{"always_reload": True, "highlight_first_line": True}'/>
-            </group>
-          </group>
+            <!--? approval alerts -->
+            <div class="alert alert-warning text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_manager', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'manager'),]}">
+              <div>
+                <strong>You, the manager Need to decide the approval of this business trip</strong>
+              </div>
+            </div>
+            <div class="alert alert-success text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_manager', '!=', 'approved'), ('curr_logged_overseer', '!=', 'manager'),]}">
+              <div>
+                <strong>You, the manager have approve of this business trip</strong>
+              </div>
+            </div>
+            <div class="alert alert-danger text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_manager', '!=', 'denied'), ('curr_logged_overseer', '!=', 'manager'),]}">
+              <div>
+                <strong>You, the manager have deny this business trip</strong>
+              </div>
+            </div>
 
-          <notebook>
-            <page string="Intentions">
-              <group>
-                <field name="intent" />
-                <field name="note" />
+            <div class="alert alert-warning text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_admin', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'admin'),]}">
+              <div>
+                <strong>You, the Admin Need to decide the approval of this business trip</strong>
+              </div>
+            </div>
+            <div class="alert alert-success text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_admin', '!=', 'approved'), ('curr_logged_overseer', '!=', 'admin'),]}">
+              <div>
+                <strong>You, the Admin have approve of this business trip</strong>
+              </div>
+            </div>
+            <div class="alert alert-danger text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_admin', '!=', 'denied'), ('curr_logged_overseer', '!=', 'admin'),]}">
+              <div>
+                <strong>You, the Admin have deny this business trip</strong>
+              </div>
+            </div>
+
+            <div class="alert alert-warning text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_creator', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'creator'),]}">
+              <div>
+                <strong>You, the Creator Need to decide the approval of this business trip</strong>
+              </div>
+            </div>
+            <div class="alert alert-success text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_creator', '!=', 'approved'), ('curr_logged_overseer', '!=', 'creator'),]}">
+              <div>
+                <strong>You, the Creator have approve of this business trip</strong>
+              </div>
+            </div>
+            <div class="alert alert-danger text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_creator', '!=', 'denied'), ('curr_logged_overseer', '!=', 'creator'),]}">
+              <div>
+                <strong>You, the Creator have deny this business trip</strong>
+              </div>
+            </div>
+
+            <div class="alert alert-warning text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_fleet', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'fleet'),]}">
+              <div>
+                <strong>You, the Fleet Need to decide the approval of this business trip</strong>
+              </div>
+            </div>
+            <div class="alert alert-success text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_fleet', '!=', 'approved'), ('curr_logged_overseer', '!=', 'fleet'),]}">
+              <div>
+                <strong>You, the Fleet have approve of this business trip</strong>
+              </div>
+            </div>
+            <div class="alert alert-danger text-center o_form_header" role="alert"
+              attrs="{'invisible':['|', ('approval_fleet', '!=', 'denied'), ('curr_logged_overseer', '!=', 'fleet'),]}">
+              <div>
+                <strong>You, the Fleet have deny this business trip</strong>
+              </div>
+            </div>
+
+            <div class="oe_title">
+              <h1>
+                  <field name="name"/>
+              </h1>
+              <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags"/>
+            </div>
+
+            <group>
+              <group string="Vehicle">
+                <field name="vehicle_id"/>
+                <field name="seats" />
               </group>
-            </page>
-
-            <page string="Overseers">
-              <group>
-                <group string="Creator">
-                  <field name="overseer_creator_id"/>
-                  <field name="overseer_creator_work_phone" />
-                  <field name="overseer_creator_email" />
-                  <field name="approval_creator" />
-                </group>
-                <group string="Manager">
-                  <field name="overseer_manager_id" />
-                  <field name="overseer_manager_work_phone" />
-                  <field name="overseer_manager_email" />
-                  <field name="approval_manager" />
-                </group>
-                <group string="Administrator">
-                  <field name="overseer_admin_id" />
-                  <field name="overseer_admin_work_phone" />
-                  <field name="overseer_admin_email" />
-                  <field name="approval_admin" />
-                </group>
-                <group string="Fleet Captain">
-                  <field name="overseer_fleet_id" />
-                  <field name="overseer_fleet_work_phone" />
-                  <field name="overseer_fleet_email" />
-                  <field name="approval_fleet" />
-                </group>
+              <group string="Driver">
+                <field name="driver_id" attrs="{'invisible':[('self_driving_employee_id', '!=', False)]}"/>
+                <field name="self_driving_employee_id" attrs="{'invisible':[('driver_id', '!=', False)]}"/>
               </group>
-            </page>
-
-            <page string="Vehicle">
-              <group>
-                <field name="model_id" class="oe_inline" placeholder="e.g. PAE 326"/>
-                <field name="license_plate" class="oe_inline" placeholder="e.g. PAE 326"/>
+            </group>
+            <group string='All Attending Employees'>
+              <field name="attending_employee_ids" widget="many2many_tags" options="{'no_create_edit': True}" nolabel='1'/>
+            </group>
+            <group>
+              <group string='Time'>
+                <field name='pick_time' />
+                <field name='return_time' />
               </group>
-            </page>
+              <group string='Estamated Time'>
+                <field name='arrive_time' />
+                <field name='back_time' />
+              </group>
+              <group string='Go To Location'>
+                <field name='to_street' />
+                <field name='to_street2' />
+                <field name='to_zip' />
+                <field name='to_city' />
+                <field name='to_state_id'/>
+                <field name='to_country_id'/>
+              </group>
+              <group string='Pick up Location'>
+                <field name="pick_address_id" context="{'show_address': 1}"
+                  options='{"always_reload": True, "highlight_first_line": True}'/>
+              </group>
+            </group>
 
-            <!--! set groups admin only -->
-            <page string="Journal">
-              <field name="journal_line_ids">
-                <tree editable="bottom">
-                  <field name="type" />
+            <notebook>
+              <page string="Intentions">
+                <group>
+                  <field name="intent" />
                   <field name="note" />
-                  <field name="create_date" string="Updated on"/>
-                </tree>
-                <form>
-                  <group>
+                </group>
+              </page>
+
+              <page string="Overseers">
+                <group>
+                  <group string="Creator">
+                    <field name="overseer_creator_id"/>
+                    <field name="overseer_creator_work_phone" />
+                    <field name="overseer_creator_email" />
+                    <field name="approval_creator" />
+                  </group>
+                  <group string="Manager">
+                    <field name="overseer_manager_id" />
+                    <field name="overseer_manager_work_phone" />
+                    <field name="overseer_manager_email" />
+                    <field name="approval_manager" />
+                  </group>
+                  <group string="Administrator">
+                    <field name="overseer_admin_id" />
+                    <field name="overseer_admin_work_phone" />
+                    <field name="overseer_admin_email" />
+                    <field name="approval_admin" />
+                  </group>
+                  <group string="Fleet Captain">
+                    <field name="overseer_fleet_id" />
+                    <field name="overseer_fleet_work_phone" />
+                    <field name="overseer_fleet_email" />
+                    <field name="approval_fleet" />
+                  </group>
+                </group>
+              </page>
+
+              <page string="Vehicle">
+                <group>
+                  <field name="model_id" class="oe_inline" placeholder="e.g. PAE 326"/>
+                  <field name="license_plate" class="oe_inline" placeholder="e.g. PAE 326"/>
+                </group>
+              </page>
+
+              <!--! set groups admin only -->
+              <page string="Journal">
+                <field name="journal_line_ids">
+                  <tree editable="bottom">
                     <field name="type" />
                     <field name="note" />
                     <field name="create_date" string="Updated on"/>
-                  </group>
-                </form>
-              </field>
-            </page>
-          </notebook>
-        </sheet>
+                  </tree>
+                  <form>
+                    <group>
+                      <field name="type" />
+                      <field name="note" />
+                      <field name="create_date" string="Updated on"/>
+                    </group>
+                  </form>
+                </field>
+              </page>
+            </notebook>
+          </sheet>
 
-        <div class="oe_chatter">
-          <field name="message_follower_ids" groups="fleet.fleet_group_user"/>
-          <field name="message_ids"/>
-        </div>
-      </form>
-    </field>
-  </record>
+          <div class="oe_chatter">
+            <field name="message_follower_ids" groups="fleet.fleet_group_user"/>
+            <field name="message_ids"/>
+          </div>
+        </form>
+      </field>
+    </record>
+
+    <!--? view permissions for fleet_group_manager -->
+    <record id="fleet_business_trip_view_form_manager_permissions_inherit_fleet_business" model="ir.ui.view">
+      <field name="name">fleet.business.trip.form.manager.permissions</field>
+      <field name="model">fleet.business.trip</field>
+      <field name="inherit_id" ref="fleet_business_trip_view_form"/>
+      <field name="groups_id" eval="[(6, 0, [ref('fleet.fleet_group_manager') ])]" />
+      <field name="priority">10</field>
+      <field name="arch" type="xml">
+        <xpath expr="//form" position="attributes">
+          <attribute name="duplicate">1</attribute>
+          <attribute name="archive">1</attribute>
+        </xpath>
+      </field>
+    </record>
+
+  </data>
 
 </odoo>

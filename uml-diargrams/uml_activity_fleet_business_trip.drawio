@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="MuZAtRpMIBstmGgHcjIb" name="Page-1">
-        <mxGraphModel dx="468" dy="423" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="486" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -179,7 +179,7 @@
                 <mxCell id="65" value="Trưởng đội xe phân việc (tài xế/ xe) và cập nhật record công tác" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
                     <mxGeometry x="915" y="850" width="130" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="67" value="Hủy vĩnh viễn chuyến công tác" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
+                <mxCell id="67" value="Tạm Lưu trữ ngầm chuyến công tác" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
                     <mxGeometry x="165" y="720" width="130" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="72" value="[Duyệt lại]" style="edgeStyle=none;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;endArrow=classic;endFill=1;" parent="1" source="68" target="50" edge="1">
@@ -367,10 +367,10 @@
                 <mxCell id="142" value="&lt;b&gt;Trưởng văn phòng &lt;/b&gt;phân công chuyên viên" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
                     <mxGeometry x="715" y="390" width="130" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="150" value="&lt;div style=&quot;text-align: center&quot;&gt;&lt;span&gt;Nếu trưởng phòng hoặc văn phòng ko chấp thuận từ các sơ đồ khác&lt;/span&gt;&lt;/div&gt;" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+                <mxCell id="150" value="&lt;div style=&quot;text-align: center&quot;&gt;&lt;span&gt;Nếu trưởng phòng hoặc văn phòng ko chấp thuận từ các sơ đồ khác&lt;/span&gt;&lt;/div&gt;" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;" parent="1" vertex="1">
                     <mxGeometry x="530" y="780" width="178.75" height="45" as="geometry"/>
                 </mxCell>
-                <mxCell id="151" style="edgeStyle=none;html=1;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="150">
+                <mxCell id="151" style="edgeStyle=none;html=1;endArrow=none;endFill=0;dashed=1;" parent="1" source="150" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="540" y="750" as="targetPoint"/>
                         <mxPoint x="512.4849999999999" y="777.5699999999999" as="sourcePoint"/>

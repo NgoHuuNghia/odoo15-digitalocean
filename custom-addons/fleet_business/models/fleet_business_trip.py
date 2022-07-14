@@ -9,12 +9,6 @@ class FleetBusinessTrip(models.Model):
   _description = "Business Trip"
   _inherit = ['fleet.business.base']
 
-  @api.model
-  def create(self, vals_list):
-    vals_list['name'] = self.env['ir.sequence'].next_by_code('fleet.business.trip')
-    vals_list['approval_manager'] = 'deciding'
-    return super(FleetBusinessTrip, self).create(vals_list)
-
   name = fields.Char('Sequence Name',readonly=True)
   attending_employee_ids = fields.Many2many(comodel_name='hr.employee', relation='fleet_business_trip_employees_rel', 
     column1='business_trip_id', column2='employee_id', string='Attending Employees', required=True)
@@ -75,11 +69,7 @@ class FleetBusinessTrip(models.Model):
       
   @api.onchange('driver_id')
   def onchange_attending_employee_ids_exclude_driver(self):
-    return {'domain':{
-      'attending_employee_ids': [
-        ('id', '!=', self.driver_id.id),
-      ],
-    }}
+    return {'domain':{ 'attending_employee_ids': [('id', '!=', self.driver_id.id),],}}
 
   @api.onchange('attending_employee_ids')
   def onchange_self_driving_employee_id_in_attendees(self):
@@ -97,10 +87,6 @@ class FleetBusinessTrip(models.Model):
         ('id', '!=', attending_employee_ids_list),
       ],
     }}
-
-  #! def action_hyperlink_test(self):
-  #   print('---self._name---',self._name)
-  #   print('---web_base_url---',self.record_url)
 
   def action_approval_fleet_approved(self):
     for rec in self:
@@ -132,17 +118,6 @@ class FleetBusinessTrip(models.Model):
         'target': 'current',
         'type': 'ir.actions.act_window',
     }
-
-  #? automated code, still figuring it out
-  def action_create_first_journal(self):
-    curr_id = self.env['fleet.business.trip'].search([('id', '!=', False)], limit=1, order="id desc").ensure_one().id
-
-    first_journal_val_list = {
-      'fleet_business_trip_id': curr_id,
-      'type': 'update',
-      'note': f'{self.env.user.employee_id.name} have successfully created this trip, now awaiting approval.'
-    }
-    self.env['fleet.business.trip.journal.line'].create(first_journal_val_list)
 
   @api.constrains('self_driving_employee_id','driver_id')
   def _check_driver(self):

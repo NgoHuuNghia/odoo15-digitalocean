@@ -7,9 +7,8 @@
       <field name="name">Request Approval: Send by email</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="email_from">{{ (object.overseer_creator_id.user_id.email_formatted or user.email_formatted) }}</field>
-      <!-- <field name="email_to">{{ object.overseer_manager_id.work_email }}</field> -->
-      <field name="partner_to">{{ object.overseer_manager_id.user_id.partner_id.id }}</field>
-      <field name="subject">{{ object.company_id.name }} Request Approval (Ref {{ object.name or 'n/a' }})</field>
+      <field name="email_to">{{ object.overseer_manager_id.work_email }}</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Request Approval (Ref {{ object.name or 'n/a' }})</field>
       <field name="body_html" type="html">
         <div style="margin: 0px; padding: 0px;">
           <p style="margin: 0px; padding: 0px; font-size: 13px;">

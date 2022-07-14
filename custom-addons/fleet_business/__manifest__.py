@@ -43,6 +43,11 @@
         'views/hr_employee_views.xml',
         'views/fleet_business_trip_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            "fleet_business/static/src/js/basic_view.js",
+        ],
+    },
     #! only loaded in demonstration mode
     # 'demo': [
     #     'demo/demo.xml',
