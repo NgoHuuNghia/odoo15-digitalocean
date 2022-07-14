@@ -20,7 +20,10 @@
       <field name="active" eval="True"/>
       <field name="filter_pre_domain">[('curr_deciding_overseer_id', '!=', False)]</field>
       <field name="filter_domain">[('curr_deciding_overseer_id', '!=', False)]</field>
-      <field name="trigger_field_ids" eval="[(6,0,[ref('fleet_business.field_fleet_business_trip__curr_deciding_overseer_id')])]"/>
+      <field name="trigger_field_ids" eval="[(6,0,[
+        ref('fleet_business.field_fleet_business_trip__curr_deciding_overseer_id'),
+        ref('fleet_business.field_fleet_business_trip__state'),
+      ])]"/>
     </record>
 
   </data>

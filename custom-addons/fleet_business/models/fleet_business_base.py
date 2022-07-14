@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from email.policy import default
+from pprint import pprint
 from odoo import models, fields, api, exceptions, _
 from dateutil import relativedelta
 
@@ -14,6 +15,7 @@ STATE_SELECTIONS = [
 #! Add the setting properly to setting module
 DUE_TIME_SETTING = 7 #days
 SETTING_TIME_CONSTRAINS = 4 #months
+#$ i really want to rework the overseer as it separated many2many model, to make it more customizable and dynamic
 class FleetBusinessBase(models.AbstractModel):
   _name = 'fleet.business.base'
   _description = 'Base model for other business model'
@@ -22,6 +24,8 @@ class FleetBusinessBase(models.AbstractModel):
   @api.model
   def create(self, vals_list):
     vals_list['curr_deciding_overseer_id'] = vals_list.get('overseer_manager_id')
+    vals_list['curr_deciding_overseer_role'] = 'Manager'
+    vals_list['approval_manager'] = 'deciding'
     vals_list['name'] = self.env['ir.sequence'].next_by_code(self._name)
     vals_list['state'] = 'draft'
     return super(FleetBusinessBase, self).create(vals_list)
@@ -51,24 +55,24 @@ class FleetBusinessBase(models.AbstractModel):
   #$ 4 available options ['manager','admin','creator',None]
   curr_logged_overseer = fields.Char('Current Logged In Overseer', compute='_compute_curr_logged_overseer',help='To track if any overseer is in view')
   curr_deciding_overseer_id = fields.Many2one('hr.employee',string='Current Deciding Overseer',help='Current Overseer That Need To Approve',readonly=True)
+  curr_deciding_overseer_role = fields.Char("Overseer's Role", help='Use mainly for mailing, not important', store=True)
   #$ all employees that need to approve this business trip
-  #! overseer_manager_id = fields.Many2one('hr.employee',string='Creator\'s Manager', default=lambda self: self.env.user.employee_id.parent_id)
   overseer_manager_id = fields.Many2one('hr.employee',string='Creator\'s Manager', default=lambda self: self.env.user.employee_id.parent_id)
   overseer_manager_work_phone = fields.Char(related='overseer_manager_id.work_phone',string='Manager\'s Work Phone')
   overseer_manager_email = fields.Char(related='overseer_manager_id.work_email',string='Manager\'s Work Email')
   #! approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, readonly=True, store=True)
-  approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, readonly=True, store=True)
+  approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, compute="_compute_approval_with_curr_deciding_overseer_id", readonly=True, store=True)
   overseer_admin_id = fields.Many2one('hr.employee',string='Admin Assigned',
     domain="['&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Management')]")
   overseer_admin_work_phone = fields.Char(related='overseer_admin_id.work_phone',string='Admin\'s Work Phone')
   overseer_admin_email = fields.Char(related='overseer_admin_id.work_email',string='Admin\'s Work Email')
   #! approval_admin = fields.Selection(APPROVAL_SELECTIONS, string='Admin\'s Decision', default=None, readonly=True, store=True)
-  approval_admin = fields.Selection(APPROVAL_SELECTIONS, string='Admin\'s Decision', default=None, readonly=True, store=True)
+  approval_admin = fields.Selection(APPROVAL_SELECTIONS, string='Admin\'s Decision', default=None, compute="_compute_approval_with_curr_deciding_overseer_id", readonly=True, store=True)
   overseer_creator_id = fields.Many2one('hr.employee',string='Creator',default=lambda self: self.env.user.employee_id)
   overseer_creator_work_phone = fields.Char(related='overseer_creator_id.work_phone',string='Creator\'s Work Phone')
   overseer_creator_email = fields.Char(related='overseer_creator_id.work_email',string='Creator\'s Work Email')
   #! approval_creator = fields.Selection(APPROVAL_SELECTIONS, string='Creator\'s Decision', default=None, readonly=True, store=True)
-  approval_creator = fields.Selection(APPROVAL_SELECTIONS, string='Creator\'s Decision', default=None, readonly=True, store=True)
+  approval_creator = fields.Selection(APPROVAL_SELECTIONS, string='Creator\'s Decision', default=None, compute="_compute_approval_with_curr_deciding_overseer_id", readonly=True, store=True)
   #$ other fields
   intent = fields.Text('Intention', required=True, help='The intention of this business trip')
   note = fields.Text('Note/Comment', help='Any note, reminder or comments special to this business trip')
@@ -98,13 +102,14 @@ class FleetBusinessBase(models.AbstractModel):
       self.edit_hide_css_user = False
     else:
       self.edit_hide_css_user = '<style>.o_form_button_edit {display: none !important;}</style>'
-  #! might want to hide the action -> duplicate too but still pending
 
   def action_approval_manager_approved(self):
     self.ensure_one()
     self.approval_manager = "approved"
-    self.approval_admin = 'deciding'
+
     self.curr_deciding_overseer_id = self.overseer_admin_id.id
+    self.curr_deciding_overseer_role = 'Administrator'
+    self.approval_admin = 'deciding'
 
   def action_approval_manager_denied(self):
     self.ensure_one()
@@ -134,9 +139,11 @@ class FleetBusinessBase(models.AbstractModel):
       'type': 'ir.actions.act_window',
     }
 
-  #? automated action to send mail
+  #? automated action to create the first journal run when record is 1st created
   def action_create_first_journal(self):
-    curr_id = self.env[self._name].search([('id', '!=', False)], limit=1, order="id desc").ensure_one().id
+    curr_id = self.id
+    if curr_id == False:
+      curr_id = self.env[self._name].search([('id', '!=', False)], limit=1, order="id desc").ensure_one().id
 
     first_journal_val_list = {
       f"{self._name.replace('.','_')}_id": curr_id,
@@ -145,15 +152,36 @@ class FleetBusinessBase(models.AbstractModel):
     }
     self.env[f'{self._name}.journal.line'].create(first_journal_val_list)
 
-  #? automated action to send mail
+  #? automated action to send mail depends on [curr_deciding_overseer_id] field not [None]
   #! keep sending double email, no idea how to fix. Seem not automation fault
   def action_send_approval_email(self):
-    curr_id = self.id
-    if curr_id == False:
-      curr_id = self.env[self._name].search([('id', '!=', False)], limit=1, order="id desc").ensure_one().id
-    approval_email_template_id = self.env.ref('fleet_business.email_template_fleet_business_approval').id
-    approval_email_template = self.env['mail.template'].browse(approval_email_template_id)
-    approval_email_template.send_mail(curr_id, force_send=True)
+    curr_record = self
+    if curr_record == False or len(curr_record) < 1:
+      curr_record = self.env[self._name].search([('id', '!=', False)], limit=1, order="id desc")
+
+    #! add a canceled mail template here
+    if curr_record.state == 'canceled':
+      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_canceled')
+    else:
+      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_approval')
+
+    approval_email_template.send_mail(curr_record.id, force_send=True)
+    if curr_record.state == 'canceled':
+      # self.env[curr_record._name].browse(curr_record.id).write({
+      #   'curr_deciding_overseer_id': None,
+      #   'curr_deciding_overseer_role': None,
+      # })
+      curr_record.curr_deciding_overseer_id = None
+      curr_record.curr_deciding_overseer_role = None
+    #! pprint('---curr_record---',curr_record.read()) how did pprint work again?
+
+  def action_request_reapproval(self):
+    for rec in self:
+      rec.curr_deciding_overseer_id = rec.overseer_manager_id
+      rec.curr_deciding_overseer_role = 'Manager'
+      rec.approval_manager = 'deciding'
+      rec.approval_admin = rec.approval_creator = None
+      rec.state = 'draft'
 
   #? Temp using this exeptions way to throw error, want to use the notification and highlight way instead
   @api.constrains('pick_time','return_time')

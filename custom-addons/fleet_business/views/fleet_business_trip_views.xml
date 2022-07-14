@@ -28,7 +28,7 @@
       <field name="name">fleet.business.trip.form</field>
       <field name="model">fleet.business.trip</field>
       <field name="arch" type="xml">
-        <form duplicate="0" archive="0">
+        <form duplicate="0">
           <header>
             <field name="company_id" invisible='1'/>
             <field name="curr_logged_overseer" invisible='1'/>
@@ -36,10 +36,11 @@
             <!--? custom conditional css -->
             <field name="edit_hide_css_user"/>
             
-            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" string="Archive This Trip">
+            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" string="Archive Trip">
                 <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
             </button>
-            <button name="action_send_approval_email" string="Send Test Email" type="object" class="oe_highlight"/>
+            <button name="action_send_approval_email" string="Send Test Email" type="object" icon="fa-envelope" class="oe_highlight"/>
+            <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight"/>
 
             <!--? approval buttons -->
             <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
@@ -318,7 +319,6 @@
       <field name="arch" type="xml">
         <xpath expr="//form" position="attributes">
           <attribute name="duplicate">1</attribute>
-          <attribute name="archive">1</attribute>
         </xpath>
       </field>
     </record>
