@@ -35,12 +35,19 @@
             <field name="active" invisible="1" />
             <!--? custom conditional css -->
             <field name="edit_hide_css_user"/>
-            
-            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" string="Archive Trip">
-                <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+
+            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" string="Archive Trip" attrs="{
+              'invisible': ['|',('curr_logged_overseer', '!=', 'creator'), ('state', 'not in', ['draft','canceled'])], 
+              'readonly':  ['|',('curr_logged_overseer', '!=', 'creator'), ('state', 'not in', ['draft','canceled'])],
+            }">
+              <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
             </button>
-            <button name="action_send_approval_email" string="Send Test Email" type="object" icon="fa-envelope" class="oe_highlight"/>
-            <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight"/>
+            <!--! might want to create some logic to prevent constant re-approval -->
+            <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
+              'invisible': ['|',('curr_logged_overseer', 'not in', ['creator','admin']), ('state', '!=', 'canceled')], 
+              'readonly':  ['|',('curr_logged_overseer', 'not in', ['creator','admin']), ('state', '!=', 'canceled')],
+            }"/>
+            <!--! <button name="action_send_approval_email" string="Send Test Email" type="object" icon="fa-envelope"/> for testing -->
 
             <!--? approval buttons -->
             <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
@@ -118,82 +125,78 @@
             </div>
 
             <!--? approval alerts -->
-            <div class="alert alert-warning text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_manager', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'manager'),]}">
-              <div>
-                <strong>You, the manager Need to decide the approval of this business trip</strong>
+            <span attrs="{'invisible':['|', ('approval_manager', '=', False), ('curr_logged_overseer', '!=', 'manager'),]}">
+              <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible':[('approval_manager', '!=', 'deciding')]}">
+                <div>
+                  <strong>You, the manager Need to decide the approval of this business trip</strong>
+                </div>
               </div>
-            </div>
-            <div class="alert alert-success text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_manager', '!=', 'approved'), ('curr_logged_overseer', '!=', 'manager'),]}">
-              <div>
-                <strong>You, the manager have approve of this business trip</strong>
+              <div class="alert alert-success text-center o_form_header" role="alert" attrs="{'invisible':[('approval_manager', '!=', 'approved')]}">
+                <div>
+                  <strong>You, the manager have approve of this business trip</strong>
+                </div>
               </div>
-            </div>
-            <div class="alert alert-danger text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_manager', '!=', 'denied'), ('curr_logged_overseer', '!=', 'manager'),]}">
-              <div>
-                <strong>You, the manager have deny this business trip</strong>
+              <div class="alert alert-danger text-center o_form_header" role="alert" attrs="{'invisible':[('approval_manager', '!=', 'denied')]}">
+                <div>
+                  <strong>You, the manager have deny this business trip</strong>
+                </div>
               </div>
-            </div>
+            </span>
 
-            <div class="alert alert-warning text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_admin', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'admin'),]}">
-              <div>
-                <strong>You, the Admin Need to decide the approval of this business trip</strong>
+            <span attrs="{'invisible':['|', ('approval_admin', '=', False), ('curr_logged_overseer', '!=', 'admin'),]}">
+              <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible':[('approval_admin', '!=', 'deciding')]}">
+                <div>
+                  <strong>You, the Admin Need to decide the approval of this business trip</strong>
+                </div>
               </div>
-            </div>
-            <div class="alert alert-success text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_admin', '!=', 'approved'), ('curr_logged_overseer', '!=', 'admin'),]}">
-              <div>
-                <strong>You, the Admin have approve of this business trip</strong>
+              <div class="alert alert-success text-center o_form_header" role="alert" attrs="{'invisible':[('approval_admin', '!=', 'approved')]}">
+                <div>
+                  <strong>You, the Admin have approve of this business trip</strong>
+                </div>
               </div>
-            </div>
-            <div class="alert alert-danger text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_admin', '!=', 'denied'), ('curr_logged_overseer', '!=', 'admin'),]}">
-              <div>
-                <strong>You, the Admin have deny this business trip</strong>
+              <div class="alert alert-danger text-center o_form_header" role="alert" attrs="{'invisible':[('approval_admin', '!=', 'denied')]}">
+                <div>
+                  <strong>You, the Admin have deny this business trip</strong>
+                </div>
               </div>
-            </div>
+            </span>
 
-            <div class="alert alert-warning text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_creator', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'creator'),]}">
-              <div>
-                <strong>You, the Creator Need to decide the approval of this business trip</strong>
+            <span attrs="{'invisible':['|', ('approval_creator', '=', False), ('curr_logged_overseer', '!=', 'creator'),]}">
+              <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible':[('approval_creator', '!=', 'deciding')]}">
+                <div>
+                  <strong>You, the Creator Need to decide the approval of this business trip</strong>
+                </div>
               </div>
-            </div>
-            <div class="alert alert-success text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_creator', '!=', 'approved'), ('curr_logged_overseer', '!=', 'creator'),]}">
-              <div>
-                <strong>You, the Creator have approve of this business trip</strong>
+              <div class="alert alert-success text-center o_form_header" role="alert" attrs="{'invisible':[('approval_creator', '!=', 'approved')]}">
+                <div>
+                  <strong>You, the Creator have approve of this business trip</strong>
+                </div>
               </div>
-            </div>
-            <div class="alert alert-danger text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_creator', '!=', 'denied'), ('curr_logged_overseer', '!=', 'creator'),]}">
-              <div>
-                <strong>You, the Creator have deny this business trip</strong>
+              <div class="alert alert-danger text-center o_form_header" role="alert" attrs="{'invisible':[('approval_creator', '!=', 'denied')]}">
+                <div>
+                  <strong>You, the Creator have deny this business trip</strong>
+                </div>
               </div>
-            </div>
+            </span>
 
-            <div class="alert alert-warning text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_fleet', '!=', 'deciding'), ('curr_logged_overseer', '!=', 'fleet'),]}">
-              <div>
-                <strong>You, the Fleet Need to decide the approval of this business trip</strong>
+            <span attrs="{'invisible':['|', ('approval_fleet', '=', False), ('curr_logged_overseer', '!=', 'fleet'),]}">
+              <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible':[('approval_fleet', '!=', 'deciding')]}">
+                <div>
+                  <strong>You, the Fleet Captain Need to decide the approval of this business trip</strong>
+                </div>
               </div>
-            </div>
-            <div class="alert alert-success text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_fleet', '!=', 'approved'), ('curr_logged_overseer', '!=', 'fleet'),]}">
-              <div>
-                <strong>You, the Fleet have approve of this business trip</strong>
+              <div class="alert alert-success text-center o_form_header" role="alert" attrs="{'invisible':[('approval_fleet', '!=', 'approved')]}">
+                <div>
+                  <strong>You, the Fleet Captain have approve of this business trip</strong>
+                </div>
               </div>
-            </div>
-            <div class="alert alert-danger text-center o_form_header" role="alert"
-              attrs="{'invisible':['|', ('approval_fleet', '!=', 'denied'), ('curr_logged_overseer', '!=', 'fleet'),]}">
-              <div>
-                <strong>You, the Fleet have deny this business trip</strong>
+              <div class="alert alert-danger text-center o_form_header" role="alert" attrs="{'invisible':[('approval_fleet', '!=', 'denied')]}">
+                <div>
+                  <strong>You, the Fleet Captain have deny this business trip</strong>
+                </div>
               </div>
-            </div>
-
+            </span>
+            
             <div class="oe_title">
               <h1>
                   <field name="name"/>
