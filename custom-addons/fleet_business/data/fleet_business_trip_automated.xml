@@ -6,8 +6,8 @@
       <field name="name">Fleet Business Automation: Create first journal</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="state">code</field>
-      <field name="code">model.action_create_first_journal()</field>
       <field name="trigger">on_create</field>
+      <field name="code">record.action_create_first_journal()</field>
       <field name="active" eval="True"/>
     </record>
 
@@ -15,12 +15,13 @@
       <field name="name">Fleet Business Automation: Send mail requesting approval to overseer</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="state">code</field>
-      <field name="code">model.action_send_approval_email()</field>
+      <field name="code">record.action_send_approval_email()</field>
       <field name="trigger">on_create_or_write</field>
       <field name="active" eval="True"/>
       <field name="filter_pre_domain">[('curr_deciding_overseer_id', '!=', False)]</field>
       <field name="filter_domain">[('curr_deciding_overseer_id', '!=', False)]</field>
       <field name="trigger_field_ids" eval="[(6,0,[
+        ref('fleet_business.field_fleet_business_trip__overseer_admin_id'),
         ref('fleet_business.field_fleet_business_trip__curr_deciding_overseer_id'),
         ref('fleet_business.field_fleet_business_trip__state'),
       ])]"/>

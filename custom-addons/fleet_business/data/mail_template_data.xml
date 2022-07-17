@@ -14,7 +14,7 @@
           <p style="margin: 0px; padding: 0px; font-size: 13px;">
             Dear <t t-out="object.curr_deciding_overseer_id.name or ''">Trip Overseer</t> from <t t-out="object.curr_deciding_overseer_id.department_id.name or 'n/a'">Trip</t>'s Department,
             <br /><br />
-            This is an automatic email requesting you to request your approval for <strong t-out="object.name or 'n/a'">0000Trip</strong> Business Trip, which you are the <strong t-out="object._context['overseer_role']"></strong> Overseer of.
+            This is an automatic email requesting you to request your approval for <strong t-out="object.name or 'n/a'">0000Trip</strong> Business Trip, which you are the <strong t-out="object.curr_deciding_overseer_role or 'n\a'"></strong> Overseer of.
             Created by <strong t-out="object.overseer_creator_id.name or 'n/a'">Trip Creator</strong> from <strong t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department
             <br /><br />
             From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
@@ -74,7 +74,7 @@
             <br /><br />
             This is an automatic email notifying you that your request for the business trip <strong t-out="object.name or 'n/a'">0000Trip</strong>, has been denied by 
             <strong t-out="object.curr_deciding_overseer_id.name or ''">Trip Overseer</strong> from <strong t-out="object.curr_deciding_overseer_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department 
-            which are currently the <strong t-out="object._context['overseer_role']"></strong> Overseer of this trip
+            which are currently the <strong t-out="object.curr_deciding_overseer_role or 'n\a'"></strong> Overseer of this trip
             <br /><br />
             From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
             <strong t-out="object.pick_address_id.street or 'n/a'">1AA Bulinot Cake</strong>, 
@@ -125,15 +125,14 @@
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="email_from">{{ (object.curr_deciding_overseer_id.user_id.email_formatted or company.email_formatted) }}</field>
       <field name="email_to">{{ object._context['admin_manager'].work_email }}</field>
-      <field name="subject">Odoo - {{ object.company_id.name }} Cancelation Notification (Business Trip {{ object.name or 'n/a' }})</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Request Admin Assignment (Business Trip {{ object.name or 'n/a' }})</field>
       <field name="body_html" type="html">
         <div style="margin: 0px; padding: 0px;">
           <p style="margin: 0px; padding: 0px; font-size: 13px;">
-            Dear <t t-out="object.overseer_creator_id.name or ''">Trip Creator</t> from <t t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip</t>'s Department,
+            Dear <t t-out="object._context['admin_manager'].name or 'n\a'">Management Manager</t> from <t t-out="object._context['admin_manager'].department_id.name or 'n/a'">Department</t>'s Department current manager
             <br /><br />
-            This is an automatic email notifying you that your request for the business trip <strong t-out="object.name or 'n/a'">0000Trip</strong>, has been denied by 
-            <strong t-out="object.curr_deciding_overseer_id.name or ''">Trip Overseer</strong> from <strong t-out="object.curr_deciding_overseer_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department 
-            which are currently the <strong t-out="object._context['overseer_role']"></strong> Overseer of this trip
+            This is an automatic email requesting you to assign an administrator to oversee this business trip <strong t-out="object.name or 'n/a'">0000Trip</strong>, Which is 
+            created by <strong t-out="object.overseer_creator_id.name or 'n/a'">Trip Creator</strong> from <strong t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department
             <br /><br />
             From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
             <strong t-out="object.pick_address_id.street or 'n/a'">1AA Bulinot Cake</strong>, 
@@ -166,7 +165,7 @@
             <br /><br />
             This trip will have a total of <strong t-out="object.attending_employee_count or 'n/a'">Number of attendees</strong> attendees (driver included)
             starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>, 
-            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. For more infomation and either to archive this trip or request request re-approval follow the link bellow:
+            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. For more infomation and to assign an administrator this trip follow the link bellow:
             <br /><br />
             <strong t-out="object.record_url or 'n/a'">Recordurl</strong>
             <t t-if="object.curr_deciding_overseer_id.user_id.signature">
