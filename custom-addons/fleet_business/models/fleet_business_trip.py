@@ -9,6 +9,14 @@ class FleetBusinessTrip(models.Model):
   _description = "Business Trip"
   _inherit = ['fleet.business.base']
 
+  def write(self, vals_list):
+    if vals_list.get('approval_admin') == 'approved':
+      self.curr_deciding_overseer_id = self.overseer_fleet_id.id
+      self.curr_deciding_overseer_role = 'Fleet Captain'
+      self.approval_fleet = 'deciding'
+      self.action_send_email()
+    return super(FleetBusinessTrip, self).write(vals_list)
+
   name = fields.Char('Sequence Name',readonly=True)
   attending_employee_ids = fields.Many2many(comodel_name='hr.employee', relation='fleet_business_trip_employees_rel', 
     column1='business_trip_id', column2='employee_id', string='Attending Employees', required=True)
@@ -24,31 +32,24 @@ class FleetBusinessTrip(models.Model):
   seats = fields.Integer(related='vehicle_id.seats',string='Seats',store=True)
   self_driving_employee_id = fields.Many2one('hr.employee',string='Attendee Driver',domain="[('id', 'in', attending_employee_ids)]")
   driver_id = fields.Many2one('hr.employee',string="Company's Driver")
-  overseer_fleet_id = fields.Many2one('hr.employee',string='Fleet Captain',
+  overseer_fleet_id = fields.Many2one('hr.employee',string='Fleet Captain', readonly=True,
     default=lambda self: self.env['hr.employee'].search([('department_id.name','=','Fleet'),('department_position','=','Manager')],limit=1,order='id').ensure_one(),
     domain="['&','&','&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Fleet'),('department_position', 'in', ['Manager','Vice Manager']),('job_title', '=', 'Fleet Captain')]")
   overseer_fleet_work_phone = fields.Char(related='overseer_fleet_id.work_phone',string='Fleet\'s Work Phone')
   overseer_fleet_email = fields.Char(related='overseer_fleet_id.work_email',string='Fleet\'s Work Email')
-  approval_fleet = fields.Selection(APPROVAL_SELECTIONS, string='Fleet\'s Decision', default=None)
+  overseer_fleet_logged = fields.Boolean(string="Fleet Captain In View",compute='_compute_logged_overseer', default=False)
+  approval_fleet = fields.Selection(APPROVAL_SELECTIONS, string='Fleet\'s Decision', default=None, readonly=True)
   tag_ids = fields.Many2many(comodel_name='fleet.business.tag', relation="fleet_business_trip_tag_rel", column1="fleet_business_trip_id", column2="tag_id", string='Tags')
   journal_line_ids = fields.One2many('fleet.business.trip.journal.line','fleet_business_trip_id',string='Journal Line')
   journal_line_count = fields.Integer('Journal Count', compute='_compute_journal_line_count')
 
   @api.depends()
-  def _compute_curr_logged_overseer(self):
+  def _compute_logged_overseer(self):
+    super(FleetBusinessTrip, self)._compute_logged_overseer()
     for trip in self:
-      curr_logged_overseer_list = []
-      if self.env.user == trip.overseer_manager_id.user_id:
-        curr_logged_overseer_list += ["manager"]
-      if self.env.user == trip.overseer_admin_id.user_id:
-        curr_logged_overseer_list += ["admin"]
-      if self.env.user == trip.overseer_creator_id.user_id:
-        curr_logged_overseer_list += ["creator"]
       if self.env.user == trip.overseer_fleet_id.user_id:
-        curr_logged_overseer_list += ["fleet"]
-      if curr_logged_overseer_list == []:
-        curr_logged_overseer_list = None
-      trip.curr_logged_overseer = curr_logged_overseer_list
+        trip.overseer_fleet_logged = True
+      else: trip.overseer_fleet_logged = False
 
   @api.depends('attending_employee_ids','driver_id')
   def _compute_attending_employee_count(self):
@@ -69,14 +70,6 @@ class FleetBusinessTrip(models.Model):
       address = trip.company_id.partner_id.address_get(['default'])
       trip.pick_address_id = address['default'] if address else False
 
-  api.onchange('approval_admin')
-  def onchange_on_admin_approved_change_curr_deciding_to_fleet(self):
-    for trip in self:
-      if trip.approval_admin == 'approved':
-        trip.approval_fleet = 'deciding'
-        trip.curr_deciding_overseer_id = trip.overseer_fleet_id
-        trip.curr_deciding_overseer_role = 'Fleet Captain'
-      
   @api.onchange('driver_id')
   def onchange_attending_employee_ids_exclude_driver(self):
     return {'domain':{ 'attending_employee_ids': [('id', '!=', self.driver_id.id),],}}
@@ -99,11 +92,42 @@ class FleetBusinessTrip(models.Model):
     }}
 
   def action_approval_fleet_approved(self):
-    for rec in self:
-      rec.approval_fleet = "approved"
+    self.ensure_one()
+    self.approval_fleet = "approved"
+
+    self.curr_deciding_overseer_id = self.overseer_creator_id.id
+    self.curr_deciding_overseer_role = 'Creator'
+    self.approval_creator = "deciding"
+    self.action_send_email()
   def action_approval_fleet_denied(self):
-    for rec in self:
-      rec.approval_fleet = "denied"
+    self.ensure_one()
+    self.approval_fleet = 'denied'
+    self.action_send_email(special='request_admin_overseer_cancellation')
+
+    self.curr_deciding_overseer_id = self.overseer_admin_id.id
+    self.curr_deciding_overseer_role = 'Administrator'
+    self.approval_admin = 'deciding'
+
+  def action_approval_creator_request_rework(self):
+    self.ensure_one()
+    self.approval_creator = 'denied'
+    self.action_send_email(special='request_fleet_overseer_rework')
+
+    self.curr_deciding_overseer_id = self.overseer_fleet_id.id
+    self.curr_deciding_overseer_role = 'Fleet Captain'
+    self.approval_fleet = 'deciding'
+  def action_approval_creator_approved(self):
+    super(FleetBusinessTrip, self).action_approval_creator_approved()
+    if self.approval_manager == 'approved' and self.approval_admin == 'approved' and self.approval_creator == 'approved' and self.approval_fleet == 'approved':
+      self.curr_deciding_overseer_id = None
+      self.curr_deciding_overseer_role = None
+      self.state = 'approved'
+    else: raise exceptions.ValidationError('A approval steps was bugged, please contact the administrator about this bug')
+
+  def action_request_reapproval(self):
+    super(FleetBusinessTrip, self).action_request_reapproval()
+    self.approval_fleet = None
+    self.action_send_email()
 
   def action_view_fleet(self):
     return {

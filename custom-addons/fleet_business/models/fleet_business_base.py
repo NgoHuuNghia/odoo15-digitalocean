@@ -23,8 +23,6 @@ class FleetBusinessBase(models.AbstractModel):
 
   @api.model
   def create(self, vals_list):
-    vals_list['curr_deciding_overseer_id'] = vals_list.get('overseer_manager_id')
-    vals_list['curr_deciding_overseer_role'] = 'Manager'
     vals_list['approval_manager'] = 'deciding'
     vals_list['name'] = self.env['ir.sequence'].next_by_code(self._name)
     vals_list['state'] = 'draft'
@@ -32,18 +30,21 @@ class FleetBusinessBase(models.AbstractModel):
 
   def write(self, vals_list):
     if vals_list.get('overseer_admin_id'):
-      vals_list['curr_deciding_overseer_id'] = vals_list.get('overseer_admin_id')
-      vals_list['curr_deciding_overseer_role'] = 'Administrator'
-      vals_list['approval_admin'] = 'deciding'
+      self.curr_deciding_overseer_id = vals_list.get('overseer_admin_id')
+      self.curr_deciding_overseer_role = 'Administrator'
+      self.approval_admin = 'deciding'
+      self.action_send_email()
     return super(FleetBusinessBase, self).write(vals_list)
 
   @api.model
-  def default_get(self, fields_list):
-    res = super(FleetBusinessBase, self).default_get(fields_list)
+  def default_get(self, vals_list):
+    res = super(FleetBusinessBase, self).default_get(vals_list)
     if not res.get('overseer_manager_id'):
       #! searching for the 1st hit of Manager of the Management Department, have to be better way of doing this
       optional_manager = self.env['hr.employee'].search(['&','&','|',('company_id', '=', False),('company_id', '=', res.get('company_id')),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1).ensure_one()
       res['overseer_manager_id'] = optional_manager.id
+    res['curr_deciding_overseer_id'] = res.get('overseer_manager_id')
+    res['curr_deciding_overseer_role'] = 'Manager'
     return res
     
   name = fields.Char()
@@ -64,25 +65,22 @@ class FleetBusinessBase(models.AbstractModel):
   curr_deciding_overseer_id = fields.Many2one('hr.employee',string='Current Deciding Overseer',help='Current Overseer That Need To Approve',readonly=True)
   curr_deciding_overseer_role = fields.Char(string="Current Deciding Overseer's Role",help='Current Overseer Role That Need To Approve',readonly=True)
   #$ all employees that need to approve this business trip
-  overseer_manager_id = fields.Many2one('hr.employee',string='Creator\'s Manager', default=lambda self: self.env.user.employee_id.parent_id)
+  overseer_manager_id = fields.Many2one('hr.employee',string='Creator\'s Manager', default=lambda self: self.env.user.employee_id.parent_id, readonly=True)
   overseer_manager_work_phone = fields.Char(related='overseer_manager_id.work_phone',string='Manager\'s Work Phone')
   overseer_manager_email = fields.Char(related='overseer_manager_id.work_email',string='Manager\'s Work Email')
   overseer_manager_logged = fields.Boolean(string="Manager In View",compute='_compute_logged_overseer', default=False)
-  #! approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, readonly=True, store=True)
-  approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, store=True)
+  approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, readonly=True, store=True)
   overseer_admin_id = fields.Many2one('hr.employee',string='Admin Assigned',
     domain="['&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Management')]")
   overseer_admin_work_phone = fields.Char(related='overseer_admin_id.work_phone',string='Admin\'s Work Phone')
   overseer_admin_email = fields.Char(related='overseer_admin_id.work_email',string='Admin\'s Work Email')
   overseer_admin_logged = fields.Boolean(string="Administrator In View",compute='_compute_logged_overseer', default=False)
-  #! approval_admin = fields.Selection(APPROVAL_SELECTIONS, string='Admin\'s Decision', default=None, readonly=True, store=True)
-  approval_admin = fields.Selection(APPROVAL_SELECTIONS, string='Admin\'s Decision', default=None, store=True)
-  overseer_creator_id = fields.Many2one('hr.employee',string='Creator',default=lambda self: self.env.user.employee_id)
+  approval_admin = fields.Selection(APPROVAL_SELECTIONS, string='Admin\'s Decision', default=None, store=True, readonly=True)
+  overseer_creator_id = fields.Many2one('hr.employee',string='Creator',default=lambda self: self.env.user.employee_id, readonly=True)
   overseer_creator_work_phone = fields.Char(related='overseer_creator_id.work_phone',string='Creator\'s Work Phone')
   overseer_creator_email = fields.Char(related='overseer_creator_id.work_email',string='Creator\'s Work Email')
   overseer_creator_logged = fields.Boolean(string="Creator In View",compute='_compute_logged_overseer', default=False)
-  #! approval_creator = fields.Selection(APPROVAL_SELECTIONS, string='Creator\'s Decision', default=None, readonly=True, store=True)
-  approval_creator = fields.Selection(APPROVAL_SELECTIONS, string='Creator\'s Decision', default=None, store=True)
+  approval_creator = fields.Selection(APPROVAL_SELECTIONS, string='Creator\'s Decision', default=None, readonly=True, store=True)
   #$ other fields
   intent = fields.Text('Intention', required=True, help='The intention of this business trip')
   note = fields.Text('Note/Comment', help='Any note, reminder or comments special to this business trip')
@@ -118,28 +116,38 @@ class FleetBusinessBase(models.AbstractModel):
   # @api.onchange('active')
   # def onchange_archive_curr_deciding_overseer_id(self):
 
+  # @api.onchange('overseer_admin_id')
+
   def action_approval_manager_approved(self):
     self.ensure_one()
     self.approval_manager = "approved"
-    self.action_send_approval_email(special='request_admin_overseer_assignment')
+    self.action_send_email(special='request_admin_overseer_assignment')
   def action_approval_manager_denied(self):
     self.ensure_one()
     self.approval_manager = "denied"
     self.state = 'canceled'
-    
+    self.action_send_email()
 
   def action_approval_admin_approved(self):
     self.ensure_one()
     self.approval_admin = "approved"
+  #! kind of want to make a separate action for asking fleet to rework the infomation instead
   def action_approval_admin_denied(self):
     self.ensure_one()
     self.approval_admin = "denied"
     self.state = 'canceled'
+    self.action_send_email()
     
   def action_approval_creator_approved(self):
+    self.ensure_one()
     self.approval_creator = "approved"
-  def action_approval_creator_denied(self):
+  #! will probably need to create a wizard to store excuses infomations for canceling
+  def action_approval_creator_cancel(self):
+    self.ensure_one()
     self.approval_creator = "denied"
+    self.state = 'canceled'
+    self.curr_deciding_overseer_id = None
+    self.curr_deciding_overseer_role = None
 
   def action_view_overseer(self):
     view_overseer = self.env.context.get('view_overseer')
@@ -164,13 +172,20 @@ class FleetBusinessBase(models.AbstractModel):
     self.env[f'{self._name}.journal.line'].create(first_journal_val_list)
 
   #? automated action to send mail depends on [curr_deciding_overseer_id] field not [None]
-  def action_send_approval_email(self, special=None):
+  def action_send_email(self, special=None):
+    print('---curr_deciding_overseer_id',self.curr_deciding_overseer_id.name)
+    print('---curr_deciding_overseer_role',self.curr_deciding_overseer_role)
+
     curr_admin_manager = None
     if self.state == 'canceled':
       approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_canceled')
     elif special == 'request_admin_overseer_assignment':
       curr_admin_manager = self.env['hr.employee'].search(['&','&','|',('company_id', '=', False),('company_id', '=', self.company_id.id),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1).ensure_one()
       approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_assignment')
+    elif special == 'request_admin_overseer_cancellation':
+      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_cancellation')
+    elif special == 'request_fleet_overseer_rework':
+      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_rework')
     else:
       approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_approval')
       
@@ -182,13 +197,13 @@ class FleetBusinessBase(models.AbstractModel):
       self.curr_deciding_overseer_role = None
   
   def action_request_reapproval(self):
+    self.curr_deciding_overseer_id = self.overseer_manager_id.id
+    self.curr_deciding_overseer_role = 'Manager'
     self.approval_manager = 'deciding'
+    self.state = 'draft'
     self.approval_creator = None
     self.approval_admin = None
     self.overseer_admin_id = None
-    self.state = 'draft'
-    self.curr_deciding_overseer_id = self.overseer_manager_id.id
-    self.curr_deciding_overseer_role = 'Manager'
 
   #? Temp using this exeptions way to throw error, want to use the notification and highlight way instead
   @api.constrains('pick_time','return_time')

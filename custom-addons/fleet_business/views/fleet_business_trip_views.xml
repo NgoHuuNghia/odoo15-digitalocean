@@ -31,55 +31,55 @@
         <form duplicate="0">
           <header>
             <field name="company_id" invisible='1'/>
-            <field name="curr_logged_overseer" invisible='1'/>
             <field name="active" invisible="1" />
+            <field name="overseer_manager_logged" string='test logged manager'/>
+            <field name="overseer_admin_logged" string='test logged admin'/>
+            <field name="overseer_creator_logged" string='test logged creator'/>
+            <field name="overseer_fleet_logged" string='test logged fleet'/>
             <!--? custom conditional css -->
             <field name="edit_hide_css_user"/>
             <!--! testing -->
-            <field name="curr_deciding_overseer_id" />
-            <field name="curr_deciding_overseer_role" />
+            <field name="curr_deciding_overseer_id" string='name'/>
+            <field name="curr_deciding_overseer_role" string='role'/>
 
             <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" string="Archive Trip" attrs="{
-              'invisible': ['|',('curr_logged_overseer', 'not in', 'creator'), ('state', 'not in', ['draft','canceled'])], 
-              'readonly':  ['|',('curr_logged_overseer', 'not in', 'creator'), ('state', 'not in', ['draft','canceled'])],
+              'invisible': ['|',('overseer_creator_logged', '=', False), ('state', 'not in', ['draft','canceled'])], 
+              'readonly':  ['|',('overseer_creator_logged', '=', False), ('state', 'not in', ['draft','canceled'])],
             }">
               <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
             </button>
             <!--! might want to create some logic to prevent constant re-approval -->
-            <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
-              'invisible': ['|',('curr_logged_overseer', 'not in', ['creator','admin']), ('state', '!=', 'canceled')], 
-              'readonly':  ['|',('curr_logged_overseer', 'not in', ['creator','admin']), ('state', '!=', 'canceled')],
-            }"/>
+            <!-- <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
+              'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')], 
+            }"/> -->action_approval_admin_approved
+            <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight"/>
             <!--! <button name="action_send_approval_email" string="Send Test Email" type="object" icon="fa-envelope"/> for testing -->
 
             <!--? approval buttons -->
             <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
-              attrs="{'invisible':['|',('approval_manager', '!=', 'deciding'),('curr_logged_overseer', 'not in', 'manager')]}"/>
+              attrs="{'invisible':['|', ('approval_manager', '!=', 'deciding'),('overseer_manager_logged', '=', False)]}"/>
             <button name="action_approval_manager_denied" string="Manager Deny" type="object" 
-              attrs="{'invisible':['|',('approval_manager', '!=', 'deciding'),('curr_logged_overseer', 'not in', 'manager')]}"/>
+              attrs="{'invisible':['|', ('approval_manager', '!=', 'deciding'),('overseer_manager_logged', '=', False)]}"/>
 
-            <!-- <button name="action_approval_admin_approved" string="Admin Approve" type="object" class="oe_highlight"
-              attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('curr_logged_overseer', 'not in', 'admin')]}"/>
-            <button name="action_approval_admin_denied" string="Admin Deny" type="object" 
-              attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('curr_logged_overseer', 'not in', 'admin')]}"/> -->
             <button name="action_approval_admin_approved" string="Admin Approve" type="object" class="oe_highlight"
-              attrs="{'invisible':[('approval_admin', '!=', 'deciding')]}"/>
+              attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('overseer_admin_logged', '=', False)]}"/>
             <button name="action_approval_admin_denied" string="Admin Deny" type="object" 
-              attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('curr_logged_overseer', 'not in', 'admin')]}"/>
+              attrs="{'invisible':['|',('approval_admin', '!=', 'deciding'),('overseer_admin_logged', '=', False)]}"/>
 
             <button name="action_approval_creator_approved" string="Creator Approve" type="object" class="oe_highlight"
-              attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('curr_logged_overseer', 'not in', 'creator')]}"/>
-            <button name="action_approval_creator_denied" string="Creator Deny" type="object" 
-              attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('curr_logged_overseer', 'not in', 'creator')]}"/>
+              attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('overseer_creator_logged', '=', False)]}"/>
+            <button name="action_approval_creator_request_rework" string="Request Rework" type="object" 
+              attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('overseer_creator_logged', '=', False)]}"/>
+            <button name="action_approval_creator_cancel" string="Creator Deny" type="object" 
+              attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('overseer_creator_logged', '=', False)]}"/>
 
             <button name="action_approval_fleet_approved" string="Fleet Approve" type="object" class="oe_highlight"
-              attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('curr_logged_overseer', 'not in', 'fleet')]}"/>
+              attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('overseer_fleet_logged', '=', False)]}"/>
             <button name="action_approval_fleet_denied" string="Fleet Deny" type="object" 
-              attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('curr_logged_overseer', 'not in', 'fleet')]}"/>
+              attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('overseer_fleet_logged', '=', False)]}"/>
 
             <field name="state" widget="statusbar" nolabel="1"
-              statusbar_visible="draft,not_approved,approved,ready,
-              departing,returning,late,returned,cancled,incident"/>
+              statusbar_visible="draft,not_approved,approved,ready,departing,returning,late,returned,cancled,incident"/>
           </header>
           
           <sheet>
@@ -132,7 +132,7 @@
             </div>
 
             <!--? approval alerts -->
-            <span attrs="{'invisible':['|', ('approval_manager', '=', False), ('curr_logged_overseer', 'not in', 'manager'),]}">
+            <span attrs="{'invisible':['|', ('approval_manager', '=', False), ('overseer_manager_logged', '=', False),]}">
               <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible':[('approval_manager', '!=', 'deciding')]}">
                 <div>
                   <strong>You, the manager Need to decide the approval of this business trip</strong>
@@ -150,7 +150,7 @@
               </div>
             </span>
 
-            <span attrs="{'invisible':['|', ('approval_admin', '=', False), ('curr_logged_overseer', 'not in', 'admin'),]}">
+            <span attrs="{'invisible':['|', ('approval_admin', '=', False), ('overseer_admin_logged', '=', False),]}">
               <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible':[('approval_admin', '!=', 'deciding')]}">
                 <div>
                   <strong>You, the Admin Need to decide the approval of this business trip</strong>
@@ -168,7 +168,7 @@
               </div>
             </span>
 
-            <span attrs="{'invisible':['|', ('approval_creator', '=', False), ('curr_logged_overseer', 'not in', 'creator'),]}">
+            <span attrs="{'invisible':['|', ('approval_creator', '=', False), ('overseer_creator_logged', '=', False),]}">
               <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible':[('approval_creator', '!=', 'deciding')]}">
                 <div>
                   <strong>You, the Creator Need to decide the approval of this business trip</strong>
@@ -186,7 +186,7 @@
               </div>
             </span>
 
-            <span attrs="{'invisible':['|', ('approval_fleet', '=', False), ('curr_logged_overseer', 'not in', 'fleet'),]}">
+            <span attrs="{'invisible':['|', ('approval_fleet', '=', False), ('overseer_fleet_logged', '=', False),]}">
               <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible':[('approval_fleet', '!=', 'deciding')]}">
                 <div>
                   <strong>You, the Fleet Captain Need to decide the approval of this business trip</strong>
