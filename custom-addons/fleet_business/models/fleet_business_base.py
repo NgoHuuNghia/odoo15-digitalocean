@@ -34,6 +34,7 @@ class FleetBusinessBase(models.AbstractModel):
     if vals_list.get('overseer_admin_id'):
       vals_list['curr_deciding_overseer_id'] = vals_list.get('overseer_admin_id')
       vals_list['curr_deciding_overseer_role'] = 'Administrator'
+      vals_list['approval_admin'] = 'deciding'
     return super(FleetBusinessBase, self).write(vals_list)
 
   @api.model
@@ -59,25 +60,27 @@ class FleetBusinessBase(models.AbstractModel):
   to_zip = fields.Char('To Country\'s Zip Code',change_default=True)
   to_city = fields.Char('To City')
   to_state_id = fields.Many2one("res.country.state", string='To State/Province', domain="[('country_id', '=?', to_country_id)]")
-  #$ 4 available options ['manager','admin','creator',None]
-  curr_logged_overseer = fields.Char('Current Logged In Overseer', compute='_compute_curr_logged_overseer',help='To track if any overseer is in view')
+  #$ current deciding overseer
   curr_deciding_overseer_id = fields.Many2one('hr.employee',string='Current Deciding Overseer',help='Current Overseer That Need To Approve',readonly=True)
   curr_deciding_overseer_role = fields.Char(string="Current Deciding Overseer's Role",help='Current Overseer Role That Need To Approve',readonly=True)
   #$ all employees that need to approve this business trip
   overseer_manager_id = fields.Many2one('hr.employee',string='Creator\'s Manager', default=lambda self: self.env.user.employee_id.parent_id)
   overseer_manager_work_phone = fields.Char(related='overseer_manager_id.work_phone',string='Manager\'s Work Phone')
   overseer_manager_email = fields.Char(related='overseer_manager_id.work_email',string='Manager\'s Work Email')
+  overseer_manager_logged = fields.Boolean(string="Manager In View",compute='_compute_logged_overseer', default=False)
   #! approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, readonly=True, store=True)
   approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, store=True)
   overseer_admin_id = fields.Many2one('hr.employee',string='Admin Assigned',
     domain="['&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Management')]")
   overseer_admin_work_phone = fields.Char(related='overseer_admin_id.work_phone',string='Admin\'s Work Phone')
   overseer_admin_email = fields.Char(related='overseer_admin_id.work_email',string='Admin\'s Work Email')
+  overseer_admin_logged = fields.Boolean(string="Administrator In View",compute='_compute_logged_overseer', default=False)
   #! approval_admin = fields.Selection(APPROVAL_SELECTIONS, string='Admin\'s Decision', default=None, readonly=True, store=True)
   approval_admin = fields.Selection(APPROVAL_SELECTIONS, string='Admin\'s Decision', default=None, store=True)
   overseer_creator_id = fields.Many2one('hr.employee',string='Creator',default=lambda self: self.env.user.employee_id)
   overseer_creator_work_phone = fields.Char(related='overseer_creator_id.work_phone',string='Creator\'s Work Phone')
   overseer_creator_email = fields.Char(related='overseer_creator_id.work_email',string='Creator\'s Work Email')
+  overseer_creator_logged = fields.Boolean(string="Creator In View",compute='_compute_logged_overseer', default=False)
   #! approval_creator = fields.Selection(APPROVAL_SELECTIONS, string='Creator\'s Decision', default=None, readonly=True, store=True)
   approval_creator = fields.Selection(APPROVAL_SELECTIONS, string='Creator\'s Decision', default=None, store=True)
   #$ other fields
@@ -90,18 +93,17 @@ class FleetBusinessBase(models.AbstractModel):
   edit_hide_css_user = fields.Html(string='CSS', sanitize=False, compute='_compute_edit_hide_css_user')
 
   @api.depends()
-  def _compute_curr_logged_overseer(self):
+  def _compute_logged_overseer(self):
     for trip in self:
-      curr_logged_overseer_list = []
       if self.env.user == trip.overseer_manager_id.user_id:
-        curr_logged_overseer_list += ["manager"]
+        trip.overseer_manager_logged = True
+      else: trip.overseer_manager_logged = False
       if self.env.user == trip.overseer_admin_id.user_id:
-        curr_logged_overseer_list += ["admin"]
+        trip.overseer_admin_logged = True
+      else: trip.overseer_admin_logged = False
       if self.env.user == trip.overseer_creator_id.user_id:
-        curr_logged_overseer_list += ["creator"]
-      if curr_logged_overseer_list == []:
-        curr_logged_overseer_list = None
-      trip.curr_logged_overseer = curr_logged_overseer_list
+        trip.overseer_creator_logged = True
+      else: trip.overseer_creator_logged = False
   def _compute_record_url(self):
     web_base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
     for rec in self:
@@ -124,6 +126,7 @@ class FleetBusinessBase(models.AbstractModel):
     self.ensure_one()
     self.approval_manager = "denied"
     self.state = 'canceled'
+    
 
   def action_approval_admin_approved(self):
     self.ensure_one()
@@ -179,12 +182,13 @@ class FleetBusinessBase(models.AbstractModel):
       self.curr_deciding_overseer_role = None
   
   def action_request_reapproval(self):
-    for rec in self:
-      rec.curr_deciding_overseer_id = rec.overseer_manager_id
-      rec.curr_deciding_overseer_role = 'Manager'
-      rec.approval_manager = 'deciding'
-      rec.approval_admin = rec.approval_creator = None
-      rec.state = 'draft'
+    self.approval_manager = 'deciding'
+    self.approval_creator = None
+    self.approval_admin = None
+    self.overseer_admin_id = None
+    self.state = 'draft'
+    self.curr_deciding_overseer_id = self.overseer_manager_id.id
+    self.curr_deciding_overseer_role = 'Manager'
 
   #? Temp using this exeptions way to throw error, want to use the notification and highlight way instead
   @api.constrains('pick_time','return_time')
