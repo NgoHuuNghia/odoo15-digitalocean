@@ -37,16 +37,18 @@ class FleetBusinessTrip(models.Model):
   @api.depends()
   def _compute_curr_logged_overseer(self):
     for trip in self:
+      curr_logged_overseer_list = []
       if self.env.user == trip.overseer_manager_id.user_id:
-        trip.curr_logged_overseer = "manager"
-      elif self.env.user == trip.overseer_admin_id.user_id:
-        trip.curr_logged_overseer = "admin"
-      elif self.env.user == trip.overseer_creator_id.user_id:
-        trip.curr_logged_overseer = "creator"
-      elif self.env.user == trip.overseer_fleet_id.user_id:
-        trip.curr_logged_overseer = "fleet"
-      else:
-        trip.curr_logged_overseer = None
+        curr_logged_overseer_list += ["manager"]
+      if self.env.user == trip.overseer_admin_id.user_id:
+        curr_logged_overseer_list += ["admin"]
+      if self.env.user == trip.overseer_creator_id.user_id:
+        curr_logged_overseer_list += ["creator"]
+      if self.env.user == trip.overseer_fleet_id.user_id:
+        curr_logged_overseer_list += ["fleet"]
+      if curr_logged_overseer_list == []:
+        curr_logged_overseer_list = None
+      trip.curr_logged_overseer = curr_logged_overseer_list
 
   @api.depends('attending_employee_ids','driver_id')
   def _compute_attending_employee_count(self):
@@ -66,6 +68,14 @@ class FleetBusinessTrip(models.Model):
     for trip in self:
       address = trip.company_id.partner_id.address_get(['default'])
       trip.pick_address_id = address['default'] if address else False
+
+  api.onchange('approval_admin')
+  def onchange_on_admin_approved_change_curr_deciding_to_fleet(self):
+    for trip in self:
+      if trip.approval_admin == 'approved':
+        trip.approval_fleet = 'deciding'
+        trip.curr_deciding_overseer_id = trip.overseer_fleet_id
+        trip.curr_deciding_overseer_role = 'Fleet Captain'
       
   @api.onchange('driver_id')
   def onchange_attending_employee_ids_exclude_driver(self):

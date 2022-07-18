@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="8NVEbFYH0CTecISd1Mc0" name="Page-1">
-        <mxGraphModel dx="1010" dy="1714" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="1">
+        <mxGraphModel dx="1222" dy="1714" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="1">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -702,9 +702,9 @@
                     <mxGeometry y="98" width="380" height="52" as="geometry"/>
                 </mxCell>
                 <mxCell id="380" value="Chắc sẽ phải tạo hệ thống notification cho res_user về những gì họ cần duyệt" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="1095" y="190" width="250" height="70" as="geometry"/>
+                    <mxGeometry x="1132" y="205" width="250" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="381" style="edgeStyle=none;html=1;endArrow=none;endFill=0;endSize=12;dashed=1;" parent="1" source="380" target="137" edge="1">
+                <mxCell id="381" style="edgeStyle=none;html=1;endArrow=none;endFill=0;endSize=12;dashed=1;" parent="1" source="380" target="140" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="1030" y="3.5477707006368746" as="targetPoint"/>
                         <mxPoint x="1152.5" y="90" as="sourcePoint"/>
@@ -724,13 +724,22 @@
                 <mxCell id="389" value="Các nhân viên tham dự sẽ cùng chung phòng ban hoặc có thể khác phòng?" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" parent="1" vertex="1">
                     <mxGeometry x="1180" y="300" width="250" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="398" style="edgeStyle=none;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="399" target="140">
+                <mxCell id="398" style="edgeStyle=none;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=none;endFill=0;dashed=1;" parent="1" source="399" target="140" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="710" y="280.00488372093037" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="399" value="Hệ thống gửi mail yêu cầu duyệt sẽ tạm thời là automated, có thể mở rộng edit sau" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" vertex="1" parent="1">
+                <mxCell id="399" value="Hệ thống gửi mail yêu cầu duyệt sẽ tạm thời là automated, có thể mở rộng edit sau" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" parent="1" vertex="1">
                     <mxGeometry x="870" y="332.47" width="250" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="400" value="Có nên giới hạn các quyền sửa của group_manager?" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1392.5" y="160" width="250" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="401" style="edgeStyle=none;html=1;endArrow=none;endFill=0;endSize=12;dashed=1;" edge="1" parent="1" source="400" target="140">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1030" y="107.34042553191489" as="targetPoint"/>
+                        <mxPoint x="1175.166666666667" y="200" as="sourcePoint"/>
+                    </mxGeometry>
                 </mxCell>
             </root>
         </mxGraphModel>

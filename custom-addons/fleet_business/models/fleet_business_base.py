@@ -62,7 +62,7 @@ class FleetBusinessBase(models.AbstractModel):
   #$ 4 available options ['manager','admin','creator',None]
   curr_logged_overseer = fields.Char('Current Logged In Overseer', compute='_compute_curr_logged_overseer',help='To track if any overseer is in view')
   curr_deciding_overseer_id = fields.Many2one('hr.employee',string='Current Deciding Overseer',help='Current Overseer That Need To Approve',readonly=True)
-  curr_deciding_overseer_role = fields.Char(string='Current Deciding Overseer',help='Current Overseer Role That Need To Approve',readonly=True)
+  curr_deciding_overseer_role = fields.Char(string="Current Deciding Overseer's Role",help='Current Overseer Role That Need To Approve',readonly=True)
   #$ all employees that need to approve this business trip
   overseer_manager_id = fields.Many2one('hr.employee',string='Creator\'s Manager', default=lambda self: self.env.user.employee_id.parent_id)
   overseer_manager_work_phone = fields.Char(related='overseer_manager_id.work_phone',string='Manager\'s Work Phone')
@@ -92,14 +92,16 @@ class FleetBusinessBase(models.AbstractModel):
   @api.depends()
   def _compute_curr_logged_overseer(self):
     for trip in self:
+      curr_logged_overseer_list = []
       if self.env.user == trip.overseer_manager_id.user_id:
-        trip.curr_logged_overseer = "manager"
-      elif self.env.user == trip.overseer_admin_id.user_id:
-        trip.curr_logged_overseer = "admin"
-      elif self.env.user == trip.overseer_creator_id.user_id:
-        trip.curr_logged_overseer = "creator"
-      else:
-        trip.curr_logged_overseer = None
+        curr_logged_overseer_list += ["manager"]
+      if self.env.user == trip.overseer_admin_id.user_id:
+        curr_logged_overseer_list += ["admin"]
+      if self.env.user == trip.overseer_creator_id.user_id:
+        curr_logged_overseer_list += ["creator"]
+      if curr_logged_overseer_list == []:
+        curr_logged_overseer_list = None
+      trip.curr_logged_overseer = curr_logged_overseer_list
   def _compute_record_url(self):
     web_base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
     for rec in self:
@@ -118,19 +120,18 @@ class FleetBusinessBase(models.AbstractModel):
     self.ensure_one()
     self.approval_manager = "approved"
     self.action_send_approval_email(special='request_admin_overseer_assignment')
-
-    #! self.curr_deciding_overseer_id = self.overseer_admin_id.id
-    #! self.approval_admin = 'deciding'
-
   def action_approval_manager_denied(self):
     self.ensure_one()
     self.approval_manager = "denied"
     self.state = 'canceled'
 
   def action_approval_admin_approved(self):
+    self.ensure_one()
     self.approval_admin = "approved"
   def action_approval_admin_denied(self):
+    self.ensure_one()
     self.approval_admin = "denied"
+    self.state = 'canceled'
     
   def action_approval_creator_approved(self):
     self.approval_creator = "approved"
