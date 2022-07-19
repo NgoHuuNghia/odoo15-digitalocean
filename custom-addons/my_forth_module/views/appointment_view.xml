@@ -41,7 +41,7 @@
           -->
           <button name="%(my_forth_module.action_cancel_appointment)d" string="Cancel" type="action" 
             states="in_consultation,draft" context="{'default_appointment_id':active_id,'hide_appointment_id':1}"/>
-          <!-- <button name="action_cancel" string="Cancel" type="object" states="in_consultation"/> -->
+          <button name="action_cancel" string="Cancel Python" type="object" states="in_consultation,draft"/>
 
           <button name="action_draft" string="Rest To Draft" type="object" states="cancel"/>
           

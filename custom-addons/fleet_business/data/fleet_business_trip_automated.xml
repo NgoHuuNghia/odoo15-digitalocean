@@ -30,16 +30,14 @@
     </record>
 
     <record id="fleet_business_update_ready_and_send_mass_mail" model="base.automation">
-      <field name="name">Fleet Business Automation: Update state and send mass mail reminder</field>
+      <field name="name">Fleet Business Automation: Update state ready and send mass mail reminder</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="state">code</field>
       <field name="trigger">on_time</field>
       <field name="code">record.action_update_state_and_send_mass_mail_reminder('ready')</field>
       <field name="active" eval="True"/>
-      <field name="filter_domain">[('state', '=', 'draft')]</field>
+      <field name="filter_domain">[('state', '=', 'approved')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','due_for_approval_time')]"/>
-      <field name="trg_date_range">-5</field>
-      <field name="trg_date_range_type">minutes</field>
     </record>
     <record id="fleet_business_update_departing_and_send_mass_mail" model="base.automation">
       <field name="name">Fleet Business Automation: Update state departing and send mass mail reminder</field>
@@ -50,8 +48,6 @@
       <field name="active" eval="True"/>
       <field name="filter_domain">[('state', '=', 'ready')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','pick_time')]"/>
-      <field name="trg_date_range">-5</field>
-      <field name="trg_date_range_type">minutes</field>
     </record>
     <record id="fleet_business_update_returning_and_send_mass_mail" model="base.automation">
       <field name="name">Fleet Business Automation: Update state returning and send mass mail reminder</field>
@@ -62,8 +58,6 @@
       <field name="active" eval="True"/>
       <field name="filter_domain">[('state', '=', 'departing')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','return_time')]"/>
-      <field name="trg_date_range">2</field>
-      <field name="trg_date_range_type">day</field>
     </record>
     <record id="fleet_business_update_late_and_send_mass_mail" model="base.automation">
       <field name="name">Fleet Business Automation: Update state late and send mass mail reminder</field>
@@ -74,7 +68,6 @@
       <field name="active" eval="True"/>
       <field name="filter_domain">[('state', '=', 'departing')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','return_time')]"/>
-      <field name="trg_date_range">-5</field>
       <field name="trg_date_range_type">minutes</field>
     </record>
 

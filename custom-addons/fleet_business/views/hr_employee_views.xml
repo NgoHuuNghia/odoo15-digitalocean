@@ -6,7 +6,7 @@
       <field name="inherit_id" ref="hr.view_employee_form"/>
       <field name="priority">10</field>
       <field name="arch" type="xml">
-        <xpath expr="//page[@name='public']" position="after" groups="hr.group_hr_user">
+        <xpath expr="//page[@name='public']" position="after" groups="hr.group_hr_user,fleet.fleet_group_user">
           <page string="Business Trip Infomations" >
               <h2>
                 <label for="business_trip_ids" ></label>
@@ -16,6 +16,28 @@
                 <label for="business_rent_ids" ></label>
               </h2>
               <field name="business_rent_ids" /> -->
+          </page>
+          <page name="hr_addons_driver_ratings" string="Driver Ratings" groups="hr.group_hr_user,fleet.fleet_group_user">
+            <group>
+              <field name="ratings" />
+              <field name="driver_rating_line_ids">
+                <tree editable="bottom">
+                  <field name="rated" />
+                  <field name="rater_id" />
+                  <field name="fleet_business_trip_id" />
+                  <field name="note" />
+                </tree>
+
+                <form>
+                  <group>
+                    <field name="rated" />
+                    <field name="rater_id" />
+                    <field name="fleet_business_trip_id" />
+                    <field name="note" />
+                  </group>
+                </form>
+              </field>
+            </group>
           </page>
         </xpath>
       </field>

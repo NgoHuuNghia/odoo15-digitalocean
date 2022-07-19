@@ -21,6 +21,7 @@ class FleetBusinessTrip(models.Model):
   attending_employee_ids = fields.Many2many(comodel_name='hr.employee', relation='fleet_business_trip_employees_rel', 
     column1='business_trip_id', column2='employee_id', string='Attending Employees', required=True)
   attending_employee_count = fields.Integer(string="Attendees Count", compute="_compute_attending_employee_count", store=True)
+  # attendee_logged = fields.Boolean(string="Fleet Captain In View",compute='_compute_logged_overseer', default=False)
   pick_address_id = fields.Many2one('res.partner','Pick Up Company',compute='_compute_address_id', store=True, readonly=False,
     #! domain="[('is_company', '=', True),('company_id','!=',False)]" for just company in the system, but need work
     domain="[('is_company', '=', True)]"

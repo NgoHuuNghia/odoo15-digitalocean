@@ -49,17 +49,17 @@
               <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
             </button>
             <!--! might want to create some logic to prevent constant re-approval -->
-            <!-- <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
+            <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
               'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')], 
-            }"/> -->
-            <button name="action_request_reapproval" string="Test Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight"/>
+            }"/>
+            <!-- <button name="action_request_reapproval" string="Test Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight"/> -->
             <!--! <button name="action_send_email" string="Send Test Email" type="object" icon="fa-envelope"/>
             <button name="action_send_mass_email" string="Send Test Mass Email" type="object" icon="fa-envelope"/> -->
-
             <!--! <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"
               attrs="{'invisible':['|', ('state', 'not in', ['departing','returning','late']),('overseer_admin_logged', '=', False)]}"/> -->
-            <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"
-              attrs="{'invisible':['|', ('state', 'not in', ['approved']),('overseer_admin_logged', '=', False)]}"/>
+            
+            <button name="action_update_state_departing" string="Test Trip Departing" type="object" icon="fa-car"/>
+            <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"/>
 
             <!--? approval buttons -->
             <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
@@ -277,7 +277,7 @@
                     <field name="approval_manager" />
                   </group>
                   <group string="Administrator">
-                    <field name="overseer_admin_id" />
+                    <field name="overseer_admin_id" attrs="{'readonly':[('approval_manager', '!=', 'approved')]}"/>
                     <field name="overseer_admin_work_phone" />
                     <field name="overseer_admin_email" />
                     <field name="approval_admin" />

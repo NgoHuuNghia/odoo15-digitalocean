@@ -175,15 +175,17 @@ class FleetBusinessBase(models.AbstractModel):
     }
     self.env[f'{self._name}.journal.line'].create(first_journal_val_list)
 
-  def action_update_state_and_send_mass_mail_reminder(self,state='incident'):
-    #! testing print
-    print('---on_time success',self.name)
-    print('---on_time state',state)
+  def action_update_state_and_send_mass_mail_reminder(self,state):
     self.state = state
     self.action_send_mass_email()
 
+  #! rating testing
+  def action_update_state_departing(self):
+    self.state = 'departing'
   def action_update_state_returned(self):
     self.state = 'returned'
+
+  
 
   #? automated action to send mail depends on [curr_deciding_overseer_id] field not [None]
   def action_send_email(self, special=None):
