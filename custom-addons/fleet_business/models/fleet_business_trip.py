@@ -122,12 +122,21 @@ class FleetBusinessTrip(models.Model):
       self.curr_deciding_overseer_id = None
       self.curr_deciding_overseer_role = None
       self.state = 'approved'
+      self.action_send_mass_email()
     else: raise exceptions.ValidationError('A approval steps was bugged, please contact the administrator about this bug')
 
   def action_request_reapproval(self):
     super(FleetBusinessTrip, self).action_request_reapproval()
     self.approval_fleet = None
     self.action_send_email()
+
+  def action_send_mass_email(self):
+    super(FleetBusinessTrip, self).action_send_mass_email()
+    approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_mass_attendees')
+    if self.driver_id:
+      approval_email_template.with_context({
+        'attendee': self.driver_id,
+      }).send_mail(self.id, force_send=True, raise_exception=False)
 
   def action_view_fleet(self):
     return {

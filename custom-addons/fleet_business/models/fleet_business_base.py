@@ -50,7 +50,7 @@ class FleetBusinessBase(models.AbstractModel):
   name = fields.Char()
   pick_time = fields.Datetime('Pick Up Time', default=fields.Datetime.now(),required=True)
   return_time = fields.Datetime('Return By Time', required=True)
-  due_for_approval_time = fields.Datetime('Due For Approval By', default=fields.Datetime.now() - relativedelta.relativedelta(days=DUE_TIME_SETTING), readonly=True)
+  due_for_approval_time = fields.Datetime('Due For Approval By', compute='_compute_due_for_approval_time', readonly=True, store=True)
   #$ these 2 Datetime fields is still experimental
   arrive_time = fields.Datetime('Estimated Arrive Time', readonly=True)
   back_time = fields.Datetime('Estimated Back Time', readonly=True)
@@ -112,6 +112,10 @@ class FleetBusinessBase(models.AbstractModel):
     else:
       self.edit_hide_css_user = '<style>.o_form_button_edit {display: none !important;}</style>'
 
+  @api.depends('pick_time')
+  def _compute_due_for_approval_time(self):
+    self.due_for_approval_time = self.pick_time - relativedelta.relativedelta(days=DUE_TIME_SETTING)
+
   #! see if it necessary to reboot the approval system when archive and unarchive 
   # @api.onchange('active')
   # def onchange_archive_curr_deciding_overseer_id(self):
@@ -171,11 +175,18 @@ class FleetBusinessBase(models.AbstractModel):
     }
     self.env[f'{self._name}.journal.line'].create(first_journal_val_list)
 
+  def action_update_state_and_send_mass_mail_reminder(self,state='incident'):
+    #! testing print
+    print('---on_time success',self.name)
+    print('---on_time state',state)
+    self.state = state
+    self.action_send_mass_email()
+
+  def action_update_state_returned(self):
+    self.state = 'returned'
+
   #? automated action to send mail depends on [curr_deciding_overseer_id] field not [None]
   def action_send_email(self, special=None):
-    print('---curr_deciding_overseer_id',self.curr_deciding_overseer_id.name)
-    print('---curr_deciding_overseer_role',self.curr_deciding_overseer_role)
-
     curr_admin_manager = None
     if self.state == 'canceled':
       approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_canceled')
@@ -195,6 +206,14 @@ class FleetBusinessBase(models.AbstractModel):
     if self.state == 'canceled':
       self.curr_deciding_overseer_id = None
       self.curr_deciding_overseer_role = None
+
+  #! gotta be a better way of sending mass mail
+  def action_send_mass_email(self):
+    approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_mass_attendees')
+    for attendee in self.attending_employee_ids:
+      approval_email_template.with_context({
+        'attendee': attendee,
+      }).send_mail(self.id, force_send=True, raise_exception=False)
   
   def action_request_reapproval(self):
     self.curr_deciding_overseer_id = self.overseer_manager_id.id

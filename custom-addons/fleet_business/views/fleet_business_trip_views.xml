@@ -51,9 +51,15 @@
             <!--! might want to create some logic to prevent constant re-approval -->
             <!-- <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
               'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')], 
-            }"/> -->action_approval_admin_approved
-            <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight"/>
-            <!--! <button name="action_send_approval_email" string="Send Test Email" type="object" icon="fa-envelope"/> for testing -->
+            }"/> -->
+            <button name="action_request_reapproval" string="Test Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight"/>
+            <!--! <button name="action_send_email" string="Send Test Email" type="object" icon="fa-envelope"/>
+            <button name="action_send_mass_email" string="Send Test Mass Email" type="object" icon="fa-envelope"/> -->
+
+            <!--! <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"
+              attrs="{'invisible':['|', ('state', 'not in', ['departing','returning','late']),('overseer_admin_logged', '=', False)]}"/> -->
+            <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"
+              attrs="{'invisible':['|', ('state', 'not in', ['approved']),('overseer_admin_logged', '=', False)]}"/>
 
             <!--? approval buttons -->
             <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
@@ -228,6 +234,7 @@
               <group string='Time'>
                 <field name='pick_time' />
                 <field name='return_time' />
+                <field name="due_for_approval_time" />
               </group>
               <group string='Estamated Time'>
                 <field name='arrive_time' />

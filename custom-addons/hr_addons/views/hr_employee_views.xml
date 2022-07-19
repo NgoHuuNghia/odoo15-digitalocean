@@ -9,6 +9,30 @@
         <xpath expr="//field[@name='department_id']" position="after">
           <field name="department_position" />
         </xpath>
+        <xpath expr="//page[@name='personal_information']" position="after">
+          <page name="hr_addons_ratings" string="User Ratings" groups="hr.group_hr_user">
+            <group>
+              <field name="ratings" />
+              <field name="driver_rating_line_ids">
+                <tree editable="bottom">
+                  <field name="rated" />
+                  <field name="rater_id" />
+                  <!-- <field name="fleet_business_trip_id" /> -->
+                  <field name="note" />
+                </tree>
+
+                <!-- <form>
+                  <group>
+                    <field name="rated" />
+                    <field name="rater_id" />
+                    <field name="fleet_business_trip_id" />
+                    <field name="note" />
+                  </group>
+                </form> -->
+              </field>
+            </group>
+          </page>
+        </xpath>
       </field>
     </record>
   </data>
