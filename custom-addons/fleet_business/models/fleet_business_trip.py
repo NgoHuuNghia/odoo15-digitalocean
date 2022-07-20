@@ -21,7 +21,6 @@ class FleetBusinessTrip(models.Model):
   attending_employee_ids = fields.Many2many(comodel_name='hr.employee', relation='fleet_business_trip_employees_rel', 
     column1='business_trip_id', column2='employee_id', string='Attending Employees', required=True)
   attending_employee_count = fields.Integer(string="Attendees Count", compute="_compute_attending_employee_count", store=True)
-  # attendee_logged = fields.Boolean(string="Fleet Captain In View",compute='_compute_logged_overseer', default=False)
   pick_address_id = fields.Many2one('res.partner','Pick Up Company',compute='_compute_address_id', store=True, readonly=False,
     #! domain="[('is_company', '=', True),('company_id','!=',False)]" for just company in the system, but need work
     domain="[('is_company', '=', True)]"
@@ -38,11 +37,14 @@ class FleetBusinessTrip(models.Model):
     domain="['&','&','&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Fleet'),('department_position', 'in', ['Manager','Vice Manager']),('job_title', '=', 'Fleet Captain')]")
   overseer_fleet_work_phone = fields.Char(related='overseer_fleet_id.work_phone',string='Fleet\'s Work Phone')
   overseer_fleet_email = fields.Char(related='overseer_fleet_id.work_email',string='Fleet\'s Work Email')
-  overseer_fleet_logged = fields.Boolean(string="Fleet Captain In View",compute='_compute_logged_overseer', default=False)
   approval_fleet = fields.Selection(APPROVAL_SELECTIONS, string='Fleet\'s Decision', default=None, readonly=True)
   tag_ids = fields.Many2many(comodel_name='fleet.business.tag', relation="fleet_business_trip_tag_rel", column1="fleet_business_trip_id", column2="tag_id", string='Tags')
   journal_line_ids = fields.One2many('fleet.business.trip.journal.line','fleet_business_trip_id',string='Journal Line')
   journal_line_count = fields.Integer('Journal Count', compute='_compute_journal_line_count')
+  #$ technical field
+  overseer_fleet_logged = fields.Boolean(string="Fleet Captain In View",compute='_compute_logged_overseer', default=False)
+  attendee_logged = fields.Boolean(string="Attendee Is In View",compute='_compute_attendee_logged', default=False)
+  attendee_rated = fields.Boolean(string="Attendee Has Rated Driver",compute='_compute_attendee_rated', default=False)
 
   @api.depends()
   def _compute_logged_overseer(self):
@@ -51,6 +53,25 @@ class FleetBusinessTrip(models.Model):
       if self.env.user == trip.overseer_fleet_id.user_id:
         trip.overseer_fleet_logged = True
       else: trip.overseer_fleet_logged = False
+  def _compute_attendee_logged(self):
+    for trip in self:
+      if trip.env.user.employee_id in trip.attending_employee_ids:
+        trip.attendee_logged = True
+      else: trip.attendee_logged = False
+
+  @api.depends('attendee_logged')
+  def _compute_attendee_rated(self):
+    for trip in self:
+      if trip.attendee_logged == True:
+        rating_record = self.env['hr.employee.fleet.driver.rating.line'].search([
+          ('fleet_business_trip_id','=',trip.id),
+          ('driver_id','=',trip.driver_id.id),
+          ('rater_id','=',self.env.user.employee_id.id),
+        ],limit=1)
+        if rating_record:
+          trip.attendee_rated = True
+        else: trip.attendee_rated = False
+      else: trip.attendee_rated = False
 
   @api.depends('attending_employee_ids','driver_id')
   def _compute_attending_employee_count(self):
@@ -138,6 +159,11 @@ class FleetBusinessTrip(models.Model):
       approval_email_template.with_context({
         'attendee': self.driver_id,
       }).send_mail(self.id, force_send=True, raise_exception=False)
+
+  def action_rate_driver(self):
+    action = self.env.ref("fleet_business.fleet_business_trip_rate_driver_action").read()[0]
+    action['context'] = {'driver_id': self.driver_id.id}
+    return action
 
   def action_view_fleet(self):
     return {

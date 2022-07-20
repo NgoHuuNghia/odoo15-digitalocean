@@ -19,16 +19,27 @@ class DriverRatingLine(models.Model):
   _description = 'Fleet Driver Ratings'
   _order = 'id'
 
+  @api.model
+  def default_get(self, fields_list):
+    res = super(DriverRatingLine, self).default_get(fields_list)
+    print('---context')
+    print(self.env.context)
+    if self.env.context.get("active_id") and self.env.context.get('active_model') == 'fleet.business.trip':
+      res['fleet_business_trip_id'] = self.env.context.get("active_id")
+      res['driver_id'] = self.env.context.get("driver_id")
+      res['rater_id'] = self.env.user.employee_id.id
+    return res
+
+  fleet_business_trip_id = fields.Many2one('fleet.business.trip',readonly=True)
   driver_id = fields.Many2one('hr.employee',string="Driver Id",readonly=True)
-  fleet_business_trip_id = fields.Many2one('fleet.business.trip')
-  rater_id = fields.Many2one('hr.employee')
-  rated = fields.Selection(
-    [
+  rater_id = fields.Many2one('hr.employee',readonly=True)
+  rated = fields.Selection([
       ('1', 'Very Low'),
       ('2', 'Low'),
       ('3', 'Normal'),
       ('4', 'High'),
       ('5', 'Very High'),
-    ], string="Rating given", default="3", required=True
-  )
+    ], string="Rating given", required=True)
   note = fields.Text('Optional Rating Note')
+
+  #! make constrains

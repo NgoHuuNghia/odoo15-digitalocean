@@ -32,34 +32,39 @@
           <header>
             <field name="company_id" invisible='1'/>
             <field name="active" invisible="1" />
-            <field name="overseer_manager_logged" string='test logged manager'/>
-            <field name="overseer_admin_logged" string='test logged admin'/>
-            <field name="overseer_creator_logged" string='test logged creator'/>
-            <field name="overseer_fleet_logged" string='test logged fleet'/>
+            <field name="overseer_manager_logged" string='test logged manager' invisible="1"/>
+            <field name="overseer_admin_logged" string='test logged admin' invisible="1"/>
+            <field name="overseer_creator_logged" string='test logged creator' invisible="1"/>
+            <field name="overseer_fleet_logged" string='test logged fleet' invisible="1"/>
+            <field name="attendee_logged" string='test logged attendee' invisible="1"/>
+            <field name="attendee_rated" string='test attendee rated' invisible="1"/>
             <!--? custom conditional css -->
             <field name="edit_hide_css_user"/>
             <!--! testing -->
-            <field name="curr_deciding_overseer_id" string='name'/>
-            <field name="curr_deciding_overseer_role" string='role'/>
+            <!-- <field name="curr_deciding_overseer_id" string='name'/>
+            <field name="curr_deciding_overseer_role" string='role'/> -->
 
-            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" string="Archive Trip" attrs="{
-              'invisible': ['|',('overseer_creator_logged', '=', False), ('state', 'not in', ['draft','canceled'])], 
-              'readonly':  ['|',('overseer_creator_logged', '=', False), ('state', 'not in', ['draft','canceled'])],
-            }">
-              <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
-            </button>
             <!--! might want to create some logic to prevent constant re-approval -->
-            <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
-              'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')], 
-            }"/>
+            
             <!-- <button name="action_request_reapproval" string="Test Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight"/> -->
             <!--! <button name="action_send_email" string="Send Test Email" type="object" icon="fa-envelope"/>
             <button name="action_send_mass_email" string="Send Test Mass Email" type="object" icon="fa-envelope"/> -->
             <!--! <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"
               attrs="{'invisible':['|', ('state', 'not in', ['departing','returning','late']),('overseer_admin_logged', '=', False)]}"/> -->
+              
+            <!--! <button name="action_update_state_departing" string="Test Trip Departing" type="object" icon="fa-car"/>
+            <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"/> -->
             
-            <button name="action_update_state_departing" string="Test Trip Departing" type="object" icon="fa-car"/>
-            <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"/>
+            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" string="Archive Trip" attrs="{
+                'invisible': ['|',('overseer_creator_logged', '=', False), ('state', 'not in', ['draft','canceled'])], 
+                'readonly':  ['|',('overseer_creator_logged', '=', False), ('state', 'not in', ['draft','canceled'])],
+              }">
+              <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
+            </button>
+            <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
+              'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')],}"/>
+            <button name="action_rate_driver" string="Rate Driver" type="object" icon="fa-star" class="oe_highlight" attrs="{
+              'invisible': ['|','|',('attendee_logged', '=', False),('attendee_rated', '!=', False),('state', '!=', 'returned')],}"/>
 
             <!--? approval buttons -->
             <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
