@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import models, fields, api
+from odoo import models, fields, api, exceptions
 
 
 class Employee(models.Model):
@@ -22,8 +22,6 @@ class DriverRatingLine(models.Model):
   @api.model
   def default_get(self, fields_list):
     res = super(DriverRatingLine, self).default_get(fields_list)
-    print('---context')
-    print(self.env.context)
     if self.env.context.get("active_id") and self.env.context.get('active_model') == 'fleet.business.trip':
       res['fleet_business_trip_id'] = self.env.context.get("active_id")
       res['driver_id'] = self.env.context.get("driver_id")
@@ -42,4 +40,12 @@ class DriverRatingLine(models.Model):
     ], string="Rating given", required=True)
   note = fields.Text('Optional Rating Note')
 
-  #! make constrains
+  #! must be a better way to constrains
+  # @api.constrains('rater_id')
+  # def _check_rater_id_unquine(self):
+  #   self.ensure_one()
+  #   driver_rating_lines_of_same_business_trip_recordset = self.env['hr.employee.fleet.driver.rating.line'].search([
+  #     ('fleet_business_trip_id','=', self.fleet_business_trip_id.id),
+  #     ('driver_id','=', self.driver_id.id),
+  #   ])
+  #!   if self.rater_id in driver_rating_lines_of_same_business_trip_recordset
