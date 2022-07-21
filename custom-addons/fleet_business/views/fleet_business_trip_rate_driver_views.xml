@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-  <record id="fleet_business_trip_rate_driver_action" model="ir.actions.act_window">
-    <field name="name">Rate Driver</field>
-    <field name="type">ir.actions.act_window</field>
-    <field name="res_model">hr.employee.fleet.driver.rating.line</field>
-    <field name="view_mode">form</field>
-    <field name="target">new</field>
-  </record>
-
   <record id="fleet_business_trip_rate_driver_view_form" model="ir.ui.view">
     <field name="name">hr.employee.fleet.driver.rating.line.form</field>
     <field name="model">hr.employee.fleet.driver.rating.line</field>
@@ -16,7 +8,7 @@
       <form string="">
         <group>
           <h2>
-            <field name="rated" widget="priority" class="mr-3" />
+            <field name="rated" widget="priority" />
           </h2>
         </group>
         <group>

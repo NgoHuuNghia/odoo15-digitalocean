@@ -3,7 +3,7 @@
 from odoo import models, fields, api, exceptions, _
 
 APPROVAL_SELECTIONS = [('deciding','Deciding'),('denied','Denied'),('approved','Approved')]
-
+RATING_SELECTIONS = [('0','None'),('1','VeryLow'),('2','Low'),('3','Normal'),('4','High'),('5','Very High'),]
 class FleetBusinessTrip(models.Model):
   _name = 'fleet.business.trip'
   _description = "Business Trip"
@@ -32,6 +32,7 @@ class FleetBusinessTrip(models.Model):
   seats = fields.Integer(related='vehicle_id.seats',string='Seats',store=True)
   self_driving_employee_id = fields.Many2one('hr.employee',string='Attendee Driver',domain="[('id', 'in', attending_employee_ids)]")
   driver_id = fields.Many2one('hr.employee',string="Company's Driver")
+  driver_ratings = fields.Selection(RATING_SELECTIONS,'Driver\'s Ratings',compute="_compute_driver_ratings",default='0',readonly=True)
   overseer_fleet_id = fields.Many2one('hr.employee',string='Fleet Captain', readonly=True,
     default=lambda self: self.env['hr.employee'].search([('department_id.name','=','Fleet'),('department_position','=','Manager')],limit=1,order='id').ensure_one(),
     domain="['&','&','&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Fleet'),('department_position', 'in', ['Manager','Vice Manager']),('job_title', '=', 'Fleet Captain')]")
@@ -81,6 +82,7 @@ class FleetBusinessTrip(models.Model):
       else:
         trip.attending_employee_count = len(trip.attending_employee_ids)
 
+  #! seem to bug for fleet.user
   @api.depends('journal_line_ids')
   def _compute_journal_line_count(self):
     for trip in self:
@@ -91,6 +93,15 @@ class FleetBusinessTrip(models.Model):
     for trip in self:
       address = trip.company_id.partner_id.address_get(['default'])
       trip.pick_address_id = address['default'] if address else False
+
+  #! still wondering if self drivers should be rated and shown, could be important
+  @api.depends('self_driving_employee_id','driver_id')
+  def _compute_driver_ratings(self):
+    driver = self.driver_id if self.driver_id else self.self_driving_employee_id
+    if not driver or self.driver_ratings == '0':
+      self.driver_ratings = '0'
+    else:
+      self.driver_ratings = driver.driver_ratings
 
   @api.onchange('driver_id')
   def onchange_attending_employee_ids_exclude_driver(self):
@@ -161,14 +172,22 @@ class FleetBusinessTrip(models.Model):
       }).send_mail(self.id, force_send=True, raise_exception=False)
 
   def action_rate_driver(self):
-    action = self.env.ref("fleet_business.fleet_business_trip_rate_driver_action").read()[0]
-    action['context'] = {'driver_id': self.driver_id.id}
-    return action
+    return {
+      'name': _('Rate Driver'),
+      'res_model': 'hr.employee.fleet.driver.rating.line',
+      'view_mode': 'form',
+      'target': 'new',
+      'context': {
+        'driver_id': self.driver_id.id,
+        'rater_id': self.env.user.employee_id.id,
+      },
+      'type': 'ir.actions.act_window',
+    }
 
   def action_view_fleet(self):
     return {
       'name': _('Fleet'),
-      'res_model': 'hr.employee',
+      'res_model': 'hr.employee.public',
       'view_mode': 'form',
       'res_id': self.overseer_fleet_id.id,
       'target': 'current',
@@ -182,7 +201,7 @@ class FleetBusinessTrip(models.Model):
 
     return {
         'name': _('Employees'),
-        'res_model': 'hr.employee',
+        'res_model': 'hr.employee.public',
         'view_mode': 'kanban,tree,activity,form',
         'domain': [('id','in',attending_employee_ids_list)],
         'target': 'current',

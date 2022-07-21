@@ -32,6 +32,7 @@ class MyPlayground(models.Model):
   # - self.env['hospital.patient'].browse(24).unlink()                                                                  # delete a record or recordset
   # - self.env['hospital.patient'].browse(24).get_metadata()[0].get('xmlid')                                            # get the metadata of a record or recordset as a list
   # - self.env['hospital.patient'].search([('gender','=','male')], limit=5, order='id')                                 # return a recordset with provided conditions
+  # - self.env['hospital.patient'].search([]).mapped('name')                                                            # with mapped will return a list of value if normal field or recordset if many relation field
   # - self.env['hospital.patient'].search_count(['|',('gender','=','male'),('gender','=','female')])                    # just like search but return counts instead
   # - self.env['hospital.patient'].browse(24).get_metadata()[0].get('id')                                               # with browse we can get the metadata of any record useful for records created through data files, remember to specify 1st index
   # - self.env['hospital.patient'].fields_get(['name','gender'],['type','float'])                                       # with this method we can get the fields and it properties with 2nd parameter to specify the conditions\n\n"""
