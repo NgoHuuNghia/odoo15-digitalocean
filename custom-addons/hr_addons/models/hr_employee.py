@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from odoo import models, fields, api
-
-
 class Employee(models.Model):
   _inherit = 'hr.employee'
 
@@ -20,3 +18,9 @@ class Employee(models.Model):
         employee.department_position = 'Vice Manager'
       else:
         employee.department_position = 'Member'
+
+class EmployeePublic(models.Model):
+  _inherit = 'hr.employee.public'
+
+  department_position = fields.Char('Department Position', related='employee_id.department_position')
+  ratings = fields.Float('Employee\'s Ratings', related='employee_id.ratings')

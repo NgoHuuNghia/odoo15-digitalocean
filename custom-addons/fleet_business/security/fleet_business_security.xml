@@ -11,7 +11,7 @@
       <field name="perm_write" eval="False"/>
       <field name="perm_create" eval="True"/>
       <field name="perm_unlink" eval="False"/>
-      <field name="domain_force">['|','|','|','|','|',
+      <field name="domain_force">[
         ('attending_employee_ids','in',[user.employee_id.id]),
         ('overseer_creator_id','=',user.employee_id.id),
         ('overseer_manager_id','=',user.employee_id.id),

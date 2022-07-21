@@ -52,7 +52,7 @@ class DriverRatingLine(models.Model):
   rated = fields.Selection(RATING_SELECTIONS, string="Rating given", required=True)
   note = fields.Text('Optional Rating Note')
 
-class Employee(models.Model):
+class EmployeePublic(models.Model):
   _inherit = 'hr.employee.public'
 
   driver_ratings = fields.Selection(RATING_SELECTIONS,'Driver\'s Ratings', related='employee_id.driver_ratings',readonly=True)

@@ -39,9 +39,11 @@ class FleetBusinessBase(models.AbstractModel):
   @api.model
   def default_get(self, vals_list):
     res = super(FleetBusinessBase, self).default_get(vals_list)
+    if not res.get('overseer_creator_id'):
+      raise exceptions.UserError('You are not an employee in this company, please contact admins for supports')
     if not res.get('overseer_manager_id'):
       #! searching for the 1st hit of Manager of the Management Department, have to be better way of doing this
-      optional_manager = self.env['hr.employee'].search(['&','&','|',('company_id', '=', False),('company_id', '=', res.get('company_id')),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1).ensure_one()
+      optional_manager = self.env['hr.employee'].search(['&','&','|',('company_id', '=', False),('company_id', '=', res.get('company_id')),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1)
       res['overseer_manager_id'] = optional_manager.id
     res['curr_deciding_overseer_id'] = res.get('overseer_manager_id')
     res['curr_deciding_overseer_role'] = 'Manager'
@@ -69,7 +71,7 @@ class FleetBusinessBase(models.AbstractModel):
   overseer_manager_work_phone = fields.Char(related='overseer_manager_id.work_phone',string='Manager\'s Work Phone')
   overseer_manager_email = fields.Char(related='overseer_manager_id.work_email',string='Manager\'s Work Email')
   overseer_manager_logged = fields.Boolean(string="Manager In View",compute='_compute_logged_overseer', default=False)
-  approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, readonly=True, store=True)
+  approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, store=True)
   overseer_admin_id = fields.Many2one('hr.employee',string='Admin Assigned',
     domain="['&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Management')]")
   overseer_admin_work_phone = fields.Char(related='overseer_admin_id.work_phone',string='Admin\'s Work Phone')
@@ -193,7 +195,7 @@ class FleetBusinessBase(models.AbstractModel):
     if self.state == 'canceled':
       approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_canceled')
     elif special == 'request_admin_overseer_assignment':
-      curr_admin_manager = self.env['hr.employee'].search(['&','&','|',('company_id', '=', False),('company_id', '=', self.company_id.id),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1).ensure_one()
+      curr_admin_manager = self.env['hr.employee'].search(['&','&','|',('company_id', '=', False),('company_id', '=', self.company_id.id),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1)
       approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_assignment')
     elif special == 'request_admin_overseer_cancellation':
       approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_cancellation')
