@@ -229,9 +229,9 @@
               <group string="Driver">
                 <field name="driver_id" attrs="{'invisible':[('self_driving_employee_id', '!=', False)]}"/>
                 <field name="self_driving_employee_id" attrs="{'invisible':[('driver_id', '!=', False)]}"/>
-                <field name="driver_ratings" widget='priority' attrs="{'invisible':[('driver_ratings', '=', '0')]}"/>
-                <div class="alert alert-info" role="alert" attrs="{
-                  'invisible': ['&amp;','|',('driver_ratings', '!=', '0'),('self_driving_employee_id', '!=', False),('driver_id', '!=', False)]}">
+                <field name="driver_ratings" widget='priority' attrs="{'invisible':[('driver_ratings', 'in', ['0',False])]}"/>
+                <div class="alert alert-danger" role="alert" attrs="{
+                  'invisible': ['|','&amp;',('self_driving_employee_id', '=', False),('driver_id', '=', False),('driver_ratings', 'not in', ['0',False])]}">
                   <strong>This driver has never been rated</strong>
                 </div>
               </group>

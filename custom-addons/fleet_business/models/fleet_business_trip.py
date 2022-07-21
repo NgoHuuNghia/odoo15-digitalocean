@@ -32,7 +32,7 @@ class FleetBusinessTrip(models.Model):
   seats = fields.Integer(related='vehicle_id.seats',string='Seats',store=True)
   self_driving_employee_id = fields.Many2one('hr.employee',string='Attendee Driver',domain="[('id', 'in', attending_employee_ids)]")
   driver_id = fields.Many2one('hr.employee',string="Company's Driver")
-  driver_ratings = fields.Selection(RATING_SELECTIONS,'Driver\'s Ratings',compute="_compute_driver_ratings",default='0',readonly=True)
+  driver_ratings = fields.Selection(RATING_SELECTIONS,'Driver\'s Ratings',compute="_compute_driver_ratings",default=None,readonly=True)
   overseer_fleet_id = fields.Many2one('hr.employee',string='Fleet Captain', readonly=True,
     default=lambda self: self.env['hr.employee'].search([('department_id.name','=','Fleet'),('department_position','=','Manager')],limit=1,order='id').ensure_one(),
     domain="['&','&','&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Fleet'),('department_position', 'in', ['Manager','Vice Manager']),('job_title', '=', 'Fleet Captain')]")
@@ -98,8 +98,8 @@ class FleetBusinessTrip(models.Model):
   @api.depends('self_driving_employee_id','driver_id')
   def _compute_driver_ratings(self):
     driver = self.driver_id if self.driver_id else self.self_driving_employee_id
-    if not driver or self.driver_ratings == '0':
-      self.driver_ratings = '0'
+    if not driver:
+      self.driver_ratings = None
     else:
       self.driver_ratings = driver.driver_ratings
 
