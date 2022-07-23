@@ -18,7 +18,7 @@ class FleetBusinessTrip(models.Model):
     return super(FleetBusinessTrip, self).write(vals_list)
 
   name = fields.Char('Sequence Name',readonly=True)
-  attending_employee_ids = fields.Many2many(comodel_name='hr.employee', relation='fleet_business_trip_employees_rel', 
+  attending_employee_ids = fields.Many2many(comodel_name='hr.employee.public', relation='fleet_business_trip_employees_rel', 
     column1='business_trip_id', column2='employee_id', string='Attending Employees', required=True)
   attending_employee_count = fields.Integer(string="Attendees Count", compute="_compute_attending_employee_count", store=True)
   pick_address_id = fields.Many2one('res.partner','Pick Up Company',compute='_compute_address_id', store=True, readonly=False,
@@ -30,11 +30,11 @@ class FleetBusinessTrip(models.Model):
   model_id = fields.Many2one(related='vehicle_id.model_id',string='Model')
   license_plate = fields.Char(related='vehicle_id.license_plate',string='License Plate')
   seats = fields.Integer(related='vehicle_id.seats',string='Seats',store=True)
-  self_driving_employee_id = fields.Many2one('hr.employee',string='Attendee Driver',domain="[('id', 'in', attending_employee_ids)]")
-  driver_id = fields.Many2one('hr.employee',string="Company's Driver")
+  self_driving_employee_id = fields.Many2one('hr.employee.public',string='Attendee Driver',domain="[('id', 'in', attending_employee_ids)]")
+  driver_id = fields.Many2one('hr.employee.public',string="Company's Driver")
   driver_ratings = fields.Selection(RATING_SELECTIONS,'Driver\'s Ratings',compute="_compute_driver_ratings",default=None,readonly=True)
-  overseer_fleet_id = fields.Many2one('hr.employee',string='Fleet Captain', readonly=True,
-    default=lambda self: self.env['hr.employee'].search([('department_id.name','=','Fleet'),('department_position','=','Manager')],limit=1,order='id').ensure_one(),
+  overseer_fleet_id = fields.Many2one('hr.employee.public',string='Fleet Captain', readonly=True,
+    default=lambda self: self.env['hr.employee.public'].search([('department_id.name','=','Fleet'),('department_position','=','Manager')],limit=1,order='id').ensure_one(),
     domain="['&','&','&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Fleet'),('department_position', 'in', ['Manager','Vice Manager']),('job_title', '=', 'Fleet Captain')]")
   overseer_fleet_work_phone = fields.Char(related='overseer_fleet_id.work_phone',string='Fleet\'s Work Phone')
   overseer_fleet_email = fields.Char(related='overseer_fleet_id.work_email',string='Fleet\'s Work Email')
@@ -56,7 +56,7 @@ class FleetBusinessTrip(models.Model):
       else: trip.overseer_fleet_logged = False
   def _compute_attendee_logged(self):
     for trip in self:
-      if trip.env.user.employee_id in trip.attending_employee_ids:
+      if trip.env.user.employee_id.id in trip.attending_employee_ids.ids:
         trip.attendee_logged = True
       else: trip.attendee_logged = False
 

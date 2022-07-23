@@ -10,3 +10,4 @@ class FleetBusinessJournalLine(models.AbstractModel):
   type = fields.Selection(TYPE_SELECTION,required=True)
   note = fields.Text('Journal\'s Note',required=True)
   #? create_date - use the odoo's basefield
+  #! also maybe the public_employee_id for the one who create the journal, if automated then None

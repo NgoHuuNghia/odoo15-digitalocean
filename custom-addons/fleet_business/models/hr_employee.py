@@ -55,4 +55,4 @@ class DriverRatingLine(models.Model):
 class EmployeePublic(models.Model):
   _inherit = 'hr.employee.public'
 
-  driver_ratings = fields.Selection(RATING_SELECTIONS,'Driver\'s Ratings', related='employee_id.driver_ratings',readonly=True)
+  driver_ratings = fields.Selection(related='employee_id.driver_ratings')

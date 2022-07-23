@@ -143,7 +143,7 @@
               <button name="action_view_attendees" type="object" class="oe_stat_button" icon="fa-history">
                 <field name="attending_employee_count" string="Attendees" widget="statinfo"/>
               </button>
-              <button class="oe_stat_button" icon="fa-list">
+              <button class="oe_stat_button" icon="fa-list" groups="fleet.fleet_group_manager">
                 <field name="journal_line_count" string="Journals" widget="statinfo"/>
               </button>
             </div>
@@ -315,8 +315,11 @@
               </page>
 
               <!--! set groups admin only -->
-              <page string="Journal">
-                <field name="journal_line_ids">
+              <page string="Journal" groups='fleet.fleet_group_manager'>
+                <field name="journal_line_ids" attrs="{'readonly':['|',
+                  ('overseer_fleet_logged', '!=', False),
+                  ('overseer_admin_logged', '!=', False),
+                ]}">
                   <tree editable="bottom">
                     <field name="type" />
                     <field name="note" />
