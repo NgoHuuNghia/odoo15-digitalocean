@@ -48,19 +48,12 @@
       <field name="active" eval="True"/>
       <field name="filter_domain">[('state', '=', 'ready')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','pick_time')]"/>
+      <field name="trg_date_range">-1</field>
+      <field name="trg_date_range_type">day</field>
     </record>
-    <!-- <record id="fleet_business_update_departing_to_returning_and_send_mass_mail" model="base.automation">
-      <field name="name">Fleet Business Automation: Update state returning and send mass mail reminder</field>
-      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
-      <field name="state">code</field>
-      <field name="trigger">on_time</field>
-      <field name="code">record.action_update_state_and_send_mass_mail_reminder('returning')</field>
-      <field name="active" eval="True"/>
-      <field name="filter_domain">[('state', '=', 'departing')]</field>
-      <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','return_time')]"/>
-    </record> -->
-    <record id="fleet_business_update_departing_to_late_and_send_mass_mail" model="base.automation">
-      <field name="name">Fleet Business Automation: Update state late and send mass mail reminder</field>
+    <!--! gonna need to use computed dates for returning -->
+    <!-- <record id="fleet_business_update_departing_to_late_and_send__mass_mail_to_overseer" model="base.automation">
+      <field name="name">Fleet Business Automation: Update state late and send mass mail to overseers</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="state">code</field>
       <field name="trigger">on_time</field>
@@ -68,8 +61,7 @@
       <field name="active" eval="True"/>
       <field name="filter_domain">[('state', '=', 'departing')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','return_time')]"/>
-      <field name="trg_date_range_type">minutes</field>
-    </record>
+    </record> -->
 
   </data>
 </odoo>

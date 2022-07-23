@@ -71,7 +71,7 @@ class FleetBusinessBase(models.AbstractModel):
   overseer_manager_work_phone = fields.Char(related='overseer_manager_id.work_phone',string='Manager\'s Work Phone')
   overseer_manager_email = fields.Char(related='overseer_manager_id.work_email',string='Manager\'s Work Email')
   overseer_manager_logged = fields.Boolean(string="Manager In View",compute='_compute_logged_overseer', default=False)
-  approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, store=True)
+  approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, store=True, readonly=True)
   overseer_admin_id = fields.Many2one('hr.employee',string='Admin Assigned',
     domain="['&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Management')]")
   overseer_admin_work_phone = fields.Char(related='overseer_admin_id.work_phone',string='Admin\'s Work Phone')
@@ -131,7 +131,7 @@ class FleetBusinessBase(models.AbstractModel):
   def action_approval_manager_denied(self):
     self.ensure_one()
     self.approval_manager = "denied"
-    self.state = 'canceled'
+    self.state = 'not_approved'
     self.action_send_email()
 
   def action_approval_admin_approved(self):
@@ -141,7 +141,7 @@ class FleetBusinessBase(models.AbstractModel):
   def action_approval_admin_denied(self):
     self.ensure_one()
     self.approval_admin = "denied"
-    self.state = 'canceled'
+    self.state = 'not_approved'
     self.action_send_email()
     
   def action_approval_creator_approved(self):
@@ -151,7 +151,7 @@ class FleetBusinessBase(models.AbstractModel):
   def action_approval_creator_cancel(self):
     self.ensure_one()
     self.approval_creator = "denied"
-    self.state = 'canceled'
+    self.state = 'not_approved'
     self.curr_deciding_overseer_id = None
     self.curr_deciding_overseer_role = None
 
@@ -179,21 +179,44 @@ class FleetBusinessBase(models.AbstractModel):
 
   def action_update_state_and_send_mass_mail_reminder(self,state):
     self.state = state
-    self.action_send_mass_email()
-
-  #! rating testing
-  def action_update_state_departing(self):
-    self.state = 'departing'
+    self.action_send_email_mass(
+      DUE_TIME=DUE_TIME_SETTING if state == 'ready' else None,
+      special='alert_overseers' if state == 'late' else None,
+    )
+    
   def action_update_state_returned(self):
     self.state = 'returned'
-
-  
+    
+  #! rating/state testing
+  # def action_update_state_returning(self):
+  #   self.state = 'returning'
+  # def action_update_state_ready(self):
+  #   self.state = 'ready'
+  # def action_update_state_departing(self):
+  #   self.state = 'departing'
+  # def action_update_state_late(self):
+  #   self.state = 'late'
+  # def action_update_and_mail_ready(self):
+  #   state = 'ready'
+  #   self.state = state
+  #   self.action_send_email_mass(DUE_TIME=DUE_TIME_SETTING if state == 'ready' else None)
+  # def action_update_and_mail_departing(self):
+  #   state = 'departing'
+  #   self.state = state
+  #   self.action_send_email_mass(DUE_TIME=DUE_TIME_SETTING if state == 'ready' else None)
+  # def action_update_and_mail_late(self):
+  #   state = 'late'
+  #   self.state = state
+  #   self.action_send_email_mass(
+  #     DUE_TIME=DUE_TIME_SETTING if state == 'ready' else None,
+  #     special='alert_overseers' if state == 'late' else None,
+  #   )
 
   #? automated action to send mail depends on [curr_deciding_overseer_id] field not [None]
   def action_send_email(self, special=None):
     curr_admin_manager = None
-    if self.state == 'canceled':
-      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_canceled')
+    if self.state in ['canceled','not_approved']:
+      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_cancelation')
     elif special == 'request_admin_overseer_assignment':
       curr_admin_manager = self.env['hr.employee'].search(['&','&','|',('company_id', '=', False),('company_id', '=', self.company_id.id),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1)
       approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_assignment')
@@ -207,16 +230,23 @@ class FleetBusinessBase(models.AbstractModel):
     approval_email_template.with_context({
       'admin_manager': curr_admin_manager,
     }).send_mail(self.id, force_send=True)
-    if self.state == 'canceled':
+    if self.state == ['canceled','not_approved']:
       self.curr_deciding_overseer_id = None
       self.curr_deciding_overseer_role = None
 
   #! gotta be a better way of sending mass mail
-  def action_send_mass_email(self):
-    approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_mass_attendees')
-    for attendee in self.attending_employee_ids:
+  def action_send_email_mass(self, DUE_TIME=None,special=None):
+    if special == 'alert_overseers':
+      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_mass_overseers')
+      receiver_recordset = self.overseer_manager_id | self.overseer_admin_id
+    else:
+      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_mass_attendees')
+      receiver_recordset = self.attending_employee_ids
+      
+    for receiver in receiver_recordset:
       approval_email_template.with_context({
-        'attendee': attendee,
+        'receiver': receiver,
+        'DUE_TIME': DUE_TIME,
       }).send_mail(self.id, force_send=True, raise_exception=False)
   
   def action_request_reapproval(self):

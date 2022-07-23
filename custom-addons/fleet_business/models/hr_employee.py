@@ -47,8 +47,8 @@ class DriverRatingLine(models.Model):
     return res
 
   fleet_business_trip_id = fields.Many2one('fleet.business.trip',readonly=True)
-  driver_id = fields.Many2one('hr.employee',string="Driver Id",readonly=True)
-  rater_id = fields.Many2one('hr.employee',readonly=True)
+  driver_id = fields.Many2one('hr.employee.public',string="Driver Id",readonly=True)
+  rater_id = fields.Many2one('hr.employee.public',readonly=True)
   rated = fields.Selection(RATING_SELECTIONS, string="Rating given", required=True)
   note = fields.Text('Optional Rating Note')
 

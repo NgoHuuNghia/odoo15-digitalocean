@@ -49,10 +49,17 @@
             <!-- <button name="action_request_reapproval" string="Test Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight"/> -->
             <!--! <button name="action_send_email" string="Send Test Email" type="object" icon="fa-envelope"/>
             <button name="action_send_mass_email" string="Send Test Mass Email" type="object" icon="fa-envelope"/> -->
-            <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"
-              attrs="{'invisible':['|', ('state', 'not in', ['departing','returning','late']),('overseer_admin_logged', '=', False)]}"/>
-            <button name="action_update_state_departing" string="Test Trip Departing" type="object" icon="fa-car"/>
+            <!-- <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"
+              attrs="{'invisible':['|', ('state', 'not in', ['departing','returning','late']),('overseer_admin_logged', '=', False)]}"/> -->
             <button name="action_update_state_returned" string="Test Confirm Trip Completed" type="object" icon="fa-car"/>
+
+            <!-- <button name="action_update_state_ready" string="Test Trip Ready" type="object" icon="fa-car"/>
+            <button name="action_update_state_departing" string="Test Trip Departing" type="object" icon="fa-car"/>
+            <button name="action_update_state_returning" string="Test Confirm Trip returning" type="object" icon="fa-car"/>
+            <button name="action_update_state_late" string="Test Confirm Trip late" type="object" icon="fa-car"/> -->
+            <!-- <button name="action_update_and_mail_ready" string="Test Confirm Trip Ready" type="object" icon="fa-star"/>
+            <button name="action_update_and_mail_departing" string="Test Confirm Trip departing" type="object" icon="fa-star"/>
+            <button name="action_update_and_mail_late" string="Test Confirm Trip late" type="object" icon="fa-star"/>
             
             <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" string="Archive Trip" attrs="{
                 'invisible': ['|',('overseer_creator_logged', '=', False), ('state', 'not in', ['draft','canceled'])], 
@@ -61,7 +68,7 @@
               <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
             </button>
             <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
-              'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')],}"/>
+              'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')],}"/> -->
             <button name="action_rate_driver" string="Rate Driver" type="object" icon="fa-star" class="oe_highlight" attrs="{
               'invisible': ['|','|',('attendee_logged', '=', False),('attendee_rated', '!=', False),('state', '!=', 'returned')],}"/>
 
