@@ -21,10 +21,6 @@ class FleetBusinessTrip(models.Model):
   attending_employee_ids = fields.Many2many(comodel_name='hr.employee.public', relation='fleet_business_trip_employees_rel', 
     column1='business_trip_id', column2='employee_id', string='Attending Employees', required=True)
   attending_employee_count = fields.Integer(string="Attendees Count", compute="_compute_attending_employee_count", store=True)
-  pick_address_id = fields.Many2one('res.partner','Pick Up Company',compute='_compute_address_id', store=True, readonly=False,
-    #! domain="[('is_company', '=', True),('company_id','!=',False)]" for just company in the system, but need work
-    domain="[('is_company', '=', True)]"
-  )
   to_country_id = fields.Many2one(related='pick_address_id.country_id', string='To Country')
   vehicle_id = fields.Many2one('fleet.vehicle','Vehicle Used',required=True)
   model_id = fields.Many2one(related='vehicle_id.model_id',string='Model')
@@ -83,12 +79,6 @@ class FleetBusinessTrip(models.Model):
   def _compute_journal_line_count(self):
     for trip in self:
       trip.journal_line_count = len(trip.journal_line_ids)
-
-  @api.depends('company_id')
-  def _compute_address_id(self):
-    for trip in self:
-      address = trip.company_id.partner_id.address_get(['default'])
-      trip.pick_address_id = address['default'] if address else False
 
   #! still wondering if self drivers should be rated and shown, could be important
   @api.depends('self_driving_employee_id','driver_id')
@@ -202,16 +192,6 @@ class FleetBusinessTrip(models.Model):
         'domain': [('id','in',attending_employee_ids_list)],
         'target': 'current',
         'type': 'ir.actions.act_window',
-    }
-
-  def action_view_journals(self):
-    return {
-      'name': _('Journals'),
-      'res_model': 'fleet.business.trip.journal.line',
-      'view_mode': 'tree',
-      # 'domain': [('fleet_business_trip_id','=',self.id)],
-      'target': 'current',
-      'type': 'ir.actions.act_window',
     }
 
   @api.constrains('self_driving_employee_id','driver_id')

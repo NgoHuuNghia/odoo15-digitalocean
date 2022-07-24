@@ -1,34 +1,48 @@
 # -*- coding: utf-8 -*-
 
+from email.policy import default
+from tokenize import String
 from odoo import models, fields, api, exceptions, _
 
 APPROVAL_SELECTIONS = [('deciding','Deciding'),('denied','Denied'),('approved','Approved')]
-class FleetBusinessTrip(models.Model):
+TRANSPORTATION_SELECTIONS = [('plane','Plane'),('ship','Ship'),('train','Train')]
+TICKET_TYPE_SELECTIONS = [('going','Going'),('returning','Returning'),('two_way','Two way')]
+class FleetBusinessRent(models.Model):
   _inherit = ['fleet.business.base']
   _name = 'fleet.business.rent'
   _description = "Supported Business Trip"
+  
+  @api.model
+  def create(self, vals_list):
+    vals_list['approval_manager'] = 'deciding'
+    vals_list['name'] = self.env['ir.sequence'].next_by_code(self._name)
+    vals_list['state'] = 'draft'
+    return super(FleetBusinessRent, self).create(vals_list)
+
 
   name = fields.Char('Sequence Name',readonly=True)
   attending_employee_ids = fields.Many2many(comodel_name='hr.employee.public', relation='fleet_business_rent_employees_rel', 
     column1='business_rent_id', column2='employee_id', string='Attending Employees', required=True)
   attending_employee_count = fields.Integer(string="Attendees Count", compute="_compute_attending_employee_count", store=True)
-  pick_address_id = fields.Many2one('res.partner','Pick Up Company',compute='_compute_address_id', store=True, readonly=False,
-    #! domain="[('is_company', '=', True),('company_id','!=',False)]" for just company in the system, but need work
-    domain="[('is_company', '=', True)]"
-  )
-  pick_stations_address_id = fields.Many2one('res.partner','Pick Up Station',compute='_compute_address_id', store=True, readonly=False, domain="[('is_company', '=', True)]")
+  pick_station_address_id = fields.Many2one('res.partner','Pick Up Station', store=True, domain="[('is_company', '=', True)]")
+  to_country_id = fields.Many2one(comodel_name='res.country', string='To Country')
+  drop_off_station_street = fields.Char('Station Street 1')
+  drop_off_station_street2 = fields.Char('Station Street 2')
+  drop_off_station_zip = fields.Char('Station Country\'s Zip Code',change_default=True)
+  drop_off_station_city = fields.Char('Station City')
+  drop_off_station_state_id = fields.Many2one("res.country.state", string='Station State/Province', domain="[('country_id', '=?', drop_off_station_country_id)]")
+  drop_off_station_country_id = fields.Many2one(comodel_name='res.country', string='Station Country')
+  type_of_transportation = fields.Selection(TRANSPORTATION_SELECTIONS,'Type Of Transportation',required=True)
+  going_ticket_ids = fields.One2many('fleet.business.rent.ticket','fleet_business_rent_id',string='Going Tickets',domain="[('type', '=', 'going')]")
+  returning_ticket_ids = fields.One2many('fleet.business.rent.ticket','fleet_business_rent_id',string='Returning Tickets',domain="[('type', '=', 'returning')]")
+  two_way_ticket_ids = fields.One2many('fleet.business.rent.ticket','fleet_business_rent_id',string='Two Way Tickets',domain="[('type', '=', 'two_way')]")
   journal_line_ids = fields.One2many('fleet.business.rent.journal.line','fleet_business_rent_id',string='Journal Line')
   journal_line_count = fields.Integer('Journal Count', compute='_compute_journal_line_count')
+  tag_ids = fields.Many2many(comodel_name='fleet.business.tag', relation="fleet_business_rent_tag_rel", column1="fleet_business_rent_id", column2="tag_id", string='Tags')
 
   @api.depends('attending_employee_ids')
   def _compute_attending_employee_count(self):
     for trip in self: trip.attending_employee_count = len(trip.attending_employee_ids)
-
-  @api.depends('company_id')
-  def _compute_address_id(self):
-    for trip in self:
-      address = trip.company_id.partner_id.address_get(['default'])
-      trip.pick_address_id = address['default'] if address else False
 
   def action_view_attendees(self):
     attending_employee_ids_list = self.attending_employee_ids.ids
@@ -41,8 +55,20 @@ class FleetBusinessTrip(models.Model):
         'target': 'current',
         'type': 'ir.actions.act_window',
     }
+class FleetBusinessRentBaseTicket(models.Model):
+  _name = 'fleet.business.rent.ticket'
 
-class FleetBusinessTripJournalLine(models.Model):
+  type = fields.Selection(TICKET_TYPE_SELECTIONS,'type Of ticket')
+  name = fields.Char("Ticket's Serial")
+  fleet_business_rent_id = fields.Many2one('fleet.business.rent',required=True)
+  attendee_id = fields.Many2one('hr.employee.public', string="Ticket's Owner",required=True)
+  active = fields.Boolean('Ticket Readiness',readonly=True,default=False)
+  #! ticket_pdf = fields.Image Maybe print a pdf of the ticket
+
+# class FleetBusinessRentGoingTicket(models.Model):
+#   _inherit = 'fleet.business.rent.base.ticket'
+#   _name = 'fleet.business.rent.going.ticket'
+class FleetBusinessRentJournalLine(models.Model):
   _inherit = 'fleet.business.journal.line'
   _name = 'fleet.business.rent.journal.line'
   _description = 'Supported Business Trips Journal'

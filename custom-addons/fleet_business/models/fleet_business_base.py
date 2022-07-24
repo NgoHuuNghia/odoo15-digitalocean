@@ -59,6 +59,11 @@ class FleetBusinessBase(models.AbstractModel):
   back_time = fields.Datetime('Estimated Back Time', readonly=True)
   #$ location 
   company_id = fields.Many2one('res.company', string='Company', index=True, default=lambda self: self.env.company, readonly=True)
+  pick_address_id = fields.Many2one('res.partner','Pick Up Company',compute='_compute_address_id', store=True, readonly=False,
+    #! domain="[('is_company', '=', True),('company_id','!=',False)]" for just company in the system, but need work
+    domain="[('is_company', '=', True)]", required=True
+  )
+  #! remember to make user's inputed address to required, for now testing so don't need
   to_street = fields.Char('To Street 1')
   to_street2 = fields.Char('To Street 2')
   to_zip = fields.Char('To Country\'s Zip Code',change_default=True)
@@ -115,6 +120,12 @@ class FleetBusinessBase(models.AbstractModel):
     else:
       self.edit_hide_css_user = '<style>.o_form_button_edit {display: none !important;}</style>'
 
+  @api.depends('company_id')
+  def _compute_address_id(self):
+    for trip in self:
+      address = trip.company_id.partner_id.address_get(['default'])
+      trip.pick_address_id = address['default'] if address else False
+
   @api.depends('pick_time')
   def _compute_due_for_approval_time(self):
     self.due_for_approval_time = self.pick_time - relativedelta.relativedelta(days=DUE_TIME_SETTING)
@@ -165,6 +176,16 @@ class FleetBusinessBase(models.AbstractModel):
       'res_model': 'hr.employee.public',
       'view_mode': 'form',
       'res_id': view_overseer_id,
+      'target': 'current',
+      'type': 'ir.actions.act_window',
+    }
+
+  def action_view_journals(self):
+    return {
+      'name': _('Journals'),
+      'res_model': f'{self._name}.journal.line',
+      'view_mode': 'tree',
+      'domain': [(f"{self._name.replace('.','_')}_id",'=',self.id)],
       'target': 'current',
       'type': 'ir.actions.act_window',
     }

@@ -317,8 +317,8 @@
               <!--! set groups admin only -->
               <page string="Journal" groups='fleet.fleet_group_manager'>
                 <field name="journal_line_ids" attrs="{'readonly':['|',
-                  ('overseer_fleet_logged', '!=', False),
-                  ('overseer_admin_logged', '!=', False),
+                  ('overseer_fleet_logged', '=', False),
+                  ('overseer_admin_logged', '=', False),
                 ]}">
                   <tree editable="bottom">
                     <field name="type" />

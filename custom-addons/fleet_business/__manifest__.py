@@ -32,7 +32,8 @@
         'data/hr_department_data.xml', #$ Data
         'data/hr_job_data.xml',
         'data/fleet_business_tag_data.xml',
-        'data/mail_template_data.xml',
+        'data/fleet_business_trip_mail_template_data.xml',
+        # 'data/fleet_business_rent_mail_template_data.xml',
         'demo/hr_employee_demo.xml', #$ Demo
         'demo/hr_department_demo.xml',
         'demo/fleet_vehicle_demo.xml',
@@ -42,7 +43,7 @@
         'views/fleet_vehicle_views.xml',
         'views/hr_employee_views.xml',
         'views/fleet_business_trip_views.xml',
-        # 'views/fleet_business_rent_views.xml',
+        'views/fleet_business_rent_views.xml',
         'views/fleet_business_journal_views.xml',
         'views/fleet_business_trip_rate_driver_views.xml',
     ],

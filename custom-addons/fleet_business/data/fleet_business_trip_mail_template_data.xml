@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <data>
+  
+    <record id="email_template_fleet_business_approval" model="mail.template">
+      <field name="name">Request Approval: Send by email</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="email_from">{{ object.overseer_creator_id.user_id.email_formatted or object.overseer_creator_id.work_email or user.email_formatted }}</field>
+      <field name="email_to">{{ object.curr_deciding_overseer_id.work_email }}</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Request Approval (Business Trip {{ object.name or 'n/a' }})</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <p style="margin: 0px; padding: 0px; font-size: 13px;">
+            Dear <strong t-out="object.curr_deciding_overseer_id.name or ''">Trip Overseer</strong> from <strong t-out="object.curr_deciding_overseer_id.department_id.name or 'n/a'">Trip</strong>'s Department,
+            <br /><br />
+            This is an automatic email requesting you to request your approval for <strong t-out="object.name or 'n/a'">0000Trip</strong> Business Trip, which you are the <strong t-out="object.curr_deciding_overseer_role or 'n\a'"></strong> Overseer of.
+            <t t-if="object.curr_deciding_overseer_role == 'Creator'">
+              Created by <strong t-out="object.overseer_creator_id.name or 'n/a'">Trip Creator</strong> from <strong t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department
+            </t>
+            <br /><br />
+            From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
+            <strong t-out="object.pick_address_id.street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.pick_address_id.street2">
+              <strong t-out="object.pick_address_id.street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.pick_address_id.state_id">
+              <strong t-out="object.pick_address_id.state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.pick_address_id.city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.pick_address_id.country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            To - <strong t-out="object.to_street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.to_street2">
+              <strong t-out="object.to_street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.to_state_id">
+              <strong t-out="object.to_state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.to_city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.to_country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            With the intention of - <t t-out="object.intent or 'n/a'">Whole lot of intention here</t>
+            <t t-if="object.note">
+              <br/>
+              Along with note of - <t t-out="object.note or 'n/a'">Note n stuff</t>
+            </t>
+            <br /><br />
+            This trip will have a total of <strong t-out="object.attending_employee_count or 'n/a'">Number of attendees</strong> attendees (driver included)
+            starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>, 
+            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. For more infomation and to make your decision please enter the link bellow:
+            <br /><br />
+            <strong t-out="object.record_url or 'n/a'">Recordurl</strong>
+            <t t-if="object.overseer_creator_id.user_id.signature">
+                <br />
+                <t t-out="object.overseer_creator_id.user_id.signature or ''">--<br/>Bom Basitic</t>
+            </t>
+          </p>
+        </div>
+      </field>
+      <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="email_template_fleet_business_disapproved" model="mail.template">
+      <field name="name">Notify Disapproved: Send by email</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="email_from">{{ (object.curr_deciding_overseer_id.user_id.email_formatted or company.email_formatted) }}</field>
+      <field name="email_to">{{ object.overseer_creator_id.work_email }}</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Disapproved Notification (Business Trip {{ object.name or 'n/a' }})</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <p style="margin: 0px; padding: 0px; font-size: 13px;">
+            Dear <strong t-out="object.overseer_creator_id.name or ''">Trip Creator</strong> from <strong t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip</strong>'s Department,
+            <br /><br />
+            This is an automatic email notifying you that your request for the business trip <strong t-out="object.name or 'n/a'">0000Trip</strong>, has been 
+            <t t-if="object.state == 'canceled'">
+              canceled </t>
+            <t t-elif="object.state == 'not_approved'">
+              denied</t>
+            by <strong t-out="object.curr_deciding_overseer_id.name or ''">Trip Overseer</strong> from <strong t-out="object.curr_deciding_overseer_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department 
+            which are currently the <strong t-out="object.curr_deciding_overseer_role or 'n\a'"></strong> Overseer of this trip
+            <br /><br />
+            From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
+            <strong t-out="object.pick_address_id.street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.pick_address_id.street2">
+              <strong t-out="object.pick_address_id.street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.pick_address_id.state_id">
+              <strong t-out="object.pick_address_id.state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.pick_address_id.city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.pick_address_id.country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            To - <strong t-out="object.to_street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.to_street2">
+              <strong t-out="object.to_street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.to_state_id">
+              <strong t-out="object.to_state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.to_city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.to_country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            With the intention of - <t t-out="object.intent or 'n/a'">Whole lot of intention here</t>
+            <t t-if="object.note">
+              <br/>
+              Along with note of - <t t-out="object.note or 'n/a'">Note n stuff</t>
+            </t>
+            <br /><br />
+            This trip will have a total of <strong t-out="object.attending_employee_count or 'n/a'">Number of attendees</strong> attendees (driver included)
+            starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>, 
+            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. For more infomation and either to archive this trip or request request re-approval follow the link bellow:
+            <br /><br />
+            <strong t-out="object.record_url or 'n/a'">Recordurl</strong>
+            <t t-if="object.curr_deciding_overseer_id.user_id.signature">
+                <br />
+                <t t-out="object.curr_deciding_overseer_id.user_id.signature or ''">--<br/>Bom Basitic</t>
+            </t>
+          </p>
+        </div>
+      </field>
+      <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="email_template_fleet_business_request_admin_overseer_assignment" model="mail.template">
+      <field name="name">Request Admin Overseer Assignment For Business Trip: Send by email</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="email_from">{{ (object.curr_deciding_overseer_id.user_id.email_formatted or company.email_formatted) }}</field>
+      <field name="email_to">{{ object._context['admin_manager'].work_email }}</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Request Admin Assignment (Business Trip {{ object.name or 'n/a' }})</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <p style="margin: 0px; padding: 0px; font-size: 13px;">
+            Dear <strong t-out="object._context['admin_manager'].name or 'n\a'">Management Manager</strong> from <strong t-out="object._context['admin_manager'].department_id.name or 'n/a'">Department</strong>'s Department current manager
+            <br /><br />
+            This is an automatic email requesting you to assign an administrator to oversee this business trip <strong t-out="object.name or 'n/a'">0000Trip</strong>, Which is 
+            created by <strong t-out="object.overseer_creator_id.name or 'n/a'">Trip Creator</strong> from <strong t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department
+            <br /><br />
+            From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
+            <strong t-out="object.pick_address_id.street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.pick_address_id.street2">
+              <strong t-out="object.pick_address_id.street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.pick_address_id.state_id">
+              <strong t-out="object.pick_address_id.state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.pick_address_id.city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.pick_address_id.country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            To - <strong t-out="object.to_street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.to_street2">
+              <strong t-out="object.to_street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.to_state_id">
+              <strong t-out="object.to_state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.to_city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.to_country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            With the intention of - <t t-out="object.intent or 'n/a'">Whole lot of intention here</t>
+            <t t-if="object.note">
+              <br/>
+              Along with note of - <t t-out="object.note or 'n/a'">Note n stuff</t>
+            </t>
+            <br /><br />
+            This trip will have a total of <strong t-out="object.attending_employee_count or 'n/a'">Number of attendees</strong> attendees (driver included)
+            starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>, 
+            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. For more infomation and to assign an administrator this trip follow the link bellow:
+            <br /><br />
+            <strong t-out="object.record_url or 'n/a'">Recordurl</strong>
+            <t t-if="object.curr_deciding_overseer_id.user_id.signature">
+                <br />
+                <t t-out="object.curr_deciding_overseer_id.user_id.signature or ''">--<br/>Bom Basitic</t>
+            </t>
+          </p>
+        </div>
+      </field>
+      <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="email_template_fleet_business_request_admin_overseer_cancellation" model="mail.template">
+      <field name="name">Request Admin Overseer Cancellation For Business Trip: Send by email</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="email_from">{{ (object.curr_deciding_overseer_id.user_id.email_formatted or company.email_formatted) }}</field>
+      <field name="email_to">{{ object.overseer_admin_id.work_email }}</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Request Admin Cancel (Business Trip {{ object.name or 'n/a' }})</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <p style="margin: 0px; padding: 0px; font-size: 13px;">
+            Dear <strong t-out="object.overseer_admin_id.name or 'n\a'">Admin Overseer</strong> from <strong t-out="object.overseer_admin_id.department_id.name or 'n/a'">Department</strong>'s Department
+            <br /><br />
+            This is an automatic email requesting you, the administrator overseer of this business trip <strong t-out="object.name or 'n/a'">0000Trip</strong> which were created by <strong t-out="object.overseer_creator_id.name or 'n/a'">Trip Creator</strong> from <strong t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department 
+            to cancel this business trip for <strong t-out="object.curr_deciding_overseer_id.name">Requester</strong> as <strong t-out="object.curr_deciding_overseer_role">Requester role</strong> Overseer, was unable to approve of this business trip for [unknow reason]. 
+            <br /><br />
+            From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
+            <strong t-out="object.pick_address_id.street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.pick_address_id.street2">
+              <strong t-out="object.pick_address_id.street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.pick_address_id.state_id">
+              <strong t-out="object.pick_address_id.state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.pick_address_id.city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.pick_address_id.country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            To - <strong t-out="object.to_street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.to_street2">
+              <strong t-out="object.to_street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.to_state_id">
+              <strong t-out="object.to_state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.to_city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.to_country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            With the intention of - <t t-out="object.intent or 'n/a'">Whole lot of intention here</t>
+            <t t-if="object.note">
+              <br/>
+              Along with note of - <t t-out="object.note or 'n/a'">Note n stuff</t>
+            </t>
+            <br /><br />
+            This trip will have a total of <strong t-out="object.attending_employee_count or 'n/a'">Number of attendees</strong> attendees (driver included)
+            starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>, 
+            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. For more infomation and to assign an administrator this trip follow the link bellow:
+            <br /><br />
+            <strong t-out="object.record_url or 'n/a'">Recordurl</strong>
+            <t t-if="object.curr_deciding_overseer_id.user_id.signature">
+                <br />
+                <t t-out="object.curr_deciding_overseer_id.user_id.signature or ''">--<br/>Bom Basitic</t>
+            </t>
+          </p>
+        </div>
+      </field>
+      <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="email_template_fleet_business_request_admin_overseer_rework" model="mail.template">
+      <field name="name">Request Fleet Overseer To Rework Infomation For Business Trip: Send by email</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="email_from">{{ (object.curr_deciding_overseer_id.user_id.email_formatted or company.email_formatted) }}</field>
+      <field name="email_to">{{ object.overseer_fleet_id.work_email }}</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Request Fleet Capntain Rework Infomation (Business Trip {{ object.name or 'n/a' }})</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <p style="margin: 0px; padding: 0px; font-size: 13px;">
+            Dear <strong t-out="object.overseer_fleet_id.name or 'n\a'">fleet Overseer</strong> from <strong t-out="object.overseer_fleet_id.department_id.name or 'n/a'">Department</strong>'s Department
+            <br /><br />
+            This is an automatic email requesting you, the fleet overseer of this business trip <strong t-out="object.name or 'n/a'">0000Trip</strong> which were created by <strong t-out="object.overseer_creator_id.name or 'n/a'">Trip Creator</strong> from <strong t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department 
+            to cancel this business trip for <strong t-out="object.curr_deciding_overseer_id.name">Requester</strong> as <strong t-out="object.curr_deciding_overseer_role">Requester role</strong> Overseer, was unable to approve of this business trip for [unknow reason]. 
+            <br /><br />
+            From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
+            <strong t-out="object.pick_address_id.street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.pick_address_id.street2">
+              <strong t-out="object.pick_address_id.street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.pick_address_id.state_id">
+              <strong t-out="object.pick_address_id.state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.pick_address_id.city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.pick_address_id.country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            To - <strong t-out="object.to_street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.to_street2">
+              <strong t-out="object.to_street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.to_state_id">
+              <strong t-out="object.to_state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.to_city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.to_country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            With the intention of - <t t-out="object.intent or 'n/a'">Whole lot of intention here</t>
+            <t t-if="object.note">
+              <br/>
+              Along with note of - <t t-out="object.note or 'n/a'">Note n stuff</t>
+            </t>
+            <br /><br />
+            This trip will have a total of <strong t-out="object.attending_employee_count or 'n/a'">Number of attendees</strong> attendees (driver included)
+            starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>, 
+            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. For more infomation and to assign an administrator this trip follow the link bellow:
+            <br /><br />
+            <strong t-out="object.record_url or 'n/a'">Recordurl</strong>
+            <t t-if="object.curr_deciding_overseer_id.user_id.signature">
+                <br />
+                <t t-out="object.curr_deciding_overseer_id.user_id.signature or ''">--<br/>Bom Basitic</t>
+            </t>
+          </p>
+        </div>
+      </field>
+      <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="email_template_fleet_business_mass_attendees" model="mail.template">
+      <field name="name">Business Trip Reminder: Send by mass email</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="email_from">{{ object.overseer_creator_id.user_id.email_formatted or object.overseer_creator_id.work_email or user.email_formatted }}</field>
+      <field name="email_to">{{ object._context['receiver'].work_email or object._context['receiver'].user_id.email }}</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Business Trip Reminder (Business Trip {{ object.name or 'n/a' }})</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <p style="margin: 0px; padding: 0px; font-size: 13px;">
+            Dear <strong t-out="object._context['receiver'].name or ''">Trip Attendee</strong> from <strong t-out="object._context['receiver'].department_id.name or 'n/a'">Trip</strong>'s Department,
+            <br /><br />
+            This is an automatic email 
+            <t t-if="object.state == 'ready'">
+              Reminding you that you are exactly <strong t-out="object._context['DUE_TIME'] or 'N\A'">DAYS LEFT</strong> left till your </t>
+            <t t-elif="object.state == 'departing'">
+              Reminding you <strong>tomorrow</strong> you will go on a  </t>
+            business trip <strong t-out="object.name or 'n/a'">0000Trip</strong> 
+            <t t-if="object._context['receiver'].id == object.driver_id.id">
+              which you are the driver of. </t>
+            <t t-elif="object._context['receiver'].id == object.self_driving_employee_id.id">
+              which you are the driver and attendee of. </t>
+            <t t-else="">
+              which you are an attendee of. </t>
+            Created by <strong t-out="object.overseer_creator_id.name or 'n/a'">Trip Creator</strong> from <strong t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department. 
+            Has been approved and will set off with the infomations bellow
+            <br /><br />
+            From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
+            <strong t-out="object.pick_address_id.street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.pick_address_id.street2">
+              <strong t-out="object.pick_address_id.street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.pick_address_id.state_id">
+              <strong t-out="object.pick_address_id.state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.pick_address_id.city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.pick_address_id.country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            To - <strong t-out="object.to_street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.to_street2">
+              <strong t-out="object.to_street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.to_state_id">
+              <strong t-out="object.to_state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.to_city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.to_country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            With the intention of - <t t-out="object.intent or 'n/a'">Whole lot of intention here</t>
+            <t t-if="object.note">
+              <br/>
+              Along with note of - <t t-out="object.note or 'n/a'">Note n stuff</t>
+            </t>
+            <br /><br />
+            This trip will have a total of <strong t-out="object.attending_employee_count or 'n/a'">Number of attendees</strong> attendees (driver included)
+            starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>, 
+            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. 
+            <br /><br />
+            <t t-if="object._context['receiver'].id == object.driver_id.id">
+              As you are the designated fleet's driver. For more infomation please contact the fleet captain who is in charge of this business trip with the email bellow:
+              <br />
+              <strong t-out="object.overseer_fleet_id.work_email or object.overseer_fleet_id.user_id.email">Captain Email</strong>
+            </t>
+            <t t-elif="object._context['receiver'].id == object.self_driving_employee_id.id and object._context['receiver'].id != object.overseer_creator_id.id">
+              As you are the designated self driver for this trip. For more infomation please contact the creator of this business trip with the email bellow:
+              <br />
+              <strong t-out="object.overseer_creator_id.work_email or object.overseer_creator_id.user_id.email">Creator Email</strong>
+            </t>
+            <br /><br />
+            <t t-if="object.overseer_creator_id.user_id.signature">
+                <br />
+                <t t-out="object.overseer_creator_id.user_id.signature or ''">--<br/>Bom Basitic</t>
+            </t>
+          </p>
+        </div>
+      </field>
+      <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="email_template_fleet_business_mass_overseers" model="mail.template">
+      <field name="name">Business Trip Alert: Send by mass email</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="email_from">{{ object.overseer_creator_id.user_id.email_formatted or object.overseer_creator_id.work_email or user.email_formatted }}</field>
+      <field name="email_to">{{ object._context['receiver'].work_email or object._context['receiver'].user_id.email }}</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Business Trip Alert (Business Trip {{ object.name or 'n/a' }})</field>
+      <field name="body_html" type="html">
+        <div style="margin: 0px; padding: 0px;">
+          <p style="margin: 0px; padding: 0px; font-size: 13px;">
+            Dear <strong t-out="object._context['receiver'].name or ''">Trip Overseer</strong> from <strong t-out="object._context['receiver'].department_id.name or 'n/a'">Trip</strong>'s Department,
+            <br /><br />
+            This is an automatic email 
+            <t t-if="object.state == 'late'">
+              Alerting you that the business trip <strong t-out="object.name or 'n/a'">0000Trip</strong>
+              Created by <strong t-out="object.overseer_creator_id.name or 'n/a'">Trip Creator</strong> from <strong t-out="object.overseer_creator_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department. 
+              Has been approved and is currently late to return, it is recommended that you take actions to ensure the situation is normal </t>
+            <!-- <t t-else="">
+              which you are an attendee of. </t> -->
+            <br /><br />
+            From - <strong t-out="object.pick_address_id.name or 'n/a'">Pick Up Company</strong> company at 
+            <strong t-out="object.pick_address_id.street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.pick_address_id.street2">
+              <strong t-out="object.pick_address_id.street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.pick_address_id.state_id">
+              <strong t-out="object.pick_address_id.state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.pick_address_id.city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.pick_address_id.country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            To - <strong t-out="object.to_street or 'n/a'">1AA Bulinot Cake</strong>, 
+            <t t-if="object.to_street2">
+              <strong t-out="object.to_street2 or 'n/a'">2AA Bulinot Ice cream</strong>, 
+            </t>
+            <t t-if="object.to_state_id">
+              <strong t-out="object.to_state_id.name or 'n/a'">3AA Bulinot State</strong>, 
+            </t>
+            <strong t-out="object.to_city or 'n/a'">New Bakery</strong>, 
+            <strong t-out="object.to_country_id.name or 'n/a'">United Kitchen</strong>
+
+            <br /><br />
+            With the intention of - <t t-out="object.intent or 'n/a'">Whole lot of intention here</t>
+            <t t-if="object.note">
+              <br/>
+              Along with note of - <t t-out="object.note or 'n/a'">Note n stuff</t>
+            </t>
+            <br /><br />
+            This trip will have a total of <strong t-out="object.attending_employee_count or 'n/a'">Number of attendees</strong> attendees (driver included)
+            starting at <strong t-out="object.pick_time or 'n/a'">Pick up time/omonth</strong> and estimated to end at <strong t-out="object.return_time or 'n/a'">Return up time/omonth</strong>, 
+            This business trip's approval peroid is due at <strong t-out="object.due_for_approval_time or 'n/a'">Due time/clock</strong>. 
+            <br /><br />
+            <t t-if="object._context['receiver'].id == object.driver_id.id">
+              As you are the designated fleet's driver. For more infomation please contact the fleet captain who is in charge of this business trip with the email bellow:
+              <br />
+              <strong t-out="object.overseer_fleet_id.work_email or object.overseer_fleet_id.user_id.email">Captain Email</strong>
+            </t>
+            <t t-elif="object._context['receiver'].id == object.self_driving_employee_id.id and object._context['receiver'].id != object.overseer_creator_id.id">
+              As you are the designated self driver for this trip. For more infomation please contact the creator of this business trip with the email bellow:
+              <br />
+              <strong t-out="object.overseer_creator_id.work_email or object.overseer_creator_id.user_id.email">Creator Email</strong>
+            </t>
+            <br /><br />
+            <t t-if="object.overseer_creator_id.user_id.signature">
+                <br />
+                <t t-out="object.overseer_creator_id.user_id.signature or ''">--<br/>Bom Basitic</t>
+            </t>
+          </p>
+        </div>
+      </field>
+      <field name="auto_delete" eval="True"/>
+    </record>
+  
+  </data>
+  
+</odoo>

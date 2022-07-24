@@ -122,7 +122,7 @@
               <button name="action_view_attendees" type="object" class="oe_stat_button" icon="fa-history">
                 <field name="attending_employee_count" string="Attendees" widget="statinfo"/>
               </button>
-              <button class="oe_stat_button" icon="fa-list" groups="fleet.fleet_group_manager" readonly="1">
+              <button name="action_view_journals" type="object" class="oe_stat_button" icon="fa-list" groups="fleet.fleet_group_manager" readonly="1">
                 <field name="journal_line_count" string="Journals" widget="statinfo"/>
               </button>
             </div>
@@ -182,46 +182,19 @@
               </div>
             </span>
 
-            <span attrs="{'invisible':['|', ('approval_fleet', '=', False), ('overseer_fleet_logged', '=', False),]}">
-              <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible':[('approval_fleet', '!=', 'deciding')]}">
-                <div>
-                  <strong>You, the Fleet Captain Need to decide the approval of this business trip</strong>
-                </div>
-              </div>
-              <div class="alert alert-success text-center o_form_header" role="alert" attrs="{'invisible':[('approval_fleet', '!=', 'approved')]}">
-                <div>
-                  <strong>You, the Fleet Captain have approve of this business trip</strong>
-                </div>
-              </div>
-              <div class="alert alert-danger text-center o_form_header" role="alert" attrs="{'invisible':[('approval_fleet', '!=', 'denied')]}">
-                <div>
-                  <strong>You, the Fleet Captain have deny this business trip</strong>
-                </div>
-              </div>
-            </span>
-            
             <div class="oe_title">
               <h1>
                   <field name="name"/>
               </h1>
+              <group>
+                <label for='type_of_transportation' string='Transportation'/>
+                <h2>
+                  <field name="type_of_transportation" widget="radio"/>
+                </h2>
+              </group>
               <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags"/>
             </div>
 
-            <group>
-              <group string="Vehicle">
-                <field name="vehicle_id"/>
-                <field name="seats" />
-              </group>
-              <group string="Driver">
-                <field name="driver_id" attrs="{'invisible':[('self_driving_employee_id', '!=', False)]}"/>
-                <field name="self_driving_employee_id" attrs="{'invisible':[('driver_id', '!=', False)]}"/>
-                <field name="driver_ratings" widget='priority' attrs="{'invisible':[('driver_ratings', 'in', ['0',False])]}"/>
-                <div class="alert alert-danger" role="alert" attrs="{
-                  'invisible': ['|','&amp;',('self_driving_employee_id', '=', False),('driver_id', '=', False),('driver_ratings', 'not in', ['0',False])]}">
-                  <strong>This driver has never been rated</strong>
-                </div>
-              </group>
-            </group>
             <group string='All Attending Employees'>
               <field name="attending_employee_ids" widget="many2many_tags" options="{'no_create_edit': True}" nolabel='1'/>
             </group>
@@ -235,17 +208,32 @@
                 <field name='arrive_time' />
                 <field name='back_time' />
               </group>
-              <group string='Go To Location'>
-                <field name='to_street' />
-                <field name='to_street2' />
-                <field name='to_zip' />
-                <field name='to_city' />
-                <field name='to_state_id'/>
-                <field name='to_country_id'/>
-              </group>
-              <group string='Pick up Location'>
+            </group>
+            <group>
+              <group string='Starting Address'>
                 <field name="pick_address_id" context="{'show_address': 1}"
                   options='{"always_reload": True, "highlight_first_line": True}'/>
+              </group>
+              <group string='Pick up Station Address'>
+                <field name="pick_station_address_id" context="{'show_address': 1}"
+                  options='{"always_reload": True, "highlight_first_line": True}'
+                  attrs="{'readonly':[('overseer_admin_logged', '=', False)]}"/>
+              </group>
+              <group string='Destination Address'>
+                <field name='to_street' string='Street'/>
+                <field name='to_street2' string='Street2'/>
+                <field name='to_zip' string="Country's Zip"/>
+                <field name='to_city' string='City'/>
+                <field name='to_state_id' string='State/Province'/>
+                <field name='to_country_id' string='Country'/>
+              </group>
+              <group string='Drop Off Station Address' >
+                <field name='drop_off_station_street' string='Street' attrs="{'readonly':[('overseer_admin_logged', '=', False)]}"/>
+                <field name='drop_off_station_street2' string='Street2' attrs="{'readonly':[('overseer_admin_logged', '=', False)]}"/>
+                <field name='drop_off_station_zip' string="Country's Zip" attrs="{'readonly':[('overseer_admin_logged', '=', False)]}"/>
+                <field name='drop_off_station_city' string='City' attrs="{'readonly':[('overseer_admin_logged', '=', False)]}"/>
+                <field name='drop_off_station_state_id' string='State/Province' attrs="{'readonly':[('overseer_admin_logged', '=', False)]}"/>
+                <field name='drop_off_station_country_id' string='Country' attrs="{'readonly':[('overseer_admin_logged', '=', False)]}"/>
               </group>
             </group>
 
@@ -256,6 +244,44 @@
                   <field name="note" />
                 </group>
               </page>
+
+              <page string="Going Tickets">
+                <field name="going_ticket_ids">
+                  <tree editable="bottom">
+                    <field name="name" string="Going Ticket's Serial"/>
+                    <field name="attendee_id" />
+                    <field name="active" />
+                    <field name="write_date" string="Updated on"/>
+                  </tree>
+                  <form>
+                    <group>
+                      <field name="name" />
+                      <field name="attendee_id" />
+                      <field name="active" />
+                      <field name="write_date" string="Updated on"/>
+                    </group>
+                  </form>
+                </field>
+              </page>
+              <page string="Returning Tickets">
+                <field name="returning_ticket_ids">
+                  <tree editable="bottom">
+                    <field name="name" string="Returning Ticket's Serial"/>
+                    <field name="attendee_id" />
+                    <field name="active" />
+                    <field name="write_date" string="Updated on"/>
+                  </tree>
+                  <form>
+                    <group>
+                      <field name="name" />
+                      <field name="attendee_id" />
+                      <field name="active" />
+                      <field name="write_date" string="Updated on"/>
+                    </group>
+                  </form>
+                </field>
+              </page>
+              <!--! Also create a two way ticket -->
 
               <page string="Overseers">
                 <group>
@@ -277,28 +303,12 @@
                     <field name="overseer_admin_email" />
                     <field name="approval_admin" />
                   </group>
-                  <group string="Fleet Captain">
-                    <field name="overseer_fleet_id" />
-                    <field name="overseer_fleet_work_phone" />
-                    <field name="overseer_fleet_email" />
-                    <field name="approval_fleet" />
-                  </group>
-                </group>
-              </page>
-
-              <page string="Vehicle">
-                <group>
-                  <field name="model_id" class="oe_inline" placeholder="e.g. PAE 326"/>
-                  <field name="license_plate" class="oe_inline" placeholder="e.g. PAE 326"/>
                 </group>
               </page>
 
               <!--! set groups admin only -->
               <page string="Journal" groups='fleet.fleet_group_manager'>
-                <field name="journal_line_ids" attrs="{'readonly':['|',
-                  ('overseer_fleet_logged', '!=', False),
-                  ('overseer_admin_logged', '!=', False),
-                ]}">
+                <field name="journal_line_ids" attrs="{'readonly':[('overseer_admin_logged', '=', False)]}">
                   <tree editable="bottom">
                     <field name="type" />
                     <field name="note" />

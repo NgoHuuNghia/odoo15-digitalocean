@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
   <data>
-    <!--! i wonder if mail sent by automated action will come with styling -->
+    <!--$ Business Trip Automated -->
 
-    <record id="fleet_business_create_first_journal" model="base.automation">
-      <field name="name">Fleet Business Automation: Create first journal</field>
+    <record id="fleet_business_trip_create_first_journal" model="base.automation">
+      <field name="name">Fleet Business Trip Automation: Create first journal</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="state">code</field>
       <field name="trigger">on_create</field>
@@ -12,8 +12,8 @@
       <field name="active" eval="True"/>
     </record>
 
-    <record id="fleet_business_send_first_approval" model="base.automation">
-      <field name="name">Fleet Business Automation: Send mail requesting approval to overseer</field>
+    <record id="fleet_business_trip_send_first_approval" model="base.automation">
+      <field name="name">Fleet Business Trip Automation: Send 1st mail requesting approval to overseer</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="state">code</field>
       <field name="trigger">on_create</field>
@@ -29,8 +29,8 @@
       ])]"/> -->
     </record>
 
-    <record id="fleet_business_update_approved_to_ready_and_send_mass_mail" model="base.automation">
-      <field name="name">Fleet Business Automation: Update state ready and send mass mail reminder</field>
+    <record id="fleet_business_trip_update_approved_to_ready_and_send_mass_mail" model="base.automation">
+      <field name="name">Fleet Business Trip Automation: Update state ready and send mass mail reminder</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="state">code</field>
       <field name="trigger">on_time</field>
@@ -39,8 +39,8 @@
       <field name="filter_domain">[('state', '=', 'approved')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','due_for_approval_time')]"/>
     </record>
-    <record id="fleet_business_update_ready_to_departing_and_send_mass_mail" model="base.automation">
-      <field name="name">Fleet Business Automation: Update state departing and send mass mail reminder</field>
+    <record id="fleet_business_trip_update_ready_to_departing_and_send_mass_mail" model="base.automation">
+      <field name="name">Fleet Business Trip Automation: Update state departing and send mass mail reminder</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="state">code</field>
       <field name="trigger">on_time</field>
@@ -62,6 +62,48 @@
       <field name="filter_domain">[('state', '=', 'departing')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','return_time')]"/>
     </record> -->
+
+    <!--$ Supporte Automated -->
+    <record id="fleet_business_rent_create_first_journal" model="base.automation">
+      <field name="name">Fleet Business Rent Automation: Create first journal</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_rent"/>
+      <field name="state">code</field>
+      <field name="trigger">on_create</field>
+      <field name="code">record.action_create_first_journal()</field>
+      <field name="active" eval="True"/>
+    </record>
+
+    <record id="fleet_business_rent_send_first_approval" model="base.automation">
+      <field name="name">Fleet Business Rent Automation: Send 1st mail requesting approval to overseer</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_rent"/>
+      <field name="state">code</field>
+      <field name="trigger">on_create</field>
+      <field name="code">record.action_send_email()</field>
+      <field name="active" eval="True"/>
+    </record>
+
+    <record id="fleet_business_rent_update_approved_to_ready_and_send_mass_mail" model="base.automation">
+      <field name="name">Fleet Business Rent Automation: Update state ready and send mass mail reminder</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_rent"/>
+      <field name="state">code</field>
+      <field name="trigger">on_time</field>
+      <field name="code">record.action_update_state_and_send_mass_mail_reminder('ready')</field>
+      <field name="active" eval="True"/>
+      <field name="filter_domain">[('state', '=', 'approved')]</field>
+      <field name="trg_date_id" search="[('model','=','fleet.business.rent'),('name','=','due_for_approval_time')]"/>
+    </record>
+    <record id="fleet_business_rent_update_ready_to_departing_and_send_mass_mail" model="base.automation">
+      <field name="name">Fleet Business Rent Automation: Update state departing and send mass mail reminder</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_rent"/>
+      <field name="state">code</field>
+      <field name="trigger">on_time</field>
+      <field name="code">record.action_update_state_and_send_mass_mail_reminder('departing')</field>
+      <field name="active" eval="True"/>
+      <field name="filter_domain">[('state', '=', 'ready')]</field>
+      <field name="trg_date_id" search="[('model','=','fleet.business.rent'),('name','=','pick_time')]"/>
+      <field name="trg_date_range">-1</field>
+      <field name="trg_date_range_type">day</field>
+    </record>
 
   </data>
 </odoo>
