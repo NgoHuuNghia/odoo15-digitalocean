@@ -33,7 +33,7 @@
         'data/hr_job_data.xml',
         'data/fleet_business_tag_data.xml',
         'data/fleet_business_trip_mail_template_data.xml',
-        # 'data/fleet_business_rent_mail_template_data.xml',
+        'data/fleet_business_rent_mail_template_data.xml',
         'demo/hr_employee_demo.xml', #$ Demo
         'demo/hr_department_demo.xml',
         'demo/fleet_vehicle_demo.xml',

@@ -189,15 +189,17 @@ class FleetBusinessBase(models.AbstractModel):
       'target': 'current',
       'type': 'ir.actions.act_window',
     }
-
   #? automated action to create the first journal run when record is 1st created
-  def action_create_first_journal(self):
+
+
+  def action_create_first_journal_and_request_first_approval(self):
     first_journal_val_list = {
       f"{self._name.replace('.','_')}_id": self.id,
       'type': 'update',
       'note': f'{self.env.user.employee_id.name} have successfully created this trip, now awaiting approval.'
     }
     self.env[f'{self._name}.journal.line'].create(first_journal_val_list)
+    self.action_send_email()
 
   def action_update_state_and_send_mass_mail_reminder(self,state):
     self.state = state
@@ -238,16 +240,16 @@ class FleetBusinessBase(models.AbstractModel):
   def action_send_email(self, special=None):
     curr_admin_manager = None
     if self.state in ['canceled','not_approved']:
-      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_disapproved')
+      approval_email_template = self.env.ref(f"fleet_business.email_template_{self._name.replace('.','_')}_disapproved")
     elif special == 'request_admin_overseer_assignment':
       curr_admin_manager = self.env['hr.employee.public'].search(['&','&','|',('company_id', '=', False),('company_id', '=', self.company_id.id),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1)
-      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_assignment')
+      approval_email_template = self.env.ref(f"fleet_business.email_template_{self._name.replace('.','_')}_request_admin_overseer_assignment")
     elif special == 'request_admin_overseer_cancellation':
-      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_cancellation')
-    elif special == 'request_fleet_overseer_rework':
-      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_rework')
+      approval_email_template = self.env.ref(f"fleet_business.email_template_{self._name.replace('.','_')}_request_admin_overseer_cancellation")
+    elif special == 'request_rework':
+      approval_email_template = self.env.ref(f"fleet_business.email_template_{self._name.replace('.','_')}_request_rework")
     else:
-      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_approval')
+      approval_email_template = self.env.ref(f"fleet_business.email_template_{self._name.replace('.','_')}_approval")
       
     approval_email_template.with_context({
       'admin_manager': curr_admin_manager,

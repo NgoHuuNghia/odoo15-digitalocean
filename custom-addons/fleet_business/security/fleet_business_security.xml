@@ -60,6 +60,34 @@
     </function>
     <!--? end of editing existing fleet's record rules -->
 
+    <record id="fleet_business_rent_rule_user" model="ir.rule">
+      <field name="name">Users can see any supported trips that is related to them in any way</field>
+      <field name="model_id" ref="model_fleet_business_rent"/>
+      <field name="groups" eval="[(4, ref('fleet.fleet_group_user'))]"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="False"/>
+      <field name="domain_force">['&amp;','|','|','|','|',
+        ('create_uid','=',user.id),
+        ('overseer_creator_id','=',user.employee_id.id),
+        ('overseer_manager_id','=',user.employee_id.id),
+        ('overseer_admin_id','=',user.employee_id.id),
+        ('attending_employee_ids','in',[user.employee_id.id]),
+        (len(user.employee_id), '=', 1),
+      ]</field>
+    </record>
+
+    <record id="fleet_business_rent_rule_manager" model="ir.rule">
+      <field name="name">Managers can see all trips</field>
+      <field name="model_id" ref="model_fleet_business_rent"/>
+      <field name="groups" eval="[(4, ref('fleet.fleet_group_manager'))]"/>
+      <field name="perm_read" eval="True"/>
+      <field name="perm_write" eval="True"/>
+      <field name="perm_create" eval="True"/>
+      <field name="perm_unlink" eval="True"/>
+    </record>
+
   </data>
   
 </odoo>

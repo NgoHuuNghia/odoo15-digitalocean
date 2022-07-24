@@ -3,30 +3,22 @@
   <data>
     <!--$ Business Trip Automated -->
 
-    <record id="fleet_business_trip_create_first_journal" model="base.automation">
-      <field name="name">Fleet Business Trip Automation: Create first journal</field>
-      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
-      <field name="state">code</field>
-      <field name="trigger">on_create</field>
-      <field name="code">record.action_create_first_journal()</field>
-      <field name="active" eval="True"/>
-    </record>
+    <!-- <field name="filter_pre_domain">[('curr_deciding_overseer_id', '!=', False)]</field>
+    <field name="filter_domain">[('state', 'in', ['draft','canceled'])]</field>
+    <field name="trigger_field_ids" eval="[(6,0,[
+      ref('fleet_business.field_fleet_business_trip__curr_deciding_overseer_id'),
+      ref('fleet_business.field_fleet_business_trip__overseer_admin_id'),
+      ref('fleet_business.field_fleet_business_trip__state'),
+      ref('fleet_business.field_fleet_business_trip__approval_admin'),
+    ])]"/> -->
 
-    <record id="fleet_business_trip_send_first_approval" model="base.automation">
-      <field name="name">Fleet Business Trip Automation: Send 1st mail requesting approval to overseer</field>
+    <record id="fleet_business_trip_create_first_journal_and_request_first_approval" model="base.automation">
+      <field name="name">Fleet Business Trip Automation: Create first journal and request first approval</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="state">code</field>
       <field name="trigger">on_create</field>
-      <field name="code">record.action_send_email()</field>
+      <field name="code">record.action_create_first_journal_and_request_first_approval()</field>
       <field name="active" eval="True"/>
-      <!-- <field name="filter_pre_domain">[('curr_deciding_overseer_id', '!=', False)]</field>
-      <field name="filter_domain">[('state', 'in', ['draft','canceled'])]</field>
-      <field name="trigger_field_ids" eval="[(6,0,[
-        ref('fleet_business.field_fleet_business_trip__curr_deciding_overseer_id'),
-        ref('fleet_business.field_fleet_business_trip__overseer_admin_id'),
-        ref('fleet_business.field_fleet_business_trip__state'),
-        ref('fleet_business.field_fleet_business_trip__approval_admin'),
-      ])]"/> -->
     </record>
 
     <record id="fleet_business_trip_update_approved_to_ready_and_send_mass_mail" model="base.automation">
@@ -64,21 +56,12 @@
     </record> -->
 
     <!--$ Supporte Automated -->
-    <record id="fleet_business_rent_create_first_journal" model="base.automation">
-      <field name="name">Fleet Business Rent Automation: Create first journal</field>
+    <record id="fleet_business_rent_create_first_journal_and_request_first_approval" model="base.automation">
+      <field name="name">Fleet Business Rent Automation: Create first journal and request first approval</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_rent"/>
       <field name="state">code</field>
       <field name="trigger">on_create</field>
-      <field name="code">record.action_create_first_journal()</field>
-      <field name="active" eval="True"/>
-    </record>
-
-    <record id="fleet_business_rent_send_first_approval" model="base.automation">
-      <field name="name">Fleet Business Rent Automation: Send 1st mail requesting approval to overseer</field>
-      <field name="model_id" ref="fleet_business.model_fleet_business_rent"/>
-      <field name="state">code</field>
-      <field name="trigger">on_create</field>
-      <field name="code">record.action_send_email()</field>
+      <field name="code">record.action_create_first_journal_and_request_first_approval()</field>
       <field name="active" eval="True"/>
     </record>
 

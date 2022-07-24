@@ -44,6 +44,11 @@ class FleetBusinessRent(models.Model):
   def _compute_attending_employee_count(self):
     for trip in self: trip.attending_employee_count = len(trip.attending_employee_ids)
 
+  @api.depends('journal_line_ids')
+  def _compute_journal_line_count(self):
+    for trip in self:
+      trip.journal_line_count = len(trip.journal_line_ids)
+
   def action_view_attendees(self):
     attending_employee_ids_list = self.attending_employee_ids.ids
 

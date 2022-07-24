@@ -18,6 +18,7 @@ class TestFleetBusinessTrip(TransactionCase):
                 self.env.ref('fleet_business.dep_fleet_captain').id,
                 self.env.ref('fleet_business.dep_fleet_driver_2').id,
             ],
+            'pick_address_id': self.env.company.partner_id.id,
             'return_time': fields.Datetime.add(fields.Datetime.today(), months=1),
             'intent': "a test for trip",
             'overseer_admin_id': self.env.ref('fleet_business.dep_management_member_fleet_business').id,

@@ -130,7 +130,7 @@ class FleetBusinessTrip(models.Model):
   def action_approval_creator_request_rework(self):
     self.ensure_one()
     self.approval_creator = 'denied'
-    self.action_send_email(special='request_fleet_overseer_rework')
+    self.action_send_email(special='request_rework')
 
     self.curr_deciding_overseer_id = self.overseer_fleet_id.id
     self.curr_deciding_overseer_role = 'Fleet Captain'
