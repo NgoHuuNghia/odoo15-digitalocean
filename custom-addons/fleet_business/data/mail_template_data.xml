@@ -63,12 +63,12 @@
       <field name="auto_delete" eval="True"/>
     </record>
 
-    <record id="email_template_fleet_business_cancelation" model="mail.template">
-      <field name="name">Notify Cancelation: Send by email</field>
+    <record id="email_template_fleet_business_disapproved" model="mail.template">
+      <field name="name">Notify Disapproved: Send by email</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
       <field name="email_from">{{ (object.curr_deciding_overseer_id.user_id.email_formatted or company.email_formatted) }}</field>
       <field name="email_to">{{ object.overseer_creator_id.work_email }}</field>
-      <field name="subject">Odoo - {{ object.company_id.name }} Cancelation Notification (Business Trip {{ object.name or 'n/a' }})</field>
+      <field name="subject">Odoo - {{ object.company_id.name }} Disapproved Notification (Business Trip {{ object.name or 'n/a' }})</field>
       <field name="body_html" type="html">
         <div style="margin: 0px; padding: 0px;">
           <p style="margin: 0px; padding: 0px; font-size: 13px;">
@@ -77,7 +77,7 @@
             This is an automatic email notifying you that your request for the business trip <strong t-out="object.name or 'n/a'">0000Trip</strong>, has been 
             <t t-if="object.state == 'canceled'">
               canceled </t>
-            <t t-else="">
+            <t t-elif="object.state == 'not_approved'">
               denied</t>
             by <strong t-out="object.curr_deciding_overseer_id.name or ''">Trip Overseer</strong> from <strong t-out="object.curr_deciding_overseer_id.department_id.name or 'n/a'">Trip Creator Department</strong>'s Department 
             which are currently the <strong t-out="object.curr_deciding_overseer_role or 'n\a'"></strong> Overseer of this trip

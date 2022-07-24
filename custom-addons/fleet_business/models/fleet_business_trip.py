@@ -5,9 +5,9 @@ from odoo import models, fields, api, exceptions, _
 APPROVAL_SELECTIONS = [('deciding','Deciding'),('denied','Denied'),('approved','Approved')]
 RATING_SELECTIONS = [('0','None'),('1','VeryLow'),('2','Low'),('3','Normal'),('4','High'),('5','Very High'),]
 class FleetBusinessTrip(models.Model):
+  _inherit = ['fleet.business.base']
   _name = 'fleet.business.trip'
   _description = "Business Trip"
-  _inherit = ['fleet.business.base']
 
   def write(self, vals_list):
     if vals_list.get('approval_admin') == 'approved':
@@ -77,12 +77,8 @@ class FleetBusinessTrip(models.Model):
   @api.depends('attending_employee_ids','driver_id')
   def _compute_attending_employee_count(self):
     for trip in self:
-      if trip.driver_id:
-        trip.attending_employee_count = len(trip.attending_employee_ids) + 1
-      else:
-        trip.attending_employee_count = len(trip.attending_employee_ids)
+      trip.attending_employee_count = len(trip.attending_employee_ids) + len(trip.driver_id) if trip.driver_id else len(trip.attending_employee_ids)
 
-  #! seem to bug for fleet.user
   @api.depends('journal_line_ids')
   def _compute_journal_line_count(self):
     for trip in self:
@@ -206,6 +202,16 @@ class FleetBusinessTrip(models.Model):
         'domain': [('id','in',attending_employee_ids_list)],
         'target': 'current',
         'type': 'ir.actions.act_window',
+    }
+
+  def action_view_journals(self):
+    return {
+      'name': _('Journals'),
+      'res_model': 'fleet.business.trip.journal.line',
+      'view_mode': 'tree',
+      # 'domain': [('fleet_business_trip_id','=',self.id)],
+      'target': 'current',
+      'type': 'ir.actions.act_window',
     }
 
   @api.constrains('self_driving_employee_id','driver_id')

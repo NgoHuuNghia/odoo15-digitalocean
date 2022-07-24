@@ -12,6 +12,7 @@ STATE_SELECTIONS = [
   ('car_na','Car N/a'),('driver_na','Driver N/a'),('car_driver_na','Car & Driver N/a'),
   ('canceled','Canceled'),('incident','Incident')
 ]
+TYPE_SELECTION = [('state','State'),('update','Update'),('approval','Approval'),('special','Special')]
 #! Add the setting properly to setting module
 DUE_TIME_SETTING = 7 #days
 SETTING_TIME_CONSTRAINS = 4 #months
@@ -83,7 +84,7 @@ class FleetBusinessBase(models.AbstractModel):
   #$ other fields
   intent = fields.Text('Intention', required=True, help='The intention of this business trip')
   note = fields.Text('Note/Comment', help='Any note, reminder or comments special to this business trip')
-  state = fields.Selection(STATE_SELECTIONS,string='State',default=None,compute='_compute_state',store=True)
+  state = fields.Selection(STATE_SELECTIONS,string='State',default=None,store=True)
   #$ none-stored technical fields
   active = fields.Boolean(string='active', default=True)
   record_url = fields.Text("Record's url",compute="_compute_record_url")
@@ -216,7 +217,7 @@ class FleetBusinessBase(models.AbstractModel):
   def action_send_email(self, special=None):
     curr_admin_manager = None
     if self.state in ['canceled','not_approved']:
-      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_cancelation')
+      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_disapproved')
     elif special == 'request_admin_overseer_assignment':
       curr_admin_manager = self.env['hr.employee.public'].search(['&','&','|',('company_id', '=', False),('company_id', '=', self.company_id.id),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1)
       approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_request_admin_overseer_assignment')
@@ -278,3 +279,12 @@ class FleetBusinessBase(models.AbstractModel):
   #       raise exceptions.ValidationError("Overseeing Administrator can't be empty")
   #     elif not trip.overseer_creator_id: 
   #       raise exceptions.ValidationError("Overseeing Creator can't be empty")
+class FleetBusinessJournalLine(models.AbstractModel):
+  _name = 'fleet.business.journal.line'
+  _description = 'Journal records for a business trip'
+  _order = 'id'
+
+  type = fields.Selection(TYPE_SELECTION,required=True)
+  note = fields.Text('Journal\'s Note',required=True)
+  #? create_date - use the odoo's basefield
+  #! also maybe the public_employee_id for the one who create the journal, if automated then None

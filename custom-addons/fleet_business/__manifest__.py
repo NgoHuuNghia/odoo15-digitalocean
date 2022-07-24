@@ -42,6 +42,8 @@
         'views/fleet_vehicle_views.xml',
         'views/hr_employee_views.xml',
         'views/fleet_business_trip_views.xml',
+        # 'views/fleet_business_rent_views.xml',
+        'views/fleet_business_journal_views.xml',
         'views/fleet_business_trip_rate_driver_views.xml',
     ],
     'assets': {

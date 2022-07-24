@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="8NVEbFYH0CTecISd1Mc0" name="Page-1">
-        <mxGraphModel dx="1222" dy="1714" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="1">
+        <mxGraphModel dx="1018" dy="1612" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="0" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="1">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -97,7 +97,7 @@
                         <mxPoint x="600" y="1190" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="165" style="edgeStyle=none;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=1.001;entryY=0.756;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="81" target="134" edge="1">
+                <mxCell id="165" style="edgeStyle=none;html=1;exitX=0.25;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=0.999;entryY=0.609;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="81" target="134" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="530" y="760" as="targetPoint"/>
                         <Array as="points">
@@ -160,7 +160,7 @@
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="170" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=1.001;entryY=0.848;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="96" target="134" edge="1">
+                <mxCell id="170" style="edgeStyle=none;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;fontSize=16;endArrow=open;endFill=0;entryX=0.999;entryY=0.681;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="96" target="134" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <Array as="points">
                             <mxPoint x="265" y="880"/>
@@ -257,16 +257,16 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="133" value="fleet_business_rent (hỗ trợ mua vé đi công tác) -nw-" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;labelBackgroundColor=none;fontColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="80" y="450" width="370" height="270" as="geometry"/>
+                    <mxGeometry x="80" y="450" width="370" height="310" as="geometry"/>
                 </mxCell>
-                <mxCell id="134" value="+ name: Char() -ir.sequence('BRT****')-&#10;+ attending_employee_ids: Many2many('hr.employee')[1..*]&#10;+ pick_street: Char()[1..1]&#10;+ pick_street2: Char()[0..1]&#10;+ pick_zip: Char()[1..1]&#10;+ pick_city: Char()[1..1]&#10;+ pick_state_id: Many2one('res.country.state')[0..1]&#10;+ pick_country_id: Many2one('res.country',)[1..1]&#10;+ type_of_transportation: Selection(['plane','private_jet,'ship','train''])&#10;+ to_ticket_line_ids: One2many('fleet_business_rent')[1..1]&#10;+ return_ticket_line_ids: One2many('fleet_business_rent')[1..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="133" vertex="1">
-                    <mxGeometry y="26" width="370" height="164" as="geometry"/>
+                <mxCell id="134" value="+ name: Char() -ir.sequence('BRT****')-&#10;+ attending_employee_ids: Many2many('hr.employee')[1..*]&#10;+ pick_address_id: Many2one('res.partner',compute='_compute_address_id'&#10;,domain=&quot;[('company_id', '=', True), ('company_id', '=', self.env.company.id)]&quot;)&#10;+ pick_station_address_id: Many2one('res.partner',compute='_compute_address_id'&#10;+ to_station_street: Char()[1..1]&#10;+ to_station_street2: Char()[0..1]&#10;+ to_station_zip: Char()[1..1]&#10;+ to_station_city: Char()[1..1]&#10;+ to_station_state_id: Many2one('res.country.state')[0..1]&#10;+ to_station_country_id: Many2one('res.country')[1..1]&#10;+ type_of_transportation: Selection(['plane','private_jet,'ship','train''])&#10;+ to_ticket_line_ids: One2many('fleet_business_rent')[1..1]&#10;+ return_ticket_line_ids: One2many('fleet_business_rent')[1..1]" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="133" vertex="1">
+                    <mxGeometry y="26" width="370" height="204" as="geometry"/>
                 </mxCell>
                 <mxCell id="135" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;labelBackgroundColor=none;fontColor=#F0F0F0;" parent="133" vertex="1">
-                    <mxGeometry y="190" width="370" height="8" as="geometry"/>
+                    <mxGeometry y="230" width="370" height="8" as="geometry"/>
                 </mxCell>
                 <mxCell id="136" value="+ action_report_ticket_busy(self): ticket_line_ids.active(False)&#10;+ @constrains check_to_rent_address(self): void&#10;+ @constrains check_to_tickets(self): void&#10;+ @constrains check_type_of_transportation(self): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;labelBackgroundColor=none;fontColor=default;" parent="133" vertex="1">
-                    <mxGeometry y="198" width="370" height="72" as="geometry"/>
+                    <mxGeometry y="238" width="370" height="72" as="geometry"/>
                 </mxCell>
                 <mxCell id="137" value="fleet_business_base (mẫu tạo công tác) -nw-" style="swimlane;fontStyle=3;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;labelBackgroundColor=none;fontColor=default;" parent="1" vertex="1">
                     <mxGeometry x="480" y="-440" width="540" height="730" as="geometry"/>
@@ -472,34 +472,34 @@
                 <mxCell id="264" value="+ id: integer&#10;+ name: Char()&#10;+ business_rent_id: Many2one('fleet_business_rent')&#10;+ attending_employee_id: Many2one('hr_employee',domain=...)&#10;+ active: Boolean()&#10;..." style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;" parent="263" vertex="1">
                     <mxGeometry y="26" width="290" height="94" as="geometry"/>
                 </mxCell>
-                <mxCell id="281" value="" style="endArrow=diamondThin;endFill=1;endSize=12;html=1;entryX=-0.004;entryY=0.936;entryDx=0;entryDy=0;entryPerimeter=0;exitX=-0.002;exitY=0.163;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="264" target="134" edge="1">
+                <mxCell id="281" value="" style="endArrow=diamondThin;endFill=1;endSize=12;html=1;entryX=0;entryY=0.962;entryDx=0;entryDy=0;entryPerimeter=0;exitX=-0.002;exitY=0.163;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="264" target="134" edge="1">
                     <mxGeometry width="160" relative="1" as="geometry">
                         <mxPoint x="79" y="250" as="sourcePoint"/>
                         <mxPoint x="250" y="200" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="40" y="221"/>
-                            <mxPoint x="40" y="630"/>
+                            <mxPoint x="40" y="672"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="282" value="" style="endArrow=diamondThin;endFill=1;endSize=12;html=1;entryX=-0.003;entryY=0.851;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.001;exitY=0.163;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="258" target="134" edge="1">
+                <mxCell id="282" value="" style="endArrow=diamondThin;endFill=1;endSize=12;html=1;exitX=0.001;exitY=0.163;exitDx=0;exitDy=0;exitPerimeter=0;entryX=-0.002;entryY=0.89;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="258" target="134" edge="1">
                     <mxGeometry width="160" relative="1" as="geometry">
                         <mxPoint x="79" y="360" as="sourcePoint"/>
-                        <mxPoint x="81" y="620" as="targetPoint"/>
+                        <mxPoint x="80" y="589" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="50" y="341"/>
-                            <mxPoint x="50" y="616"/>
+                            <mxPoint x="50" y="658"/>
                         </Array>
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="284" value="0..1" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=default;direction=west;" parent="1" vertex="1">
-                    <mxGeometry x="25" y="580" width="40" height="20" as="geometry"/>
+                    <mxGeometry x="25" y="620" width="40" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="285" value="1..*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="25" y="370" width="30" height="20" as="geometry"/>
+                    <mxGeometry x="30" y="370" width="30" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="287" value="part of" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="20" y="460" width="50" height="20" as="geometry"/>
+                    <mxGeometry x="20" y="490" width="50" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="289" value="-nw- object, model mới | -basefield- field có sẵn | @ decorator odoo của chức năng |&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;Chức năng chính" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;fillColor=default;" parent="1" vertex="1">
                     <mxGeometry x="570" y="-520" width="610" height="40" as="geometry"/>
@@ -714,7 +714,7 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="382" value="Kế hoạch muốn thêm hệ thống để tạo chuyến đi công tác chở đến điểm sân bay/bến&amp;nbsp;&amp;nbsp;" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="80" y="760" width="250" height="70" as="geometry"/>
+                    <mxGeometry x="65" y="790" width="250" height="70" as="geometry"/>
                 </mxCell>
                 <mxCell id="390" style="edgeStyle=none;html=1;exitX=0;exitY=0;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=none;endFill=0;dashed=1;" parent="1" source="389" target="140" edge="1">
                     <mxGeometry relative="1" as="geometry">
@@ -732,10 +732,10 @@
                 <mxCell id="399" value="Hệ thống gửi mail yêu cầu duyệt sẽ tạm thời là automated, có thể mở rộng edit sau" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" parent="1" vertex="1">
                     <mxGeometry x="870" y="332.47" width="250" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="400" value="Có nên giới hạn các quyền sửa của group_manager?" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" vertex="1" parent="1">
+                <mxCell id="400" value="Có nên giới hạn các quyền sửa của group_manager?" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fillColor=default;" parent="1" vertex="1">
                     <mxGeometry x="1392.5" y="160" width="250" height="70" as="geometry"/>
                 </mxCell>
-                <mxCell id="401" style="edgeStyle=none;html=1;endArrow=none;endFill=0;endSize=12;dashed=1;" edge="1" parent="1" source="400" target="140">
+                <mxCell id="401" style="edgeStyle=none;html=1;endArrow=none;endFill=0;endSize=12;dashed=1;" parent="1" source="400" target="140" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="1030" y="107.34042553191489" as="targetPoint"/>
                         <mxPoint x="1175.166666666667" y="200" as="sourcePoint"/>

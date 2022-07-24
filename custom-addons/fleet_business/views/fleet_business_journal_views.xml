@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="fleet_business_trip_journal_line_view_tree" model="ir.ui.view">
+      <field name="name">fleet.business.trip.journal.line.tree</field>
+      <field name="model">fleet.business.trip.journal.line</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="type" />
+          <field name="note" />
+          <field name="create_date" />
+        </tree>
+      </field>
+    </record>
+
+  </data>
+
+</odoo>

@@ -2,16 +2,14 @@
 <odoo>
   <data>
 
-    <record id="fleet_business_trip_view_tree" model="ir.ui.view">
-      <field name="name">fleet.business.trip.tree</field>
-      <field name="model">fleet.business.trip</field>
+    <record id="fleet_business_rent_view_tree" model="ir.ui.view">
+      <field name="name">fleet.business.rent.tree</field>
+      <field name="model">fleet.business.rent</field>
       <field name="arch" type="xml">
         <tree>
           <field name="name" string='Sequence ID'/>
           <field name="overseer_creator_id" />
           <field name="attending_employee_count"/>
-          <field name="vehicle_id"/>
-          <field name="driver_id"/>
           <field name="pick_time"/>
           <field name="pick_address_id"/>
           <field name="to_street"/>
@@ -24,9 +22,9 @@
       </field>
     </record>
 
-    <record id="fleet_business_trip_view_form" model="ir.ui.view">
-      <field name="name">fleet.business.trip.form</field>
-      <field name="model">fleet.business.trip</field>
+    <record id="fleet_business_rent_view_form" model="ir.ui.view">
+      <field name="name">fleet.business.rent.form</field>
+      <field name="model">fleet.business.rent</field>
       <field name="arch" type="xml">
         <form duplicate="0">
           <header>
@@ -35,9 +33,6 @@
             <field name="overseer_manager_logged" invisible="1"/>
             <field name="overseer_admin_logged" invisible="1"/>
             <field name="overseer_creator_logged" invisible="1"/>
-            <field name="overseer_fleet_logged" invisible="1"/>
-            <field name="attendee_logged" invisible="1"/>
-            <field name="attendee_rated" invisible="1"/>
             <!--? custom conditional css -->
             <field name="edit_hide_css_user"/>
             <!--! testing -->
@@ -69,8 +64,6 @@
             </button>
             <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
               'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')],}"/> -->
-            <button name="action_rate_driver" string="Rate Driver" type="object" icon="fa-star" class="oe_highlight" attrs="{
-              'invisible': ['|','|',('attendee_logged', '=', False),('attendee_rated', '!=', False),('state', '!=', 'returned')],}"/>
 
             <!--? approval buttons -->
             <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
@@ -85,15 +78,10 @@
 
             <button name="action_approval_creator_approved" string="Creator Approve" type="object" class="oe_highlight"
               attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('overseer_creator_logged', '=', False)]}"/>
-            <button name="action_approval_creator_request_rework" string="Request Rework" type="object" 
-              attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('overseer_creator_logged', '=', False)]}"/>
+            <!--! <button name="action_approval_creator_request_rework" string="Request Rework" type="object" 
+              attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('overseer_creator_logged', '=', False)]}"/> -->
             <button name="action_approval_creator_cancel" string="Creator Deny" type="object" 
               attrs="{'invisible':['|',('approval_creator', '!=', 'deciding'),('overseer_creator_logged', '=', False)]}"/>
-
-            <button name="action_approval_fleet_approved" string="Fleet Approve" type="object" class="oe_highlight"
-              attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('overseer_fleet_logged', '=', False)]}"/>
-            <button name="action_approval_fleet_denied" string="Fleet Deny" type="object" 
-              attrs="{'invisible':['|',('approval_fleet', '!=', 'deciding'),('overseer_fleet_logged', '=', False)]}"/>
 
             <field name="state" widget="statusbar" nolabel="1"
               statusbar_visible="draft,not_approved,approved,ready,departing,returning,late,returned,cancled,incident"/>
@@ -130,20 +118,11 @@
                     <span class="o_stat_text">Trip Requester</span>
                 </div>
               </button>
-              <button name="action_view_overseer" context="{'view_overseer': 'fleet','view_overseer_id': overseer_fleet_id}" type="object" class="oe_stat_button" icon="fa-id-card-o" attrs="{'invisible': [('overseer_fleet_id', '=', False)]}">
-                <div class="o_field_widget o_stat_info">
-                    <span class="o_stat_value">
-                      <field name="overseer_fleet_id" readonly="1" attrs="{'invisible': [('overseer_fleet_id', '=', False)]}"/>
-                      <strong attrs="{'invisible': [('overseer_fleet_id', '!=', False)]}">Missing fleet</strong>
-                    </span>
-                    <span class="o_stat_text">Fleet Captain</span>
-                </div>
-              </button>
               
               <button name="action_view_attendees" type="object" class="oe_stat_button" icon="fa-history">
                 <field name="attending_employee_count" string="Attendees" widget="statinfo"/>
               </button>
-              <button name="action_view_journals" type="object" class="oe_stat_button" icon="fa-list" groups="fleet.fleet_group_manager">
+              <button class="oe_stat_button" icon="fa-list" groups="fleet.fleet_group_manager" readonly="1">
                 <field name="journal_line_count" string="Journals" widget="statinfo"/>
               </button>
             </div>
@@ -346,10 +325,10 @@
     </record>
 
     <!--? view permissions for fleet_group_manager -->
-    <record id="fleet_business_trip_view_form_manager_permissions_inherit_fleet_business" model="ir.ui.view">
-      <field name="name">fleet.business.trip.form.manager.permissions</field>
-      <field name="model">fleet.business.trip</field>
-      <field name="inherit_id" ref="fleet_business_trip_view_form"/>
+    <record id="fleet_business_rent_view_form_manager_permissions_inherit_fleet_business" model="ir.ui.view">
+      <field name="name">fleet.business.rent.form.manager.permissions</field>
+      <field name="model">fleet.business.rent</field>
+      <field name="inherit_id" ref="fleet_business_rent_view_form"/>
       <field name="groups_id" eval="[(6, 0, [ref('fleet.fleet_group_manager') ])]" />
       <field name="priority">10</field>
       <field name="arch" type="xml">

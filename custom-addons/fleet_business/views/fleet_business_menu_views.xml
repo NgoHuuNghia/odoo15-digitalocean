@@ -15,6 +15,20 @@
     </field>
   </record>
 
+  <record id="fleet_business_rent_action" model="ir.actions.act_window">
+    <field name="name">Company's Supported</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">fleet.business.rent</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{}</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Create a Company's Supported business trips and wait for approval, 
+        Contact administrator if you aren't a company's employee
+      </p>
+    </field>
+  </record>
+
   <menuitem
     id="fleet_business_menu_root"
     name="Business Trips"
@@ -31,8 +45,9 @@
 
     <menuitem
       id="fleet_business_rent_menu"
-      name="Company's Supported Business Trips"
+      name="Company's Supported"
       groups="fleet.fleet_group_user"
+      action="fleet_business_rent_action"
       sequence="10"/>
   </menuitem>
 
