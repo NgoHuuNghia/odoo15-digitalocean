@@ -141,23 +141,34 @@ class FleetBusinessTrip(models.Model):
       self.curr_deciding_overseer_id = None
       self.curr_deciding_overseer_role = None
       self.state = 'approved'
-      self.action_send_mass_email()
+      self.action_send_email_mass()
     else: raise exceptions.ValidationError('A approval steps was bugged, please contact the administrator about this bug')
+
+  def action_update_state_returned(self):
+    if self.env.user.employee_id.id == self.driver_id.id\
+    or self.env.user.employee_id.id == self.overseer_admin_id.id\
+    or self.env.user.employee_id.id == self.overseer_fleet_id.id:
+      self.state = 'returned'
+    else: raise exceptions.UserError('You are not authorized to confirm returned')
 
   def action_request_reapproval(self):
     super(FleetBusinessTrip, self).action_request_reapproval()
     self.approval_fleet = None
     self.action_send_email()
 
-  def action_send_mass_email(self):
-    super(FleetBusinessTrip, self).action_send_mass_email()
-    approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_mass_attendees')
-    if self.driver_id:
+  def action_send_email_mass(self,DUE_TIME=None,special=None):
+    super(FleetBusinessTrip, self).action_send_email_mass()
+    if self.driver_id and special==None:
+      approval_email_template = self.env.ref(f"fleet_business.email_template_{self._name.replace('.','_')}_mass_attendees")
       approval_email_template.with_context({
-        'attendee': self.driver_id,
+        'receiver': self.driver_id,
+        'DUE_TIME': DUE_TIME,
       }).send_mail(self.id, force_send=True, raise_exception=False)
 
   def action_rate_driver(self):
+    if self.env.user.employee_id.id not in self.attending_employee_ids.ids:
+      raise exceptions.UserError('You are not one of the attendees')
+
     return {
       'name': _('Rate Driver'),
       'res_model': 'hr.employee.fleet.driver.rating.line',

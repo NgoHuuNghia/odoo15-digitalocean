@@ -202,14 +202,18 @@ class FleetBusinessBase(models.AbstractModel):
     self.action_send_email()
 
   def action_update_state_and_send_mass_mail_reminder(self,state):
+    if state == 'ready' and self.state != 'approved':
+      raise exceptions.ValidationError(f"Can only update to {state} from approved")
+    if state == 'departing' and self.state != 'ready':
+      raise exceptions.ValidationError(f"Can only update to {state} from ready")
+    #! returning state will need the computed datetimes and late state also depend on it 
+    if state == 'late' and self.state not in ['departing']:
+      raise exceptions.ValidationError(f"Can only update to {state} from departing or returning")
     self.state = state
     self.action_send_email_mass(
       DUE_TIME=DUE_TIME_SETTING if state == 'ready' else None,
       special='alert_overseers' if state == 'late' else None,
     )
-    
-  def action_update_state_returned(self):
-    self.state = 'returned'
     
   #! rating/state testing
   # def action_update_state_returning(self):
@@ -261,10 +265,10 @@ class FleetBusinessBase(models.AbstractModel):
   #! gotta be a better way of sending mass mail
   def action_send_email_mass(self, DUE_TIME=None,special=None):
     if special == 'alert_overseers':
-      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_mass_overseers')
+      approval_email_template = self.env.ref(f"fleet_business.email_template_{self._name.replace('.','_')}_mass_overseers")
       receiver_recordset = self.overseer_manager_id | self.overseer_admin_id
     else:
-      approval_email_template = self.env.ref('fleet_business.email_template_fleet_business_mass_attendees')
+      approval_email_template = self.env.ref(f"fleet_business.email_template_{self._name.replace('.','_')}_mass_attendees")
       receiver_recordset = self.attending_employee_ids
 
     for receiver in receiver_recordset:

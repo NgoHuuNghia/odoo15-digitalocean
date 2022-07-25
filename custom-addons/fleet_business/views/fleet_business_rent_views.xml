@@ -64,6 +64,8 @@
             </button>
             <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
               'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')],}"/> -->
+            <button name="action_prepare_going_and_returning_ticket_template" string="Create Ticket Template" type="object" icon="fa-plus" class="oe_highlight" attrs="{
+              'invisible': [('overseer_admin_logged', '=', False)]}"/>
 
             <!--? approval buttons -->
             <button name="action_approval_manager_approved" string="Manager Approve" type="object" class="oe_highlight"
@@ -246,18 +248,19 @@
               </page>
 
               <page string="Going Tickets">
-                <field name="going_ticket_ids">
+                <!-- <field name="going_ticket_ids" options="{'no_create': True, 'no_create_edit' : True}"> -->
+                <field name="going_ticket_ids" options="{'create': False}">
                   <tree editable="bottom">
                     <field name="name" string="Going Ticket's Serial"/>
                     <field name="attendee_id" />
-                    <field name="active" />
+                    <field name="ready" />
                     <field name="write_date" string="Updated on"/>
                   </tree>
                   <form>
                     <group>
                       <field name="name" />
                       <field name="attendee_id" />
-                      <field name="active" />
+                      <field name="ready" />
                       <field name="write_date" string="Updated on"/>
                     </group>
                   </form>
@@ -268,14 +271,14 @@
                   <tree editable="bottom">
                     <field name="name" string="Returning Ticket's Serial"/>
                     <field name="attendee_id" />
-                    <field name="active" />
+                    <field name="ready" />
                     <field name="write_date" string="Updated on"/>
                   </tree>
                   <form>
                     <group>
                       <field name="name" />
                       <field name="attendee_id" />
-                      <field name="active" />
+                      <field name="ready" />
                       <field name="write_date" string="Updated on"/>
                     </group>
                   </form>
