@@ -9,14 +9,6 @@ class FleetBusinessTrip(models.Model):
   _name = 'fleet.business.trip'
   _description = "Business Trip"
 
-  def write(self, vals_list):
-    if vals_list.get('approval_admin') == 'approved':
-      self.curr_deciding_overseer_id = self.overseer_fleet_id.id
-      self.curr_deciding_overseer_role = 'Fleet Captain'
-      self.approval_fleet = 'deciding'
-      self.action_send_email()
-    return super(FleetBusinessTrip, self).write(vals_list)
-
   name = fields.Char('Sequence Name',readonly=True)
   attending_employee_ids = fields.Many2many(comodel_name='hr.employee.public', relation='fleet_business_trip_employees_rel', 
     column1='business_trip_id', column2='employee_id', string='Attending Employees', required=True)
@@ -109,6 +101,13 @@ class FleetBusinessTrip(models.Model):
         ('id', '!=', attending_employee_ids_list),
       ],
     }}
+
+  def action_approval_admin_approved(self):
+    super(FleetBusinessTrip, self).action_approval_admin_approved()
+    self.curr_deciding_overseer_id = self.overseer_fleet_id.id
+    self.curr_deciding_overseer_role = 'Fleet Captain'
+    self.approval_fleet = 'deciding'
+    self.action_send_email()
 
   def action_approval_fleet_approved(self):
     self.ensure_one()

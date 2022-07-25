@@ -34,31 +34,43 @@ class TestFleetBusinessTrip(TransactionCase):
         res_new_trip_first_journal = self.env["fleet.business.rent"].browse(new_trip.id).journal_line_ids[0]
         self.assertEqual(res_new_trip_first_journal,new_trip.journal_line_ids[0])
 
-        print(new_trip.read())
+        #$ test overseers approved action, assigning admin and check curr_deciding_overseer
+        new_trip.action_approval_manager_approved()
+        new_trip.with_user(admin_manager).write({
+            'overseer_admin_id': admin_manager.employee_id.id,
+        })
 
-        # #$ test overseers approved action, assigning admin and check curr_deciding_overseer
-        # new_trip.action_approval_manager_approved()
-        # new_trip.with_user(admin_manager).write({
-        #     'overseer_admin_id': admin_manager.employee_id.id,
-        # })
-        # self.assertEqual(res_new_trip_curr_deciding_overseer_record(), new_trip.overseer_admin_id)
-        # new_trip.action_approval_admin_approved()
-        # self.assertEqual(res_new_trip_curr_deciding_overseer_record(), new_trip.overseer_fleet_id)
-        # new_trip.action_approval_fleet_approved()
-        # self.assertEqual(res_new_trip_curr_deciding_overseer_record(), new_trip.overseer_creator_id)
+        #$ test ticket template actions
+        new_trip.with_user(admin_manager).action_prepare_going_and_returning_ticket_template()
+        self.assertFalse(new_trip.two_way_ticket_ids)
+        res_new_trip_going_ticket_ids = self.env['fleet.business.rent.going.ticket'].search([('fleet_business_rent_id','=',new_trip.id)])
+        self.assertEqual(res_new_trip_going_ticket_ids, new_trip.going_ticket_ids)
+        res_new_trip_returning_ticket_ids = self.env['fleet.business.rent.returning.ticket'].search([('fleet_business_rent_id','=',new_trip.id)])
+        self.assertEqual(res_new_trip_returning_ticket_ids, new_trip.returning_ticket_ids)
+
+        new_trip.with_user(admin_manager).action_prepare_two_way_ticket_template()
+        self.assertFalse(new_trip.going_ticket_ids)
+        self.assertFalse(new_trip.returning_ticket_ids)
+        res_new_trip_two_way_ticket_ids = self.env['fleet.business.rent.two.way.ticket'].search([('fleet_business_rent_id','=',new_trip.id)])
+        self.assertEqual(res_new_trip_two_way_ticket_ids, new_trip.two_way_ticket_ids)
+
+        self.assertEqual(res_new_trip_curr_deciding_overseer_record(), new_trip.overseer_admin_id)
+        new_trip.action_approval_admin_approved()
+        self.assertEqual(res_new_trip_curr_deciding_overseer_record(), new_trip.overseer_creator_id)
 
         # #$ test final approval
-        # new_trip.action_approval_creator_approved()
-        # self.assertEqual(len(res_new_trip_curr_deciding_overseer_record()), 0)
-        # res_new_trip_state = self.env["fleet.business.rent"].browse(new_trip.id).state
-        # self.assertEqual(res_new_trip_state, 'approved')
+        new_trip.action_approval_creator_approved()
+        self.assertFalse(res_new_trip_curr_deciding_overseer_record())
+        res_new_trip_state = self.env["fleet.business.rent"].browse(new_trip.id).state
+        self.assertEqual(res_new_trip_state, 'approved')
 
-        # #$ test automated actions
-        # new_trip.action_update_state_and_send_mass_mail_reminder('ready')
-        # new_trip.action_update_state_and_send_mass_mail_reminder('departing')
-        # #! new_trip.action_update_state_and_send_mass_mail_reminder('returning') make that computed datetime yo
-        # new_trip.action_update_state_and_send_mass_mail_reminder('late')
+        #$ test automated actions
+        new_trip.action_update_state_and_send_mass_mail_reminder('ready')
+        new_trip.action_update_state_and_send_mass_mail_reminder('departing')
+        #! new_trip.action_update_state_and_send_mass_mail_reminder('returning') make that computed datetime yo
+        new_trip.action_update_state_and_send_mass_mail_reminder('late')
 
         # #$ test returned and finishing actions
-        # new_trip.with_user(admin_manager).action_update_state_returned()
-        # new_trip.with_user(user).action_rate_driver()
+        new_trip.with_user(admin_manager).action_update_state_returned()
+
+        print(new_trip.read())

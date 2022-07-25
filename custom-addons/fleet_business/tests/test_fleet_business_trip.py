@@ -48,7 +48,7 @@ class TestFleetBusinessTrip(TransactionCase):
 
         #$ test final approval
         new_trip.action_approval_creator_approved()
-        self.assertEqual(len(res_new_trip_curr_deciding_overseer_record()), 0)
+        self.assertFalse(res_new_trip_curr_deciding_overseer_record())
         res_new_trip_state = self.env["fleet.business.trip"].browse(new_trip.id).state
         self.assertEqual(res_new_trip_state, 'approved')
 
