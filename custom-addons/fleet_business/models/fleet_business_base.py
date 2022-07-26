@@ -42,6 +42,8 @@ class FleetBusinessBase(models.AbstractModel):
     res = super(FleetBusinessBase, self).default_get(vals_list)
     if not res.get('overseer_creator_id'):
       raise exceptions.UserError('You are not an employee in this company, please contact admins for supports')
+    if self.env.user.employee_id.id != res.get('overseer_creator_id'):
+      raise exceptions.ValidationError('There seem to be an error when validating your employee data, please contact support')
     if not res.get('overseer_manager_id'):
       #! searching for the 1st hit of Manager of the Management Department, have to be better way of doing this
       optional_manager = self.env['hr.employee.public'].search(['&','&','|',('company_id', '=', False),('company_id', '=', res.get('company_id')),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1)
@@ -94,6 +96,7 @@ class FleetBusinessBase(models.AbstractModel):
   active = fields.Boolean(string='active', default=True)
   record_url = fields.Text("Record's url",compute="_compute_record_url")
   edit_hide_css_user = fields.Html(string='CSS', sanitize=False, compute='_compute_edit_hide_css_user')
+  admin_manager_logged = fields.Boolean(string='Admin Manager In View',compute='_compute_logged_overseer', default=False)
   overseer_manager_logged = fields.Boolean(string="Manager In View",compute='_compute_logged_overseer', default=False)
   overseer_admin_logged = fields.Boolean(string="Administrator In View",compute='_compute_logged_overseer', default=False)
   overseer_creator_logged = fields.Boolean(string="Creator In View",compute='_compute_logged_overseer', default=False)
@@ -110,6 +113,9 @@ class FleetBusinessBase(models.AbstractModel):
       if self.env.user == trip.overseer_creator_id.user_id:
         trip.overseer_creator_logged = True
       else: trip.overseer_creator_logged = False
+      if self.env.user == self.env['hr.employee.public'].search(['&','&','|',('company_id', '=', False),('company_id', '=', self.company_id.id),('department_id.name','=','Management'),('department_position','=','Manager')],limit=1).user_id:
+        trip.admin_manager_logged = True
+      else: trip.admin_manager_logged = False
   def _compute_record_url(self):
     web_base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
     for rec in self:

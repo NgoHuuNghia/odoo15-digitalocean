@@ -21,7 +21,7 @@
   </record>
 
   <!--? and the action attribute where we provide our actions duh!  -->
-  <!--! remember that actions need to be declear first for menu to recongize it -->
+  <!--! remember that actions need to be declare first for menu to recongize it -->
   <menuitem
     id="menu_patient"
     name="Patients"
@@ -65,10 +65,7 @@
           * (just add more [|] see it as bettween the tuples so 3 OR for 4 tuples 
           * the tuples in of itself only have 3 values
         -->
-        <field name="name" string="Patient Name" filter_domain="[
-          '|',
-          ('name', 'ilike', self), ('ref', 'ilike', self)
-        ]" />
+        <field name="name" string="Patient Name" filter_domain="['|',('name', 'ilike', self), ('ref', 'ilike', self)]" />
         <field name="age" />
         <field name="gender" />
         <field name="ref" />

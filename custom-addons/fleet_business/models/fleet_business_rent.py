@@ -133,6 +133,7 @@ class FleetBusinessRentBaseTicket(models.TransientModel):
   name = fields.Char("Ticket's Serial")
   fleet_business_rent_id = fields.Many2one('fleet.business.rent',required=True)
   attendee_id = fields.Many2one('hr.employee.public', string="Ticket's Owner",required=True)
+  #! make sure all ticket is ready before continuing with approval
   ready = fields.Boolean('Ticket Readiness',readonly=True,default=False)
   #! ticket_pdf = fields.Image Maybe print a pdf of the ticket
 class FleetBusinessRentGoingTicket(models.Model):

@@ -6,21 +6,78 @@
       <field name="name">fleet.business.trip.tree</field>
       <field name="model">fleet.business.trip</field>
       <field name="arch" type="xml">
-        <tree>
+        <tree default_order='due_for_approval_time asc'>
           <field name="name" string='Sequence ID'/>
-          <field name="overseer_creator_id" />
+          <field name="create_uid" string='creator' widget="many2one_avatar_user"/>
           <field name="attending_employee_count"/>
           <field name="vehicle_id"/>
           <field name="driver_id"/>
           <field name="pick_time"/>
+          <field name="due_for_approval_time" optional="show"/>
           <field name="pick_address_id"/>
           <field name="to_street"/>
-          <field name="state" widget="badge"
-            decoration-success="state == ['approved','returned']" 
-            decoration-danger="state == ['not_approved','canceled','car_na','driver_na','car_driver_na']"
-            decoration-info="state == ['ready','departing','returning']"
-            decoration-warning="state == ['late','incident']"/>
+          <field name="state" widget="badge" optional="show"
+            decoration-success="state in ['approved','returned']" 
+            decoration-danger="state in ['not_approved','canceled','car_na','driver_na','car_driver_na']"
+            decoration-info="state in ['ready','departing','returning']"
+            decoration-warning="state in ['late','incident']"/>
         </tree>
+      </field>
+    </record>
+
+    <record id="fleet_business_trip_view_search" model="ir.ui.view">
+      <field name="name">fleet.business.trip.search</field>
+      <field name="model">fleet.business.trip</field>
+      <!--* and this where we write our search (arch is mandatory) -->
+      <field name="arch" type="xml">
+        <search>
+
+          <field name="name" string="Trip Sequence"/>
+          <field name="vehicle_id" string="Vehicle"/>
+          <field name="overseer_manager_id" string="Manager Overseer"/>
+          <field name="overseer_admin_id" string="Administrator Overseer"/>
+          <field name="overseer_creator_id" string="Creator"/>
+          <field name="driver_id" string="Driver"/>
+          <field name="overseer_fleet_id" string="Fleet"/>
+          <field name="attending_employee_ids" string="Attendee"/>
+
+          <filter name="filter_overseer_manager_id" string="Managing" domain="[('overseer_manager_id.user_id', '=', uid)]" />
+          <filter name="filter_overseer_admin_id" string="Admining" domain="[('overseer_admin_id.user_id', '=', uid)]" />
+          <filter name="filter_overseer_creator_id" string="Created" domain="[('overseer_creator_id.user_id', '=', uid)]" />
+          <filter name="filter_driver_id" string="Driving" domain="[('driver_id.user_id', '=', uid)]" />
+          <filter name="filter_overseer_fleet_id" string="Captain" domain="[('overseer_fleet_id.user_id', '=', uid)]" />
+          <filter name="filter_attending_employee_ids" string="Attending" domain="[('attending_employee_ids.user_id','in',[uid])]" />
+          <separator />
+          <!--! these datetime filters might need rework -->
+          <filter name="filter_due_for_approval_time" string="Due Time" domain="[
+            ('due_for_approval_time', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))
+          ]"/>
+          <filter name="filter_pick_time" string="Pick Time" domain="[
+            ('pick_time', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))
+          ]"/>
+          <filter name="filter_return_time" string="Return Time" domain="[
+            ('return_time', '&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)))
+          ]"/>
+          <separator />
+          <filter name="filter_archive" string="Archived" domain="[('active', '=', False)]" />
+
+          <group expand="0" string="Group By">
+            <filter string="Vehicle" name="group_by_vehicle" context="{'group_by':'vehicle_id'}"/>
+            <filter string="State" name="group_by_state" context="{'group_by':'state'}"/>
+            <filter string="Creator" name="group_by_creator" context="{'group_by':'overseer_creator_id'}"/>
+            <filter string="Manager" name="group_by_manager" context="{'group_by':'overseer_manager_id'}"/>
+            <filter string="Administrator" name="group_by_admin" context="{'group_by':'overseer_admin_id'}"/>
+            <filter string="Driver" name="group_by_driver" context="{'group_by':'driver_id'}"/>
+            <filter string="Fleet Captain" name="group_by_fleet" context="{'group_by':'overseer_fleet_id'}"/>
+            <filter string="Pick Up" name="group_by_pick_address" context="{'group_by':'pick_address_id'}"/>
+          </group>
+
+          <searchpanel>
+            <field name="state" string="State" icon="fa-question" select="multi" enable_counters="1"/>
+            <field name="vehicle_id" string="Vehicle" icon="fa-car" select="multi" enable_counters="1"/>
+          </searchpanel>
+
+        </search>
       </field>
     </record>
 
@@ -36,6 +93,7 @@
             <field name="overseer_admin_logged" invisible="1"/>
             <field name="overseer_creator_logged" invisible="1"/>
             <field name="overseer_fleet_logged" invisible="1"/>
+            <field name="admin_manager_logged" invisible="1"/>
             <field name="attendee_logged" invisible="1"/>
             <field name="attendee_rated" invisible="1"/>
             <!--? custom conditional css -->
@@ -217,6 +275,14 @@
               <div class="alert alert-danger text-center o_form_header" role="alert" attrs="{'invisible':[('approval_fleet', '!=', 'denied')]}">
                 <div>
                   <strong>You, the Fleet Captain have deny this business trip</strong>
+                </div>
+              </div>
+            </span>
+
+            <span attrs="{'invisible':['|','|',('overseer_admin_id', '!=', False),('admin_manager_logged', '=', False),('approval_creator', '!=', 'approved')]}">
+              <div class="alert alert-warning text-center o_form_header" role="alert">
+                <div>
+                  <strong>You, the Administrator Manager Need to assign an administrator for this business trip</strong>
                 </div>
               </div>
             </span>
