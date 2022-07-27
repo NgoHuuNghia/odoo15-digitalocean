@@ -11,15 +11,15 @@ class TestFleetBusinessTrip(TransactionCase):
         fleet_captain = self.env.ref('fleet_business.dep_fleet_captain')
         new_trip = self.env["fleet.business.trip"].with_user(user).create({
             'tag_ids': [
-                self.env.ref('fleet_business.fleet_business_tag_priority').id,
-                self.env.ref('fleet_business.fleet_business_tag_business').id,
+                (4, self.env.ref('fleet_business.fleet_business_tag_priority').id),
+                (4, self.env.ref('fleet_business.fleet_business_tag_business').id),
             ],
             'vehicle_id': self.env.ref('fleet_business.business_vehicle_1').id,
             'driver_id': self.env.ref('fleet_business.dep_fleet_driver').id,
             'attending_employee_ids': [
-                user.employee_id.id,
-                fleet_captain.id,
-                self.env.ref('fleet_business.dep_fleet_driver_2').id,
+                (4, user.employee_id.id),
+                (4, fleet_captain.id),
+                (4, self.env.ref('fleet_business.dep_fleet_driver_2').id),
             ],
             'pick_address_id': self.env.company.partner_id.id,
             'return_time': fields.Datetime.add(fields.Datetime.today(), months=1),

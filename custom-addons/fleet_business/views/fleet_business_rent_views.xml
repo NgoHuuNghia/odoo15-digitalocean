@@ -118,9 +118,9 @@
                 'readonly':  ['|',('overseer_creator_logged', '=', False), ('state', 'not in', ['draft','canceled'])],
               }">
               <field name="active" widget="boolean_button" options='{"terminology": "archive"}'/>
-            </button>
+            </button> -->
             <button name="action_request_reapproval" string="Request Re-approval" type="object" icon="fa-repeat" class="oe_highlight" attrs="{
-              'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', '!=', 'canceled')],}"/> -->
+              'invisible': ['|','&amp;',('overseer_creator_logged', '=', False),('overseer_admin_logged', '=', False), ('state', 'not in', ['not_approved','canceled'])],}"/>
             <button name="action_prepare_going_and_returning_ticket_template" string="Create 2 Ticket Template" type="object" icon="fa-plus" class="oe_highlight" attrs="{
               'invisible': ['|','|','|',('overseer_admin_logged', '=', False),('going_ticket_count', '!=', 0),('returning_ticket_count', '!=', 0),('two_way_ticket_count', '!=', 0)]}"/>
             <button name="action_prepare_two_way_ticket_template" string="Create 1 Two Way Ticket Template" type="object" icon="fa-plus" class="oe_highlight" attrs="{
@@ -188,7 +188,7 @@
               <button name="action_view_attendees" type="object" class="oe_stat_button" icon="fa-history">
                 <field name="attending_employee_count" string="Attendees" widget="statinfo"/>
               </button>
-              <button name="action_view_journals" type="object" class="oe_stat_button" icon="fa-list" groups="fleet.fleet_group_manager" readonly="1">
+              <button name="action_view_journals" type="object" class="oe_stat_button" icon="fa-list" groups="fleet.fleet_group_manager">
                 <field name="journal_line_count" string="Journals" widget="statinfo"/>
               </button>
             </div>
@@ -260,13 +260,13 @@
               <h1>
                   <field name="name"/>
               </h1>
+              <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags"/>
               <group>
                 <label for='type_of_transportation' string='Transportation'/>
                 <h2>
                   <field name="type_of_transportation" widget="radio"/>
                 </h2>
               </group>
-              <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" placeholder="Tags"/>
             </div>
 
             <group string='All Attending Employees'>

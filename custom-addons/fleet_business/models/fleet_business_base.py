@@ -27,6 +27,8 @@ class FleetBusinessBase(models.AbstractModel):
     vals_list['approval_manager'] = 'deciding'
     vals_list['name'] = self.env['ir.sequence'].next_by_code(self._name)
     vals_list['state'] = 'draft'
+    business_tag_id = self.env.ref('fleet_business.fleet_business_tag_business').id
+    vals_list['tag_ids'].append((4, business_tag_id) if business_tag_id else None)
     return super(FleetBusinessBase, self).create(vals_list)
 
   def write(self, vals_list):
@@ -295,6 +297,7 @@ class FleetBusinessBase(models.AbstractModel):
     self.approval_creator = None
     self.approval_admin = None
     self.overseer_admin_id = None
+    self.action_send_email()
 
   #? Temp using this exeptions way to throw error, want to use the notification and highlight way instead
   #! temp not adding SETTING_TIME_CONSTRAINS for pick and due_time for testing purposes

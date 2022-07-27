@@ -82,6 +82,7 @@ class FleetBusinessTrip(models.Model):
       self.driver_ratings = driver.driver_ratings
 
   @api.onchange('driver_id')
+  #! gonna need to change this to web domain field module one day, odoo keep yelling at me
   def onchange_attending_employee_ids_exclude_driver(self):
     return {'domain':{ 'attending_employee_ids': [('id', '!=', self.driver_id.id),],}}
 
@@ -153,7 +154,6 @@ class FleetBusinessTrip(models.Model):
   def action_request_reapproval(self):
     super(FleetBusinessTrip, self).action_request_reapproval()
     self.approval_fleet = None
-    self.action_send_email()
 
   def action_send_email_mass(self,DUE_TIME=None,special=None):
     super(FleetBusinessTrip, self).action_send_email_mass()

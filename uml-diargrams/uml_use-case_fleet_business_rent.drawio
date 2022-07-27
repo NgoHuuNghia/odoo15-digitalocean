@@ -1,12 +1,12 @@
 <mxfile host="65bd71144e">
     <diagram id="Y4IQfSycDRqmELYqsQpS" name="use-case (fleet_business_trip)">
-        <mxGraphModel dx="378" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1176" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <UserObject label="use-case Hệ thống mượn xe công ty đi công tác (fleet_business_trip)" id="2">
-                    <mxCell style="shape=rect;html=1;verticalAlign=top;fontStyle=1;whiteSpace=wrap;align=center;movable=0;resizable=0;rotatable=0;deletable=0;editable=0;connectable=0;" parent="1" vertex="1">
-                        <mxGeometry x="80" y="80" width="680" height="650" as="geometry"/>
+                <UserObject label="use-case Hệ thống mượn xe công ty đi công tác (fleet_business_rent)" id="2">
+                    <mxCell style="shape=rect;html=1;verticalAlign=top;fontStyle=1;whiteSpace=wrap;align=center;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;connectable=1;" parent="1" vertex="1">
+                        <mxGeometry x="80" y="80" width="680" height="840" as="geometry"/>
                     </mxCell>
                 </UserObject>
                 <mxCell id="32" style="edgeStyle=none;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontFamily=Helvetica;fontSize=12;fontColor=default;endArrow=none;endFill=0;" parent="1" source="3" target="5" edge="1">
@@ -21,7 +21,7 @@
                 <mxCell id="23" value="" style="edgeStyle=none;html=1;endArrow=none;endFill=0;" parent="1" source="5" target="22" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="52" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="23">
+                <mxCell id="52" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="23" vertex="1" connectable="0">
                     <mxGeometry x="0.1379" y="1" relative="1" as="geometry">
                         <mxPoint x="-19" y="7" as="offset"/>
                     </mxGeometry>
@@ -87,12 +87,12 @@
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
                 <mxCell id="37" value="Văn phòng" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;" parent="1" vertex="1">
-                    <mxGeometry x="795" y="550" width="30" height="60" as="geometry"/>
+                    <mxGeometry x="795" y="750" width="30" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="38" value="Thống kế, hỗ trợ, lên kế hoạch mua vé và Duyệt chuyến công tác" style="ellipse;whiteSpace=wrap;html=1;verticalAlign=middle;" parent="1" vertex="1">
-                    <mxGeometry x="485" y="450" width="200" height="100" as="geometry"/>
+                    <mxGeometry x="485" y="650" width="200" height="100" as="geometry"/>
                 </mxCell>
-                <mxCell id="39" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;endArrow=open;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;" parent="1" target="38" edge="1">
+                <mxCell id="39" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;endArrow=open;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;" parent="1" target="54" edge="1">
                     <mxGeometry width="160" relative="1" as="geometry">
                         <mxPoint x="584.71" y="390" as="sourcePoint"/>
                         <mxPoint x="585" y="440" as="targetPoint"/>
@@ -104,7 +104,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="44" value="Tiến hành mua vé sau khi nhân viên duyệt lần cuối" style="ellipse;whiteSpace=wrap;html=1;verticalAlign=middle;" parent="1" vertex="1">
-                    <mxGeometry x="480" y="590" width="200" height="100" as="geometry"/>
+                    <mxGeometry x="480" y="790" width="200" height="100" as="geometry"/>
                 </mxCell>
                 <mxCell id="47" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;endArrow=open;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;entryX=0.755;entryY=0.076;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="38" target="48" edge="1">
                     <mxGeometry width="160" relative="1" as="geometry">
@@ -113,12 +113,27 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="48" value="Kiểm tra lại vé, thông tin và duyệt cuối cùng chuyến công tác" style="ellipse;whiteSpace=wrap;html=1;verticalAlign=middle;" parent="1" vertex="1">
-                    <mxGeometry x="195" y="590" width="200" height="100" as="geometry"/>
+                    <mxGeometry x="195" y="790" width="200" height="100" as="geometry"/>
                 </mxCell>
                 <mxCell id="49" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;endArrow=open;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="48" target="44" edge="1">
                     <mxGeometry width="160" relative="1" as="geometry">
                         <mxPoint x="325" y="542.4999999999998" as="sourcePoint"/>
                         <mxPoint x="420" y="670" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="56" style="edgeStyle=none;html=1;endArrow=none;endFill=0;" edge="1" parent="1" source="53" target="54">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="53" value="Trưởng văn phòng" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="1">
+                    <mxGeometry x="799" y="469" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="54" value="Xem qua và phân công chuyên viên" style="ellipse;whiteSpace=wrap;html=1;verticalAlign=middle;" vertex="1" parent="1">
+                    <mxGeometry x="500" y="460" width="160" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;endArrow=open;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;" edge="1" parent="1" source="54" target="38">
+                    <mxGeometry width="160" relative="1" as="geometry">
+                        <mxPoint x="594.71" y="400" as="sourcePoint"/>
+                        <mxPoint x="591.4543050934012" y="470.0066099314645" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
             </root>
