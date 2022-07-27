@@ -79,6 +79,7 @@ class FleetBusinessBase(models.AbstractModel):
   overseer_manager_work_phone = fields.Char(related='overseer_manager_id.work_phone',string='Manager\'s Work Phone')
   overseer_manager_email = fields.Char(related='overseer_manager_id.work_email',string='Manager\'s Work Email')
   approval_manager = fields.Selection(APPROVAL_SELECTIONS, string='Manager\'s Decision', default=None, store=True, readonly=True)
+  #! annoying mistake, rather choosing employees from management dep, switch to administration
   overseer_admin_id = fields.Many2one('hr.employee.public',string='Admin Assigned',
     domain="['&','|',('company_id', '=', False),('company_id', '=', company_id),('department_id.name', '=', 'Management')]")
   overseer_admin_work_phone = fields.Char(related='overseer_admin_id.work_phone',string='Admin\'s Work Phone')
@@ -142,6 +143,7 @@ class FleetBusinessBase(models.AbstractModel):
 
   # @api.onchange('overseer_admin_id')
 
+  #! gonna have to create some function to validate which action is done by who for back-end security reasons
   def action_approval_manager_approved(self):
     self.ensure_one()
     self.approval_manager = "approved"
@@ -210,6 +212,8 @@ class FleetBusinessBase(models.AbstractModel):
   def action_update_state_and_send_mass_mail_reminder(self,state):
     if state == 'ready' and self.state != 'approved':
       raise exceptions.ValidationError(f"Can only update to {state} from approved")
+    if state == 'not_approved' and self.state != 'draft':
+      raise exceptions.ValidationError(f"Can only update to {state} from draft")
     if state == 'departing' and self.state != 'ready':
       raise exceptions.ValidationError(f"Can only update to {state} from ready")
     #! returning state will need the computed datetimes and late state also depend on it 
@@ -293,6 +297,7 @@ class FleetBusinessBase(models.AbstractModel):
     self.overseer_admin_id = None
 
   #? Temp using this exeptions way to throw error, want to use the notification and highlight way instead
+  #! temp not adding SETTING_TIME_CONSTRAINS for pick and due_time for testing purposes
   @api.constrains('pick_time','return_time')
   def _check_time(self):
     for trip in self:

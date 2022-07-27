@@ -31,6 +31,16 @@
       <field name="filter_domain">[('state', '=', 'approved')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','due_for_approval_time')]"/>
     </record>
+    <record id="fleet_business_trip_update_draft_to_not_approved_and_send_mass_mail" model="base.automation">
+      <field name="name">Fleet Business Trip Automation: Update state not approved and send mass mail reminder</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
+      <field name="state">code</field>
+      <field name="trigger">on_time</field>
+      <field name="code">record.action_update_state_and_send_mass_mail_reminder('not_approved')</field>
+      <field name="active" eval="True"/>
+      <field name="filter_domain">[('state', '=', 'draft')]</field>
+      <field name="trg_date_id" search="[('model','=','fleet.business.trip'),('name','=','due_for_approval_time')]"/>
+    </record>
     <record id="fleet_business_trip_update_ready_to_departing_and_send_mass_mail" model="base.automation">
       <field name="name">Fleet Business Trip Automation: Update state departing and send mass mail reminder</field>
       <field name="model_id" ref="fleet_business.model_fleet_business_trip"/>
@@ -73,6 +83,16 @@
       <field name="code">record.action_update_state_and_send_mass_mail_reminder('ready')</field>
       <field name="active" eval="True"/>
       <field name="filter_domain">[('state', '=', 'approved')]</field>
+      <field name="trg_date_id" search="[('model','=','fleet.business.rent'),('name','=','due_for_approval_time')]"/>
+    </record>
+    <record id="fleet_business_rent_update_draft_to_not_approved_and_send_mass_mail" model="base.automation">
+      <field name="name">Fleet Business Rent Automation: Update state not approved and send mass mail reminder</field>
+      <field name="model_id" ref="fleet_business.model_fleet_business_rent"/>
+      <field name="state">code</field>
+      <field name="trigger">on_time</field>
+      <field name="code">record.action_update_state_and_send_mass_mail_reminder('not_approved')</field>
+      <field name="active" eval="True"/>
+      <field name="filter_domain">[('state', '=', 'draft')]</field>
       <field name="trg_date_id" search="[('model','=','fleet.business.rent'),('name','=','due_for_approval_time')]"/>
     </record>
     <record id="fleet_business_rent_update_ready_to_departing_and_send_mass_mail" model="base.automation">

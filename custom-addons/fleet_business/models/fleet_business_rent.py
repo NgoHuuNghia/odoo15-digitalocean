@@ -65,9 +65,9 @@ class FleetBusinessRent(models.Model):
       trip.two_way_ticket_count = len(trip.two_way_ticket_ids)
 
   def action_update_state_returned(self):
-    if self.env.user.employee_id.id == self.overseer_admin_id.id:
-      self.state = 'returned'
-    else: raise exceptions.UserError('You are not authorized to confirm returned')
+    if self.env.user.employee_id.id != self.overseer_admin_id.id:
+      raise exceptions.UserError('You are not authorized to confirm returned')
+    self.state = 'returned'
 
   def action_prepare_going_and_returning_ticket_template(self):
     if self.env.user.employee_id.id != self.overseer_admin_id.id:

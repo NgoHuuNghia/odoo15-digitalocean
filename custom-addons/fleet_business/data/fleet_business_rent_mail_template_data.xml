@@ -314,6 +314,8 @@
             This is an automatic email 
             <t t-if="object.state == 'ready'">
               Reminding you that you are exactly <strong t-out="object._context['DUE_TIME'] or 'N\A'">DAYS LEFT</strong> left till your </t>
+            <t t-elif="object.state == 'not_approved'">
+              Reminding you that you that your business trip wasn't able to be <strong>approved</strong>, please contact support for this trip </t>
             <t t-elif="object.state == 'departing'">
               Reminding you <strong>tomorrow</strong> you will go on a  </t>
             business trip <strong t-out="object.name or 'n/a'">0000Trip</strong>  which you are an attendee of.
