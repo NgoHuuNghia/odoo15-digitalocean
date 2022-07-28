@@ -8,7 +8,7 @@ from dateutil import relativedelta
 APPROVAL_SELECTIONS = [('deciding','Deciding'),('denied','Denied'),('approved','Approved')]
 STATE_SELECTIONS = [
   ('draft','Draft'),('not_approved','Not Approved'),('approved','Approved'),('ready','Ready'),
-  ('departing','Departing'),('returning','Returning'),('late','Late'),('returned','Returned'),
+  ('departing','Departing'),('arrived','Arrived'),('returning','Returning'),('late','Late'),('returned','Returned'),
   ('car_na','Car N/a'),('driver_na','Driver N/a'),('car_driver_na','Car & Driver N/a'),
   ('canceled','Canceled'),('incident','Incident')
 ]
@@ -320,6 +320,7 @@ class FleetBusinessBase(models.AbstractModel):
   #       raise exceptions.ValidationError("Overseeing Administrator can't be empty")
   #     elif not trip.overseer_creator_id: 
   #       raise exceptions.ValidationError("Overseeing Creator can't be empty")
+  #! you will need to update status of employees, drivers and cars related to this trips btw
 class FleetBusinessJournalLine(models.AbstractModel):
   _name = 'fleet.business.journal.line'
   _description = 'Journal records for a business trip'

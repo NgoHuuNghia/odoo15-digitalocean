@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="tti8-qOC2e271COAyMI7" name="use-case (fleet_business_trip_rating)">
-        <mxGraphModel dx="990" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="628" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="cs3OPDo4-kUtPiiAal4Z-0"/>
                 <mxCell id="cs3OPDo4-kUtPiiAal4Z-1" parent="cs3OPDo4-kUtPiiAal4Z-0"/>
@@ -12,7 +12,7 @@
                 <mxCell id="VOc7xbZnXONlbMijgc1x-2" value="" style="edgeStyle=none;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;endArrow=none;endFill=0;" parent="cs3OPDo4-kUtPiiAal4Z-1" source="lDgoFlY37DkyPlibSX0k-1" target="VOc7xbZnXONlbMijgc1x-1" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="lDgoFlY37DkyPlibSX0k-1" value="Nhân viên" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;" parent="cs3OPDo4-kUtPiiAal4Z-1" vertex="1">
+                <mxCell id="lDgoFlY37DkyPlibSX0k-1" value="Attendee" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;" parent="cs3OPDo4-kUtPiiAal4Z-1" vertex="1">
                     <mxGeometry x="25" y="180" width="30" height="60" as="geometry"/>
                 </mxCell>
                 <mxCell id="VOc7xbZnXONlbMijgc1x-1" value="&lt;span&gt;Đánh giá 1-5 sao tài xe sau khi thành công chuyến công tác từ (fleet_business_trip)&lt;/span&gt;" style="ellipse;whiteSpace=wrap;html=1;verticalAlign=middle;" parent="cs3OPDo4-kUtPiiAal4Z-1" vertex="1">
@@ -50,7 +50,7 @@
                         <mxPoint x="651.4" y="385.65" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="bl2fk228C5GolrHnd2m4-7" value="Sắp xếp lại các danh sách khác" style="ellipse;whiteSpace=wrap;html=1;" parent="cs3OPDo4-kUtPiiAal4Z-1" vertex="1">
+                <mxCell id="bl2fk228C5GolrHnd2m4-7" value="Sắp xếp lại các danh sách&amp;nbsp;" style="ellipse;whiteSpace=wrap;html=1;" parent="cs3OPDo4-kUtPiiAal4Z-1" vertex="1">
                     <mxGeometry x="500" y="450" width="150" height="80" as="geometry"/>
                 </mxCell>
                 <mxCell id="bl2fk228C5GolrHnd2m4-9" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="edgeStyle=none;html=1;endArrow=open;verticalAlign=bottom;dashed=1;labelBackgroundColor=none;fontFamily=Helvetica;fontSize=12;fontColor=default;exitX=0.855;exitY=0.855;exitDx=0;exitDy=0;exitPerimeter=0;" parent="cs3OPDo4-kUtPiiAal4Z-1" source="bl2fk228C5GolrHnd2m4-0" target="bl2fk228C5GolrHnd2m4-7" edge="1">
@@ -65,7 +65,7 @@
                 <mxCell id="bl2fk228C5GolrHnd2m4-12" style="edgeStyle=none;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;endArrow=none;endFill=0;" parent="cs3OPDo4-kUtPiiAal4Z-1" source="bl2fk228C5GolrHnd2m4-10" target="bl2fk228C5GolrHnd2m4-5" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="bl2fk228C5GolrHnd2m4-10" value="Nhân viên" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;" parent="cs3OPDo4-kUtPiiAal4Z-1" vertex="1">
+                <mxCell id="bl2fk228C5GolrHnd2m4-10" value="Admin" style="shape=umlActor;html=1;verticalLabelPosition=bottom;verticalAlign=top;align=center;" parent="cs3OPDo4-kUtPiiAal4Z-1" vertex="1">
                     <mxGeometry x="790" y="200" width="30" height="60" as="geometry"/>
                 </mxCell>
             </root>
