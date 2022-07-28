@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="MuZAtRpMIBstmGgHcjIb" name="Page-1">
-        <mxGraphModel dx="1442" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="657" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -229,7 +229,7 @@
                     <mxGeometry x="227.5" y="400" width="5" height="180" as="geometry"/>
                 </mxCell>
                 <mxCell id="88" value="[Không chấp thuận]" style="edgeStyle=none;html=1;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="1" source="86" target="134" edge="1">
-                    <mxGeometry x="-0.8824" y="50" relative="1" as="geometry">
+                    <mxGeometry x="-0.6364" relative="1" as="geometry">
                         <mxPoint x="230" y="900" as="targetPoint"/>
                         <Array as="points">
                             <mxPoint x="230" y="940"/>
@@ -238,7 +238,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="90" value="[Chấp thuận]" style="edgeStyle=none;html=1;startArrow=none;startFill=0;endArrow=classic;endFill=1;" parent="1" source="86" target="89" edge="1">
-                    <mxGeometry y="-40" relative="1" as="geometry">
+                    <mxGeometry relative="1" as="geometry">
                         <mxPoint as="offset"/>
                     </mxGeometry>
                 </mxCell>

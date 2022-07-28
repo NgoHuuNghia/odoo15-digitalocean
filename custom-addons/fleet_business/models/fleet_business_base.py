@@ -145,7 +145,7 @@ class FleetBusinessBase(models.AbstractModel):
 
   # @api.onchange('overseer_admin_id')
 
-  #! gonna have to create some function to validate which action is done by who for back-end security reasons
+  #! gonna have to create some class to validate which action is done by who for back-end security reasons
   def action_approval_manager_approved(self):
     self.ensure_one()
     self.approval_manager = "approved"

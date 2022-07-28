@@ -373,7 +373,6 @@
                   </form>
                 </field>
               </page>
-              <!--! Also create a two way ticket -->
 
               <page string="Overseers">
                 <group>
