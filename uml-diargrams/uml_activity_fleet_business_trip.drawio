@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="MuZAtRpMIBstmGgHcjIb" name="Page-1">
-        <mxGraphModel dx="657" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="897" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -19,7 +19,7 @@
                 <mxCell id="8" value="&lt;span&gt;Sơ đồ&amp;nbsp;&lt;/span&gt;activity của hệ thống mượn xe đi công tác (fleet_business_trip)&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1" parent="1" vertex="1">
                     <mxGeometry x="40" y="40" width="420" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="10" value="Nhân viên" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                <mxCell id="10" value="Creator" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="180" y="80" width="100" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="24" style="edgeStyle=none;html=1;" parent="1" source="11" target="22" edge="1">
@@ -93,13 +93,13 @@
                 <mxCell id="37" value="Tạo thành công record công tác trên database (chưa duyệt)" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
                     <mxGeometry x="165" y="530" width="130" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="39" value="Trưởng Phòng" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                <mxCell id="39" value="Manager" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="530" y="80" width="100" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="40" value="Văn Phòng" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                <mxCell id="40" value="Admin" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="730" y="80" width="100" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="41" value="Đội xe" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                <mxCell id="41" value="Captain" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="930" y="80" width="100" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="42" value="" style="endArrow=none;html=1;" parent="1" edge="1">
@@ -254,9 +254,6 @@
                 <mxCell id="93" value="" style="ellipse;html=1;shape=endState;fillColor=#000000;strokeColor=#ff0000;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="760" y="1210" width="30" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="96" value="&lt;span&gt;Hỗ trợ trực tiếp nhân viên &lt;br&gt;và tài xế của chuyến&lt;br&gt;&amp;nbsp;công tác&lt;/span&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=default;" parent="1" vertex="1">
-                    <mxGeometry x="610" y="1200" width="150" height="50" as="geometry"/>
-                </mxCell>
                 <mxCell id="100" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="215" y="140" width="30" height="30" as="geometry"/>
                 </mxCell>
@@ -375,6 +372,18 @@
                         <mxPoint x="540" y="750" as="targetPoint"/>
                         <mxPoint x="512.4849999999999" y="777.5699999999999" as="sourcePoint"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="152" value="Đầu vào đến use-case của fleet_business_automated" style="shape=note2;boundedLbl=1;whiteSpace=wrap;html=1;size=25;verticalAlign=top;align=center;fontColor=default;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="870" y="1146.48" width="180" height="84.45" as="geometry"/>
+                </mxCell>
+                <mxCell id="153" style="edgeStyle=none;html=1;fontColor=#FFFFFF;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" target="152" source="93">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1113.27" y="1230.93" as="targetPoint"/>
+                        <mxPoint x="914.0873462346235" y="1090" as="sourcePoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="154" value="Admin Manager" style="shape=umlFrame;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="687.49" y="350" width="175.01" height="116.67" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

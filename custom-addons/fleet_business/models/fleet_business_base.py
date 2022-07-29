@@ -8,8 +8,8 @@ from dateutil import relativedelta
 APPROVAL_SELECTIONS = [('deciding','Deciding'),('denied','Denied'),('approved','Approved')]
 STATE_SELECTIONS = [
   ('draft','Draft'),('not_approved','Not Approved'),('approved','Approved'),('ready','Ready'),
-  ('departing','Departing'),('arrived','Arrived'),('returning','Returning'),('late','Late'),('returned','Returned'),
-  ('car_na','Car N/a'),('driver_na','Driver N/a'),('car_driver_na','Car & Driver N/a'),
+  ('departing','Departing'),('arrived','Arrived'),('returning','Returning'),('late','Late'),
+  ('returned','Returned'),('car_na','Car N/a'),('driver_na','Driver N/a'),('car_driver_na','Car & Driver N/a'),
   ('canceled','Canceled'),('incident','Incident')
 ]
 TYPE_SELECTION = [('state','State'),('update','Update'),('approval','Approval'),('special','Special')]

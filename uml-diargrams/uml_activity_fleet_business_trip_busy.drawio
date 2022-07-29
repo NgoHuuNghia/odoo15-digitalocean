@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="MuZAtRpMIBstmGgHcjIb" name="Page-1">
-        <mxGraphModel dx="438" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="897" dy="614" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -19,10 +19,10 @@
                 <mxCell id="8" value="&lt;span&gt;Sơ đồ&amp;nbsp;&lt;/span&gt;activity của hệ thống mượn xe đi công tác (mở rộng 2) xe hoặc tài xế bận (fleet_business_trip_priority)&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontStyle=1" parent="1" vertex="1">
                     <mxGeometry x="40" y="40" width="640" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="40" value="Nhân viên" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                <mxCell id="40" value="Creator" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="650" y="80" width="100" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="41" value="Đội xe" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                <mxCell id="41" value="Captain" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="350" y="80" width="100" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="100" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;dashed=1;" parent="1" vertex="1">
@@ -132,7 +132,7 @@
                 <mxCell id="160" style="edgeStyle=none;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=1;entryDx=0;entryDy=0;dashed=1;endArrow=none;endFill=0;" parent="1" source="152" target="152" edge="1">
                     <mxGeometry relative="1" as="geometry"/>
                 </mxCell>
-                <mxCell id="163" value="Văn phòng" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
+                <mxCell id="163" value="Admin" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="60" y="80" width="100" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="170" value="[Yêu cầu phân công lại]" style="edgeStyle=none;html=1;endArrow=classic;endFill=1;startArrow=none;" parent="1" source="186" target="137" edge="1">
@@ -224,7 +224,7 @@
                 <mxCell id="188" value="" style="ellipse;html=1;shape=startState;fillColor=#000000;strokeColor=#ff0000;dashed=1;" parent="1" vertex="1">
                     <mxGeometry x="85" y="140" width="30" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="189" value="Yêu cầu nhân viên tạo quyệt định theo sơ đồ nền" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
+                <mxCell id="189" value="Yêu cầu nhân viên quyệt định tiếp, theo sơ đồ nền" style="whiteSpace=wrap;html=1;rounded=0;fontSize=11;" parent="1" vertex="1">
                     <mxGeometry x="30" y="217.69" width="140" height="64.62" as="geometry"/>
                 </mxCell>
                 <mxCell id="190" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;verticalAlign=bottom;endArrow=open;endSize=8;strokeColor=#ff0000;" parent="1" source="189" target="188" edge="1">
@@ -233,12 +233,12 @@
                         <mxPoint x="120" y="170" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="194" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;dashed=1;" edge="1" parent="1" source="196" target="189">
+                <mxCell id="194" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;endArrow=none;endFill=0;dashed=1;" parent="1" source="196" target="189" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="209.34210526315792" y="185" as="sourcePoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="196" value="&lt;span style=&quot;text-align: center&quot;&gt;Xem sơ đồ activity&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: center ; font-weight: 700&quot;&gt;fleet_business_trip&lt;/span&gt;" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;" vertex="1" parent="1">
+                <mxCell id="196" value="&lt;span style=&quot;text-align: center&quot;&gt;Xem sơ đồ activity&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;text-align: center ; font-weight: 700&quot;&gt;fleet_business_trip&lt;/span&gt;" style="shape=note;size=15;align=left;spacingLeft=10;html=1;whiteSpace=wrap;" parent="1" vertex="1">
                     <mxGeometry x="177.5" y="150" width="172.5" height="40" as="geometry"/>
                 </mxCell>
             </root>
